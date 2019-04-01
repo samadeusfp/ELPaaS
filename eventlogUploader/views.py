@@ -21,7 +21,8 @@ def list(request):
             path = os.getcwd() + "/media/documents/" + file.name
             kValue = 4
             tValue = 0.2
-            command = "python algorithms/PRETSA/runPretsa.py " + path + " " + str(kValue) + " " + str(tValue) + " &"
+            pathDB = os.getcwd() + "/db.sqlite3"
+            command = "python algorithms/PRETSA/runPretsa.py " + path + " " + str(kValue) + " " + str(tValue) + " "+ pathDB + " &"
             os.system(command)
 
             # Redirect to the document list after POST
