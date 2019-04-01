@@ -3,9 +3,12 @@ from django.shortcuts import render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.conf import settings
 
 from eventlogUploader.models import Document
 from eventlogUploader.forms import DocumentForm
+import algorithms.PRETSA
+import os
 
 
 def list(request):
@@ -15,6 +18,10 @@ def list(request):
         if form.is_valid():
             newdoc = Document(docfile = request.FILES['docfile'])
             newdoc.save()
+            file = request.FILES['docfile']
+            path = settings.BASE_DIR + "/documents/" + file.name
+            print(path)
+            os.system("python algorithms/PRETSA/helloworld.py &")
 
             # Redirect to the document list after POST
             return HttpResponseRedirect(reverse('list'))
