@@ -7,7 +7,6 @@ from django.conf import settings
 
 from eventlogUploader.models import Document
 from eventlogUploader.forms import DocumentForm
-import algorithms.PRETSA
 import os
 
 
@@ -19,9 +18,11 @@ def list(request):
             newdoc = Document(docfile = request.FILES['docfile'])
             newdoc.save()
             file = request.FILES['docfile']
-            path = settings.BASE_DIR + "/documents/" + file.name
-            print(path)
-            os.system("python algorithms/PRETSA/helloworld.py &")
+            path = os.getcwd() + "/media/documents/" + file.name
+            kValue = 4
+            tValue = 0.2
+            command = "python algorithms/PRETSA/runPretsa.py " + path + " " + str(kValue) + " " + str(tValue) + " &"
+            os.system(command)
 
             # Redirect to the document list after POST
             return HttpResponseRedirect(reverse('list'))
