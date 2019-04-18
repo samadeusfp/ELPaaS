@@ -6,3 +6,5 @@ media/
 eventlogUploader/__pycache__/
 
 eventlogUploader/migrations/
+
+ELPaaS/__pycache__/
