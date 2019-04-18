@@ -1,5 +1,4 @@
 import sys
-from algorithms.PRETSA.pretsa import Pretsa
 import pandas as pd
 import sqlite3
 
