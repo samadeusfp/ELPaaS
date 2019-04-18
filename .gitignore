@@ -2,3 +2,7 @@
 db\.sqlite3
 
 media/
+
+eventlogUploader/__pycache__/
+
+eventlogUploader/migrations/
