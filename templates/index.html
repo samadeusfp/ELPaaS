@@ -2,11 +2,13 @@
 <html>
     <head>
 
+
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-         <link rel="stylesheet" type="text/css" href="index.css">
+        <link rel="stylesheet" type="text/css" href="index.css">
         
         <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>        
-        <script src="http://netdna.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <script src="http://netdna.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        
         <meta charset="utf-8">
         <title>ELPaaS - Event Log Privacy as a Service</title>
     </head>
@@ -16,17 +18,8 @@
 		<header>
 			<h1>ELPaaS - Event Log Privacy as a Service</h1>
 		</header>
-		<div class="accordion" id="accordion_collapse">
-			<p>
-				<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#processed_files" aria-expanded="false" aria-controls="test">
-					View processed Files
-				</button> OR
-				<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#upload_file" aria-expanded="false" aria-controls="uploadfile	">
-					Upload a File
-				</button>
-			</p>
-			<div id="processed_files" class="collapse" data-parent="#accordion_collapse">
-				<h3>Uploaded documents</h>		
+			<div id="processed_files">
+				<h3>Uploaded documents</h>	
 				{% if documents %}
 					<ul class="list-group">
 					{% for document in documents %}
@@ -42,22 +35,35 @@
 				{% endif %}
 			</div>
 			
+			<p>
+				<button class="btn btn-primary" type="button" data-toggle="modal" data-target="#upload_file">
+					Upload a File
+				</button>
+			</p>
 			
-			<div id="upload_file" class="collapse" data-parent="#accordion_collapse">	
-				{% load crispy_forms_tags %}
-				<!-- Upload form. Note enctype attribute! -->
-				<h3>Upload a file for Privatization</h3>
-				<form action="{% url 'index' %}" method="post" enctype="multipart/form-data">
-					{% csrf_token %}
-					{{form|crispy}}
-					<p>
-						<button type="submit" class="btn btn-primary" >
-							Upload Log file
-						</button>
-					</p>
-				</form>
+			<div class="modal fade" tabindex="-1" role="dialog" id="upload_file">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5>Upload a Log-File</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									&times;
+							</button>
+						</div>
+						<!--Form spanning Header and Footer-->
+						{% load crispy_forms_tags %}
+						<form action="{% url 'index' %}" method="post" enctype="multipart/form-data">
+						<div class="modal-body">
+							{% csrf_token %}
+							{{form|crispy}}
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary" >Submit</button>
+						</div>
+						</form>	
+					</div>
+				</div>
 			</div>
-        </div>
         <footer>
 			<p>
 				©Copyright 2050 by nobody. All rights reversed.

@@ -1,9 +1,12 @@
 from django import forms
 from decimal import Decimal
+from crispy_forms.helper import FormHelper
 
 class DocumentForm(forms.Form):
+        
     docfile = forms.FileField(
         label='Select a file',
+        required = True
     )
 
     algorithm = forms.ChoiceField(
@@ -11,13 +14,16 @@ class DocumentForm(forms.Form):
     )
     
     t = forms.DecimalField(
-        label='Select t'
+        label='Select t',
+                required = True
         )
 
     k = forms.IntegerField(
-        label='Select k'
+        label='Select k',
+                required = True
         )
     
     email = forms.EmailField(
-        label='Email adress'
+        label='Email adress',
+                required = True
         )
