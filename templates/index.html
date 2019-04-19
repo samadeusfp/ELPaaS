@@ -1,47 +1,67 @@
 <!DOCTYPE html>
 <html>
     <head>
+
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-		
+         <link rel="stylesheet" type="text/css" href="index.css">
+        
+        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>        
+        <script src="http://netdna.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <meta charset="utf-8">
         <title>ELPaaS - Event Log Privacy as a Service</title>
     </head>
+    
+    
     <body>
-	<div class="row">
-		<div class="col-md-6">
-			<h3>Uploaded documents</h>
-		</div>	
-	</div>
-    <!-- List of uploaded documents -->
-    {% if documents %}
-        <ul>
-        {% for document in documents %}
-            <li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No documents.</p>
-    {% endif %}
-
-        <!-- Upload form. Note enctype attribute! -->
-        <h3>Upload a file for Privatization</h3>
-        <form action="{% url 'index' %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <!--<p>{{ form.non_field_errors }}</p>
-            <p>{{ form.docfile.label_tag }}{{ form.docfile.help_text }}</p>
-            <p>
-                {{ form.docfile.errors }}
-                {{ form.docfile }}
-            </p>
-			<p>{{form.email.label_tag}}{{form.email}}</p>
-            <p>{{ form.algorithm.label_tag }} {{ form.algorithm }}</p>
-            
-            <p>{{ form.k.label_tag}}{{form.k}}</p>
-            <p>{{ form.t.label_tag}}{{form.t}}</p>-->
-            <table>
-            {{form.as_table}}
-            </table>
-            <p><input type="submit" value="Upload" /></p>
-        </form>
+		<header>
+			<h1>ELPaaS - Event Log Privacy as a Service</h1>
+		</header>
+		<div class="accordion" id="accordion_collapse">
+			<p>
+				<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#processed_files" aria-expanded="false" aria-controls="test">
+					View processed Files
+				</button> OR
+				<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#upload_file" aria-expanded="false" aria-controls="uploadfile	">
+					Upload a File
+				</button>
+			</p>
+			<div id="processed_files" class="collapse" data-parent="#accordion_collapse">
+				<h3>Uploaded documents</h>		
+				{% if documents %}
+					<ul class="list-group">
+					{% for document in documents %}
+						<li>
+							<a href="{{ document.docfile.url }}">
+								{{ document.docfile.name }}
+							</a>
+						</li>
+					{% endfor %}
+					</ul>
+				{% else %}
+					<p>No documents.</p>
+				{% endif %}
+			</div>
+			
+			
+			<div id="upload_file" class="collapse" data-parent="#accordion_collapse">	
+				{% load crispy_forms_tags %}
+				<!-- Upload form. Note enctype attribute! -->
+				<h3>Upload a file for Privatization</h3>
+				<form action="{% url 'index' %}" method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+					{{form|crispy}}
+					<p>
+						<button type="submit" class="btn btn-primary" >
+							Upload Log file
+						</button>
+					</p>
+				</form>
+			</div>
+        </div>
+        <footer>
+			<p>
+				©Copyright 2050 by nobody. All rights reversed.
+			</p>
+		</footer>
     </body>
 </html>
