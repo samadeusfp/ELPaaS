@@ -39,7 +39,10 @@ def index(request):
             # Redirect to the document list after POST
             return HttpResponseRedirect(reverse('index'))
     else:
-        form = DocumentForm() # A empty, unbound form
+        form = DocumentForm(
+                initial={"t":"0.2", "k":"4"}
+                )
+                # A empty, unbound form
 
     # Load documents for the list page
     documents = Document.objects.all()
