@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html>
     <head>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		
         <meta charset="utf-8">
         <title>ELPaaS - Event Log Privacy as a Service</title>
     </head>
     <body>
-	<h3>Uploaded documents</h>
+	<div class="row">
+		<div class="col-md-6">
+			<h3>Uploaded documents</h>
+		</div>	
+	</div>
     <!-- List of uploaded documents -->
     {% if documents %}
         <ul>
@@ -21,7 +27,7 @@
         <h3>Upload a file for Privatization</h3>
         <form action="{% url 'index' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <p>{{ form.non_field_errors }}</p>
+            <!--<p>{{ form.non_field_errors }}</p>
             <p>{{ form.docfile.label_tag }}{{ form.docfile.help_text }}</p>
             <p>
                 {{ form.docfile.errors }}
@@ -31,9 +37,10 @@
             <p>{{ form.algorithm.label_tag }} {{ form.algorithm }}</p>
             
             <p>{{ form.k.label_tag}}{{form.k}}</p>
-            <p>{{ form.t.label_tag}}{{form.t}}</p>
-            
-            
+            <p>{{ form.t.label_tag}}{{form.t}}</p>-->
+            <table>
+            {{form.as_table}}
+            </table>
             <p><input type="submit" value="Upload" /></p>
         </form>
     </body>
