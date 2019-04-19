@@ -7,9 +7,9 @@ class DocumentForm(forms.Form):
     docfile = forms.FileField(
         label='Select a file',
         required = True,
-        widget=forms.FileInput(
-                attrs={'class':'btn btn-primary'}
-        )
+        #widget=forms.FileInput(
+        #        attrs={'class':'btn btn-primary'}
+        #)
         
     )
 
