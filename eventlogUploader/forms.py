@@ -6,7 +6,11 @@ class DocumentForm(forms.Form):
         
     docfile = forms.FileField(
         label='Select a file',
-        required = True
+        required = True,
+        widget=forms.FileInput(
+                attrs={'class':'btn btn-primary'}
+        )
+        
     )
 
     algorithm = forms.ChoiceField(
@@ -15,7 +19,7 @@ class DocumentForm(forms.Form):
     
     t = forms.DecimalField(
         label='Select t',
-                required = True
+        required = True,
         )
 
     k = forms.IntegerField(
