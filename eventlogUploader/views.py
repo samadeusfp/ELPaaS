@@ -13,9 +13,16 @@ import os
 import hashlib
 import datetime
 
-#initial rendering of index page, renders upload form and uploaded files
-def index(request):
-    # Handle file upload
+def handle_view_file(request):
+    if request.method == 'POST':
+        form = DownloadForm(request.POST)
+        if form.is_valid():
+            input_token = form.cleaned_data['token']
+            documents=Document.objects.filter(token = input_token)
+            return HttpResponseRedirect(reverse('index'))
+
+
+def handle_file_upload(request):
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
@@ -47,11 +54,13 @@ def index(request):
 
             # Redirect to the document list after POST
             return HttpResponseRedirect(reverse('index'))
-    else:
-        upload_form = DocumentForm(
-                initial={"t":"0.2", "k":"4"}
-                )
-        download_form = DownloadForm()
+
+
+
+#initial rendering of index page, renders upload form and uploaded files if token has been inputted
+def index(request):
+    upload_form = DocumentForm(initial={"t":"0.2", "k":"4"})
+    download_form = DownloadForm()
 
     # Load documents for the list page
     documents = Document.objects.all()
@@ -59,12 +68,16 @@ def index(request):
     # Render list page with the documents
     return render(request, 'index.html', {'documents': documents, 'upload_form': upload_form, 'download_form': download_form})
 
+
+
 def generate_token(docfile, email, algorithm):
     m = hashlib.sha256()
     m.update(str.encode(email))
     m.update(str.encode(algorithm))
     m.update(str.encode(str(datetime.datetime.now())))
     return m.hexdigest()
+
+
 
 #TODO proper settings for mail management
 def send_mail(secure_token, email):
