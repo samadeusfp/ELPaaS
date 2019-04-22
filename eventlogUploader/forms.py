@@ -31,3 +31,9 @@ class DocumentForm(forms.Form):
         label='Email adress',
                 required = True
         )
+
+class DownloadForm(forms.Form):
+    token = forms.CharField(
+        label='Please enter a secure token',
+        required= True
+    )

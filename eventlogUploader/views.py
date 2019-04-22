@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.conf import settings
 
 from eventlogUploader.models import Document
-from eventlogUploader.forms import DocumentForm
+from eventlogUploader.forms import DocumentForm, DownloadForm
 from django.contrib import messages 
 import os
 import hashlib
@@ -48,16 +48,16 @@ def index(request):
             # Redirect to the document list after POST
             return HttpResponseRedirect(reverse('index'))
     else:
-        form = DocumentForm(
+        upload_form = DocumentForm(
                 initial={"t":"0.2", "k":"4"}
                 )
-                # A empty, unbound form
+        download_form = DownloadForm()
 
     # Load documents for the list page
     documents = Document.objects.all()
 
-    # Render list page with the documents and the form
-    return render(request, 'index.html', {'documents': documents, 'form': form})
+    # Render list page with the documents
+    return render(request, 'index.html', {'documents': documents, 'upload_form': upload_form, 'download_form': download_form})
 
 def generate_token(docfile, email, algorithm):
     m = hashlib.sha256()

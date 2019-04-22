@@ -18,8 +18,69 @@
 		<header>
 			<h1>ELPaaS - Event Log Privacy as a Service</h1>
 		</header>
+		<br>
+		<!-- Buttons for fade in/out modals -->
+		<p>
+			<button class="btn btn-primary" type="button" data-toggle="modal" data-target="#view_file">
+				View a File
+			</button>
+			OR
+			<button class="btn btn-primary" type="button" data-toggle="modal" data-target="#upload_file">
+				Upload a File
+			</button>
+		</p>
+		
+		<!-- File Download Modal -->
+			<div class="modal fade" tabindex="-1" role="dialog" id="view_file">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5>Enter a secure token</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									&times;
+							</button>
+						</div>
+						{% load crispy_forms_tags %}
+						<form action="{% url 'index' %}" method="post" enctype="multipart/form-data">
+						<div class="modal-body">
+							{% csrf_token %}
+							{{download_form|crispy}}
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary" >Submit</button>
+						</div>
+						</form>	
+					</div>
+				</div>
+			</div>
+			
+		<!-- File Upload Modal -->
+			<div class="modal fade" tabindex="-1" role="dialog" id="upload_file">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5>Upload a Log-File</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									&times;
+							</button>
+						</div>
+						{% load crispy_forms_tags %}
+						<form action="{% url 'index' %}" method="post" enctype="multipart/form-data">
+						<div class="modal-body">
+							{% csrf_token %}
+							{{upload_form|crispy}}
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary" >Submit</button>
+						</div>
+						</form>	
+					</div>
+				</div>
+			</div>
+			
+		<!-- Uploaded Files -->
 			<div id="processed_files">
-				<h3>Uploaded documents</h>	
+				<h2>Uploaded documents</h2>
 				{% if documents %}
 					<ul class="list-group">
 					{% for document in documents %}
@@ -33,37 +94,8 @@
 				{% else %}
 					<p>No documents.</p>
 				{% endif %}
-			</div>
-			
-			<p>
-				<button class="btn btn-primary" type="button" data-toggle="modal" data-target="#upload_file">
-					Upload a File
-				</button>
-			</p>
-			
-			<div class="modal fade" tabindex="-1" role="dialog" id="upload_file">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5>Upload a Log-File</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									&times;
-							</button>
-						</div>
-						<!--Form spanning Header and Footer-->
-						{% load crispy_forms_tags %}
-						<form action="{% url 'index' %}" method="post" enctype="multipart/form-data">
-						<div class="modal-body">
-							{% csrf_token %}
-							{{form|crispy}}
-						</div>
-						<div class="modal-footer">
-							<button type="submit" class="btn btn-primary" >Submit</button>
-						</div>
-						</form>	
-					</div>
-				</div>
-			</div>
+			</div>	
+		<!-- Footer with copyright/contect stuff -->
         <footer>
 			<p>
 				©Copyright 2050 by nobody. All rights reversed.
