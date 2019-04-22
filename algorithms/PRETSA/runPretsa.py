@@ -7,6 +7,7 @@ filePath = sys.argv[1]
 k = sys.argv[2]
 t = sys.argv[3]
 dbName = sys.argv[4]
+secure_token = sys.argv[5]
 sys.setrecursionlimit(3000)
 targetFilePath = filePath.replace(".csv","_t%s_k%s_pretsa.csv" % (t,k))
 
@@ -22,6 +23,6 @@ puffer,targetFile = targetFilePath.split("media/")
 print(dbName)
 conn = sqlite3.connect(dbName)
 c = conn.cursor()
-c.execute("INSERT INTO eventlogUploader_document(docfile) VALUES (?)",(targetFile,))
+c.execute("INSERT INTO eventlogUploader_document(docfile, token) VALUES (?,?)",(targetFile,secure_token))
 conn.commit()
 conn.close()
