@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.core.mail import BadHeaderError, send_mail
 from django.urls import reverse
 from django.conf import settings
@@ -18,14 +18,16 @@ def handle_view_file(request):
         form = DownloadForm(request.POST)
         if form.is_valid():
             input_token = form.cleaned_data['token']
-            documents=Document.objects.filter(token = input_token)
-            return HttpResponseRedirect(reverse('index'))
+            documents=list(Document.objects.filter(token = input_token).values())
+
+            return JsonResponse(documents, safe= False)
 
 
 def handle_file_upload(request):
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
+            print(form)
             algorithm = form.cleaned_data['algorithm']
             email = form.cleaned_data['email']
         #TODO clarrify if these should be default values?

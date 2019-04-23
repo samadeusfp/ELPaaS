@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+		{% load static %}
 
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="index.css">
@@ -9,10 +9,10 @@
         <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>        
         <script src="http://netdna.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         
+        
         <meta charset="utf-8">
         <title>ELPaaS - Event Log Privacy as a Service</title>
     </head>
-    
     
     <body>
 		<header>
@@ -30,7 +30,7 @@
 			</button>
 		</p>
 		
-		<!-- File Download Modal -->
+		<!-- File View Modal -->
 			<div class="modal fade" tabindex="-1" role="dialog" id="view_file">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
@@ -41,7 +41,7 @@
 							</button>
 						</div>
 						{% load crispy_forms_tags %}
-						<form action="{% url 'view' %}" method="post" enctype="multipart/form-data">
+						<form action="{% url 'view' %}" method="post" id="view_file_form">
 						<div class="modal-body">
 							{% csrf_token %}
 							{{download_form|crispy}}
@@ -65,7 +65,7 @@
 							</button>
 						</div>
 						{% load crispy_forms_tags %}
-						<form action="{% url 'upload' %}" method="post" enctype="multipart/form-data">
+						<form action="{% url 'upload' %}" method="post" enctype="multipart/form-data" id="upload_file_form">
 						<div class="modal-body">
 							{% csrf_token %}
 							{{upload_form|crispy}}
@@ -79,27 +79,39 @@
 			</div>
 			
 		<!-- Uploaded Files -->
-			<div id="processed_files">
-				<h2>Uploaded documents</h2>
-				{% if documents %}
-					<ul class="list-group">
-					{% for document in documents %}
-						<li>
-							<a href="{{ document.docfile.url }}">
-								{{ document.docfile.name }}
-							</a>
-						</li>
-					{% endfor %}
-					</ul>
-				{% else %}
-					<p>No documents.</p>
-				{% endif %}
+			<div class="card" id="file_view_area">
+				<div class="card-header" id="file_view_area_header">
+					<h3>Uploaded Documents</h3>
+				</div>
+			<div class="card-body" id="file_view_area_body">
+						<div id="information_area">
+							No Documents to show
+							<!-- Used to tell user that no document has been found -->
+						</div>
+						
+						<table class="table" id="file_table">
+							<thead>
+								<tr>
+									<th scope="col">Document</th>
+									<th scope="col">Status</th>
+									<th scope="col">Uploaded on</th>
+								</tr>
+							</thead>
+							<tbody id="file_table_body">
+								<!-- dynamically loaded -->
+							</tbody>
+						</table>
+				</div>			
 			</div>	
 		<!-- Footer with copyright/contect stuff -->
+		<br><br>
         <footer>
 			<p>
 				©Copyright 2050 by nobody. All rights reversed.
 			</p>
 		</footer>
+		<script language="javascript">var MEDIA_URL = "{{ media_url }}";</script>
+		<script type="text/javascript" src="{% static 'index.js' %}"></script>
+
     </body>
 </html>
