@@ -18,11 +18,13 @@ targetFilePath = filePath.replace(".csv","_t%s_k%s_pretsa.csv" % (t,k))
 #privateEventLog = pretsa.getPrivatisedEventLog()
 #privateEventLog.to_csv(targetFilePath, sep=";",index=False)
 
+#save to file, change name to new
+
+#Change existing entry instead of writing a new one, maybe add start and end time
 #Add PRETSA result to django-model/sqlite
-puffer,targetFile = targetFilePath.split("media/")
-print(dbName)
+puffer,targetFile = targetFilePath.split("media/documents/")
 conn = sqlite3.connect(dbName)
 c = conn.cursor()
-c.execute("INSERT INTO eventlogUploader_document(docfile, token) VALUES (?,?)",(targetFile,secure_token))
+c.execute("INSERT INTO eventlogUploader_document(docfile, token, status) VALUES (?,?,?)",(targetFile,secure_token,"FINISHED"))
 conn.commit()
 conn.close()

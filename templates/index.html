@@ -85,10 +85,10 @@
 				</div>
 			<div class="card-body" id="file_view_area_body">
 						<div id="information_area">
-							No Documents to show
-							<!-- Used to tell user that no document has been found -->
+							<!-- print informations here -->
+							No Documents selected. Please enter a Token via the view button!
 						</div>
-						
+						<br>
 						<table class="table" id="file_table">
 							<thead>
 								<tr>
@@ -110,8 +110,10 @@
 				©Copyright 2050 by nobody. All rights reversed.
 			</p>
 		</footer>
-		<script language="javascript">var MEDIA_URL = "{{ media_url }}";</script>
+		<script>
+			var media_adress = "{% get_media_prefix %}";
+		</script>
 		<script type="text/javascript" src="{% static 'index.js' %}"></script>
-
+		
     </body>
 </html>

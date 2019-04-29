@@ -16,13 +16,14 @@ $('#view_file_form').on('submit', function(event){
 					$("#information_area").html("Sorry! We could not find any document");
 				}
 				else{
-					alert(MEDIA_URL);
 					var token = json[0].token;
 					$("#information_area").html("Token: "+token);
 					var doc_table = $("#file_table_body");
 					for(var i=0; i<json.length;i++){
 						var document=json[i].docfile;
-						new_row='<tr><td>'+document+'</a></td><td>Finished</td><td>DATETIME</td></tr>'
+						var status=json[i].status;
+						//<a href="{% static 'document.docfile.name' %}">{{ document.docfile.name }}</a>
+						new_row='<tr><td><a href="'+media_adress+'/documents/'+document+'">'+document+'</a></td><td>'+status+'</td><td>DATETIME</td></tr>'
 						doc_table.append(new_row)
 					}
 				}

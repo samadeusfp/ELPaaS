@@ -36,21 +36,21 @@ def handle_file_upload(request):
             kValue = form.cleaned_data['k']
             tValue = form.cleaned_data['t']
 
-        #TODO clarify why file is explicitly saved           
+            #save doc for error handling
             #newdoc = Document(docfile = request.FILES['docfile'])
             #newdoc.save()
             
-            file = request.FILES['docfile']
-            path = os.getcwd() + "/media/documents/" + file.name
+            file_name = request.FILES['docfile'].name
+            path = os.getcwd() + "/media/documents/" + file_name
             pathDB = os.getcwd() + "/db.sqlite3"
 
             #send mail with token
             secure_token = generate_token(request.FILES['docfile'], email, algorithm)
             send_mail =(secure_token, email)
 
-            #save into db with token
+            #save to db with processing status
+            Document.objects.create(docfile=file_name, token=secure_token, status="PROCESSING")
 
-        #TODO let this run as a background task
             command = "python algorithms/PRETSA/runPretsa.py " + path + " " + str(kValue) + " " + str(tValue) + " " + pathDB + " " + secure_token + " &"
             os.system(command)
 
