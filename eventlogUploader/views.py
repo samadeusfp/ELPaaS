@@ -19,7 +19,6 @@ def handle_view_file(request):
         if form.is_valid():
             input_token = form.cleaned_data['token']
             documents=list(Document.objects.filter(token = input_token).values())
-
             return JsonResponse(documents, safe= False)
 
 
@@ -27,30 +26,27 @@ def handle_file_upload(request):
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
-            print(form)
+            #get values from form
             algorithm = form.cleaned_data['algorithm']
             email = form.cleaned_data['email']
-        #TODO clarrify if these should be default values?
-            #kValue = 4
-            #tValue = 0.2
             kValue = form.cleaned_data['k']
             tValue = form.cleaned_data['t']
 
-            #save doc for error handling
-            #newdoc = Document(docfile = request.FILES['docfile'])
-            #newdoc.save()
-            
+            #generate token, save to db and to media folder
+            secure_token = generate_token(request.FILES['docfile'], email, algorithm)
+            newdoc = Document(docfile = request.FILES['docfile'], token = secure_token, status="PROCESSING" )
+            newdoc.save()
+
+            #TODO /documents as django variable
+            #get all parameter for execution script
             file_name = request.FILES['docfile'].name
             path = os.getcwd() + "/media/documents/" + file_name
             pathDB = os.getcwd() + "/db.sqlite3"
 
             #send mail with token
-            secure_token = generate_token(request.FILES['docfile'], email, algorithm)
             send_mail =(secure_token, email)
 
-            #save to db with processing status
-            Document.objects.create(docfile=file_name, token=secure_token, status="PROCESSING")
-
+            #TODO execute chosen algorithm
             command = "python algorithms/PRETSA/runPretsa.py " + path + " " + str(kValue) + " " + str(tValue) + " " + pathDB + " " + secure_token + " &"
             os.system(command)
 
@@ -61,10 +57,12 @@ def handle_file_upload(request):
 
 #initial rendering of index page, renders upload form and uploaded files if token has been inputted
 def index(request):
+    #TODO clarify if these should be default values?
     upload_form = DocumentForm(initial={"t":"0.2", "k":"4"})
     download_form = DownloadForm()
 
     # Load documents for the list page
+    #TODO seems unneccessary
     documents = Document.objects.all()
 
     # Render list page with the documents

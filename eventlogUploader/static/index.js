@@ -23,7 +23,7 @@ $('#view_file_form').on('submit', function(event){
 						var document=json[i].docfile;
 						var status=json[i].status;
 						//<a href="{% static 'document.docfile.name' %}">{{ document.docfile.name }}</a>
-						new_row='<tr><td><a href="'+media_adress+'/documents/'+document+'">'+document+'</a></td><td>'+status+'</td><td>DATETIME</td></tr>'
+						new_row='<tr><td><a href="'+media_adress+"/"+document+'">'+document+'</a></td><td>'+status+'</td><td>DATETIME</td></tr>'
 						doc_table.append(new_row)
 					}
 				}
