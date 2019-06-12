@@ -13,6 +13,7 @@ import os
 import hashlib
 import datetime
 
+
 def handle_view_file(request):
     if request.method == 'POST':
         form = DownloadForm(request.POST)
@@ -44,10 +45,10 @@ def handle_file_upload(request):
             pathDB = os.getcwd() + "/db.sqlite3"
 
             #send mail with token
-            send_mail =(secure_token, email)
+            send_mail_to_user(secure_token, email)
 
             #TODO execute chosen algorithm
-            command = "python algorithms/PRETSA/runPretsa.py " + path + " " + str(kValue) + " " + str(tValue) + " " + pathDB + " " + secure_token + " &"
+            command = 'python algorithms/PRETSA/runPretsa.py "' + path + '" ' + str(kValue) + ' ' + str(tValue) + ' ' + pathDB + ' ' + secure_token + ' &'
             os.system(command)
 
             # Redirect to the document list after POST
@@ -80,22 +81,22 @@ def generate_token(docfile, email, algorithm):
 
 
 #TODO proper settings for mail management
-def send_mail(secure_token, email):
-        subject = 'ELPaaS - your secure download token'
-        message = 'Hello,'
-        'In this mail you can find your secure token that has been generated the'
-        'log file that you have uploaded to ELPaaS for Privatization.\n'
-        'Use this token to view the status of your file or download it from WEBPAGE.\n'
-        '\n'
-        'Best regards,\n'
-        'your ELPaaS team\n'
-        '\n'
-        'Warning. This in an autmated mail. Please do not reply to this mail.'
-        from_email = 'noreply@elpaas.com'
-        
-        if subject and message and from_email:
-            try:
-                send_mail(subject, message, from_email, [email])
-            except BadHeaderError:
-                return HttpResponse('Invalid header found.')
-        return
+def send_mail_to_user(secure_token, email):
+    subject = 'ELPaaS - your secure download token'
+    message ="""Hello,
+In this mail you can find your secure token that has been generated for the log file that you have uploaded to ELPaaS.
+Use this token to view the status of your file or download it from WEBPAGE
+\n
+Your personal Token is:
+{secure_token}
+\n
+Best regards,
+your ELPaaS team
+\n
+Note: This in an autmated mail. Please do not reply to this mail.""".format(secure_token=str(secure_token))
+    from_email = settings.EMAIL_HOST_USER
+    #try:
+    send_mail(subject, message, from_email, [email])
+    #except BadHeaderError:
+    #    return HttpResponse('Invalid header found.')
+    return

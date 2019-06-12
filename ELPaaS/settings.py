@@ -127,9 +127,12 @@ STATIC_URL = '/static/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#Enter smtp data of your mailhost - right now HU Berlin
+EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'mailhost.cms.hu-berlin.de'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'noreply@gmail.com'
-DEFAULT_FROM_EMAIL = 'testing@testing.com'
+
+#Enter a valid email adress and pw here
+EMAIL_HOST_USER = 'user@hu-berlin.de'
+EMAIL_HOST_PASSWORD = 'your_super_secret_pw'
