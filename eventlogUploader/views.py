@@ -12,6 +12,7 @@ from django.contrib import messages
 import os
 import hashlib
 import datetime
+import subprocess
 
 
 def handle_view_file(request):
@@ -48,8 +49,9 @@ def handle_file_upload(request):
             send_mail_to_user(secure_token, email)
 
             #TODO execute chosen algorithm
-            command = 'python algorithms/PRETSA/runPretsa.py "' + path + '" ' + str(kValue) + ' ' + str(tValue) + ' ' + pathDB + ' ' + secure_token + ' &'
-            os.system(command)
+            command = subprocess.Popen(["python", os.getcwd()+"/algorithms/PRETSA/runPretsa.py", str(path), str(kValue), str(tValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/PRETSA")
+            #command = 'python algorithms/PRETSA/runPretsa.py "' + path + '" ' + str(kValue) + ' ' + str(tValue) + ' ' + pathDB + ' ' + secure_token + ' &'
+            #os.system(command)
 
             # Redirect to the document list after POST
             return HttpResponseRedirect(reverse('index'))

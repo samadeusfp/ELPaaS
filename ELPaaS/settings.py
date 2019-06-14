@@ -134,5 +134,5 @@ EMAIL_HOST = 'mailhost.cms.hu-berlin.de'
 EMAIL_PORT = 587
 
 #Enter a valid email adress and pw here
-EMAIL_HOST_USER = 'user@hu-berlin.de'
-EMAIL_HOST_PASSWORD = 'your_super_secret_pw'
+EMAIL_HOST_USER = 'your-username@hu-berlin.de'
+EMAIL_HOST_PASSWORD = 'your-password'
