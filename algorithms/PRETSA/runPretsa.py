@@ -13,7 +13,6 @@ dbName = sys.argv[4]
 secure_token = sys.argv[5]
 sys.setrecursionlimit(3000)
 targetFilePath = filePath.replace(".csv","_t%s_k%s_pretsa.csv" % (t,k))
-
 #run PRETSA
 eventLog = pd.read_csv(filePath, delimiter=";",skipinitialspace=True, encoding="utf-8-sig")
 pretsa_alg = pretsa.Pretsa(eventLog)
@@ -28,10 +27,11 @@ privateEventLog.to_csv(targetFilePath, sep=";",index=False)
 puffer,targetFile = targetFilePath.split("media/")
 conn = sqlite3.connect(dbName)
 c = conn.cursor()
-c.execute("UPDATE eventlogUploader_document SET status = ? WHERE token = ?", ("FINISHED", secure_token))
+c.execute("UPDATE eventlogUploader_document SET status = ?, docfile = ? WHERE token = ?", ("FINISHED", targetFile, secure_token))
 
 #print mail to user stating file is ready now?
 
 #c.execute("INSERT INTO eventlogUploader_document(docfile, token, status) VALUES (?,?,?)",(targetFile,secure_token,"FINISHED"))
 conn.commit()
 conn.close()
+f.close()

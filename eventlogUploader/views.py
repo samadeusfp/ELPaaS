@@ -30,9 +30,7 @@ def handle_file_upload(request):
         if form.is_valid():
             #get values from form
             algorithm = form.cleaned_data['algorithm']
-            email = form.cleaned_data['email']
-            kValue = form.cleaned_data['k']
-            tValue = form.cleaned_data['t']
+            email = form.cleaned_data['email']         
 
             #generate token, save to db and to media folder
             secure_token = generate_token(request.FILES['docfile'], email, algorithm)
@@ -42,17 +40,21 @@ def handle_file_upload(request):
             #TODO /documents as django variable
             #get all parameter for execution script
             file_name = request.FILES['docfile'].name
-            path = os.getcwd() + "/media/documents/" + file_name
-            pathDB = os.getcwd() + "/db.sqlite3"
+            media_path = os.getcwd() + "/media/documents/" + file_name
+            db_path = os.getcwd() + "/db.sqlite3"
 
             #send mail with token
             send_mail_to_user(secure_token, email)
 
-            #TODO execute chosen algorithm
-            command = subprocess.Popen(["python", os.getcwd()+"/algorithms/PRETSA/runPretsa.py", str(path), str(kValue), str(tValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/PRETSA")
-            #command = 'python algorithms/PRETSA/runPretsa.py "' + path + '" ' + str(kValue) + ' ' + str(tValue) + ' ' + pathDB + ' ' + secure_token + ' &'
-            #os.system(command)
 
+            #Pretsa
+            kValue = form.cleaned_data['k']
+            tValue = form.cleaned_data['t']
+            handle_pretsa_upload(kValue, tValue, media_path, db_path, secure_token)
+            #laplacian
+  #
+
+                
             # Redirect to the document list after POST
             return HttpResponseRedirect(reverse('index'))
 
@@ -60,7 +62,6 @@ def handle_file_upload(request):
 
 #initial rendering of index page, renders upload form and uploaded files if token has been inputted
 def index(request):
-    #TODO clarify if these should be default values?
     upload_form = DocumentForm(initial={
                                         "t":"0.2",
                                         "k":"4",
@@ -70,12 +71,24 @@ def index(request):
     download_form = DownloadForm()
 
     # Load documents for the list page
-    #TODO seems unneccessary
     documents = Document.objects.all()
 
     # Render list page with the documents
     return render(request, 'index.html', {'documents': documents, 'upload_form': upload_form, 'download_form': download_form})
 
+
+#todo have config file that reads installed methods from folders and links correctly
+def handle_pretsa_upload(kValue, tValue, path, pathDB, secure_token):
+    command = subprocess.Popen(["python", os.getcwd()+"/algorithms/PRETSA/runPretsa.py", str(path), str(kValue), str(tValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/PRETSA")
+    return
+
+
+def handle_laplace_df_upload(epsilon, n, p, path, pathDB, secure_token):
+    return
+
+
+def handle_laplace_df_upload(epsilon, n, p, path, pathDB, secure_token):
+    return
 
 
 def generate_token(docfile, email, algorithm):
@@ -84,7 +97,6 @@ def generate_token(docfile, email, algorithm):
     m.update(str.encode(algorithm))
     m.update(str.encode(str(datetime.datetime.now())))
     return m.hexdigest()
-
 
 
 #TODO proper settings for mail management
@@ -102,8 +114,5 @@ your ELPaaS team
 \n
 Note: This in an autmated mail. Please do not reply to this mail.""".format(secure_token=str(secure_token))
     from_email = settings.EMAIL_HOST_USER
-    #try:
     send_mail(subject, message, from_email, [email])
-    #except BadHeaderError:
-    #    return HttpResponse('Invalid header found.')
     return
