@@ -61,7 +61,12 @@ def handle_file_upload(request):
 #initial rendering of index page, renders upload form and uploaded files if token has been inputted
 def index(request):
     #TODO clarify if these should be default values?
-    upload_form = DocumentForm(initial={"t":"0.2", "k":"4"})
+    upload_form = DocumentForm(initial={
+                                        "t":"0.2",
+                                        "k":"4",
+                                        "epsilon":"0.1",
+                                        "n":"10",
+                                        "p":"30"})
     download_form = DownloadForm()
 
     # Load documents for the list page

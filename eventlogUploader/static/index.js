@@ -1,3 +1,40 @@
+$(document).ready(function() {
+	//assumes pretsa is initial algorithm
+			$('#div_id_epsilon').css("display", "none");
+			$('#div_id_k').css("display", "block");
+			$('#div_id_t').css("display", "block");
+			$('#div_id_n').css("display", "none");
+			$('#div_id_p').css("display", "none");
+})
+
+
+$('#id_algorithm').change(function(){
+	var valueSelected = this.value;
+		if (valueSelected == 1){
+			$('#div_id_epsilon').css("display", "none");
+			$('#div_id_k').css("display", "block");
+			$('#div_id_t').css("display", "block");
+			$('#div_id_n').css("display", "none");
+			$('#div_id_p').css("display", "none");
+
+		}
+		else if (valueSelected ==2){
+			$('#div_id_epsilon').css("display", "block");
+			$('#div_id_k').css("display", "none");
+			$('#div_id_t').css("display", "none");
+			$('#div_id_n').css("display", "block");
+			$('#div_id_p').css("display", "block");
+		}
+		else if (valueSelected ==3){
+			$('#id_epsilon').show();
+			$('#div_id_epsilon').css("display", "block");
+			$('#div_id_k').css("display", "none");
+			$('#div_id_t').css("display", "none");
+			$('#div_id_n').css("display", "block");
+			$('#div_id_p').css("display", "block");
+	}
+})
+
 
 $('#view_file_form').on('submit', function(event){
 	event.preventDefault();
