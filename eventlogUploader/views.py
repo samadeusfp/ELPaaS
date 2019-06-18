@@ -33,6 +33,7 @@ def handle_file_upload(request):
             email = form.cleaned_data['email']         
 
             #generate token, save to db and to media folder
+            #TODO seems to replace space characters with "_" but saves in db without
             secure_token = generate_token(request.FILES['docfile'], email, algorithm)
             newdoc = Document(docfile = request.FILES['docfile'], token = secure_token, status="PROCESSING" )
             newdoc.save()
@@ -48,13 +49,16 @@ def handle_file_upload(request):
 
 
             #Pretsa
-            kValue = form.cleaned_data['k']
-            tValue = form.cleaned_data['t']
-            handle_pretsa_upload(kValue, tValue, media_path, db_path, secure_token)
+            if algorithm =='1':
+                kValue = form.cleaned_data['k']
+                tValue = form.cleaned_data['t']
+                handle_pretsa_upload(kValue, tValue, media_path, db_path, secure_token)
             #laplacian
-  #
-
-                
+            if algorithm =='2':
+                epsilonValue = form.cleaned_data['epsilon']
+                nValue = form.cleaned_data['n']
+                pValue = form.cleaned_data['p']
+                handle_laplace_df_upload(epsilonValue, nValue, pValue, media_path, db_path, secure_token)  
             # Redirect to the document list after POST
             return HttpResponseRedirect(reverse('index'))
 
@@ -83,11 +87,12 @@ def handle_pretsa_upload(kValue, tValue, path, pathDB, secure_token):
     return
 
 
-def handle_laplace_df_upload(epsilon, n, p, path, pathDB, secure_token):
+def handle_laplace_df_upload(epsilonValue, nValue, pValue, path, pathDB, secure_token):
+    command = subprocess.Popen(["python", os.getcwd()+"/algorithms/Laplacian_df/runLaplacian_df.py", str(path), str(epsilonValue), str(nValue), str(pValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/Laplacian_df")
     return
 
 
-def handle_laplace_df_upload(epsilon, n, p, path, pathDB, secure_token):
+def handle_laplace_tv_upload(epsilon, n, p, path, pathDB, secure_token):
     return
 
 

@@ -3,7 +3,6 @@ import pandas as pd
 import sqlite3
 import os
 import pretsa
-#change cwd to dir of script
 
 #set parameters
 filePath = sys.argv[1]
@@ -34,4 +33,3 @@ c.execute("UPDATE eventlogUploader_document SET status = ?, docfile = ? WHERE to
 #c.execute("INSERT INTO eventlogUploader_document(docfile, token, status) VALUES (?,?,?)",(targetFile,secure_token,"FINISHED"))
 conn.commit()
 conn.close()
-f.close()

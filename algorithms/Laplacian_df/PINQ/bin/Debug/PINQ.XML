@@ -1,0 +1,598 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PINQ</name>
+    </assembly>
+    <members>
+        <member name="T:PINQ.PINQAgent">
+            <summary>
+            Used as a delegate for data sets, to respond to requests for private access to the data.
+            Intended use is by subtyping and overriding the apply method to implement data set specific logic.
+            </summary>
+        </member>
+        <member name="M:PINQ.PINQAgent.apply(System.Double)">
+            <summary>
+            Method applies logic associated with a change of epsilon to the differential privacy bound of the associated data set.
+            The intended semantics are that if the return value is true then the change is commited, if the return value is false it is not commited.
+            Negative values may be passed in as a way of "rolling back" increments if they are later aborted. It is recommended that all negative changes be applied (the intent is that the only access to this method is through trusted code) as to fail to do so may result in excessively pessimistic privacy assessment.
+            </summary>
+            <param name="epsilon">Additive increment to differential privacy parameter. Both positive and negative values are possible. Can be both positive and negative.</param>
+            <returns>True if the change is accepted, and false if not. It is assumed that negative changes will be accepted, and return values may not always be tested in that case.</returns>
+        </member>
+        <member name="T:PINQ.PINQAgentBudget">
+            <summary>
+            A PINQAgent maintaining a fixed budget. Any request that would exceed the budget is rejected. Accepted requests deplete the budget.
+            </summary>
+        </member>
+        <member name="M:PINQ.PINQAgentBudget.apply(System.Double)">
+            <summary>
+            Tests if the increment epsilon is acceptable. If so, the budget is decremented byfore returning.
+            </summary>
+            <param name="epsilon">epsilon</param>
+            <returns>True iff the remain budget supports the decrement.</returns>
+        </member>
+        <member name="M:PINQ.PINQAgentBudget.#ctor(System.Double)">
+            <summary>
+            Constructor for a PINQAgentBudget
+            </summary>
+            <param name="b">The initial budget setting.</param>
+        </member>
+        <member name="T:PINQ.PINQAgentUnary">
+            <summary>
+            A PINQAgent who scales all requests by a fixed value and passes them on.
+            </summary>
+        </member>
+        <member name="M:PINQ.PINQAgentUnary.apply(System.Double)">
+            <summary>
+            Queries the target PINQAgent with a scaled value of epsilon.
+            </summary>
+            <param name="epsilon">epsilon</param>
+            <returns>Accepts iff the target PINQAgent accepts the scaled request.</returns>
+        </member>
+        <member name="M:PINQ.PINQAgentUnary.#ctor(PINQ.PINQAgent,System.Double)">
+            <summary>
+            PINQAgentUnary Constructor
+            </summary>
+            <param name="t">Target PINQAgent, who handles scaled requests.</param>
+            <param name="s">Scale factor to apply to requests.</param>
+        </member>
+        <member name="T:PINQ.PINQAgentBinary">
+            <summary>
+            A PINQAgent with two targets, both of who must agree to any increment.
+            </summary>
+        </member>
+        <member name="M:PINQ.PINQAgentBinary.apply(System.Double)">
+            <summary>
+            Tests both targets, accepting if both accept.
+            </summary>
+            <param name="epsilon">epsilon</param>
+            <returns>Accepts iff both target PINQAgents accept.</returns>
+        </member>
+        <member name="M:PINQ.PINQAgentBinary.#ctor(PINQ.PINQAgent,PINQ.PINQAgent)">
+            <summary>
+            PINQAgentBinary constructor
+            </summary>
+            <param name="a">First target</param>
+            <param name="b">Second target</param>
+        </member>
+        <member name="T:PINQ.PINQAgentPartition`1">
+            <summary>
+            PINQAgent class resulting from the Partition operation. 
+            Contains a list of epsilon values, and tracks the maximum value.
+            Increments to the maximum are forwarded to the source IQueryable.
+            Requests that do not increment the maximum are accepted.
+            </summary>
+            <typeparam name="K">The type of the key used to partition the data set.</typeparam>
+        </member>
+        <member name="M:PINQ.PINQAgentPartition`1.apply(System.Double)">
+            <summary>
+            Accepts iff the increment to the maximum value is accepted by the target.
+            </summary>
+            <param name="epsilon">epsilon</param>
+            <returns>Accepts if the increment to the maximum value is accepted by the target.</returns>
+        </member>
+        <member name="M:PINQ.PINQAgentPartition`1.#ctor(PINQ.PINQAgent,System.Collections.Generic.Dictionary{`0,System.Double},`0,System.Double[])">
+            <summary>
+            Constructor for PINQAgentPartition
+            </summary>
+            <param name="t">Target PINQAgent</param>
+            <param name="tbl">Table of (key,epsilon) pairs</param>
+            <param name="k">Key associated with this agent</param>
+            <param name="m">Stores a shared maximum between all peers</param>
+        </member>
+        <member name="T:PINQ.PINQueryable`1">
+            <summary>
+            Wrapper for IQueryable generic that helps to maintain differential privacy.
+            Interface intends to parallel the LINQ standard query operators to a large degree, with additional methods specific to differential privacy.
+            </summary>
+            <typeparam name="T">The generic type of the records of the associated IQueryable.</typeparam>
+        </member>
+        <member name="F:PINQ.PINQueryable`1.source">
+            <summary>
+            Data source, to which we apply operations.
+            </summary>
+        </member>
+        <member name="F:PINQ.PINQueryable`1.agent">
+            <summary>
+            Privacy agent, who must confirm all accesses.
+            </summary>
+        </member>
+        <member name="F:PINQ.PINQueryable`1.rewrite">
+            <summary>
+            Rewriting method, applied to all user-supplied expressions before execution.
+            Intended to be used to mitigate exploits and side-channel attacks.
+            </summary>
+        </member>
+        <member name="F:PINQ.PINQueryable`1.random">
+            <summary>
+            Random number generator for all randomized query responses. Consider strengthening as appopriate.
+            </summary>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.NoisyCount(System.Double)">
+            <summary>
+            Counts the number of tuples in the source data set, with noise added for privacy.
+            </summary>
+            <param name="epsilon">The accuracy of the associated noise, influencing the privacy lost.</param>
+            <returns>The count of the source data set, plus Laplace(1.0/epsilon).</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.NoisyAverage(System.Double,System.Linq.Expressions.Expression{System.Func{`0,System.Double}})">
+            <summary>
+            Computes a noisy average resulting from the application of function to each record.
+            The function is tested against the expression visitor, and after application each output value is clamped to [-1,+1].
+            </summary>
+            <param name="epsilon">Determines the accuracy of the average, and the privacy lost</param>
+            <param name="function">Function to apply to each tuple, yield a number in [0,1]</param>
+            <returns>The average of the [0,1] values described by function, plus Laplace(2.0/epsilon)/Count.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.NoisySum(System.Double,System.Linq.Expressions.Expression{System.Func{`0,System.Double}})">
+            <summary>
+            Computes a noisy sum resulting from the application of function to each record.
+            The function is first tested again the expression visitor, and the output of each invocation is clamped to [-1,+1].
+            </summary>
+            <param name="epsilon">Determines the accuracy of the sum, and privacy lost.</param>
+            <param name="function">Function to be applied to each record. Results are clamped to [-1.0,+1.0].</param>
+            <returns>The clamped sums of the application of function to each record, plus Laplace(1.0/epsilon).</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.NoisyOrderStatistic(System.Double,System.Double,System.Linq.Expressions.Expression{System.Func{`0,System.Double}})">
+            <summary>
+            Computes a value in [0,1] that splits the input at roughly the intended fraction.
+            </summary>
+            <param name="epsilon">Amount of privacy lost. Controls the sensitivity of the computation.</param>
+            <param name="fraction">Value in [0,1] indicating the fraction of data to be split. 0.5 would be median.</param>
+            <param name="function">Function to produce values in [0,1] from the source tuples.</param>
+            <returns>Randomly selected element of [0,1] with exponential bias towards values that split with the appropriate balance.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.NoisyMedian(System.Double,System.Linq.Expressions.Expression{System.Func{`0,System.Double}})">
+            <summary>
+            Computes a value in [0,1] that splits the data approximately in half. Uses NoisyOrderStatistic.
+            </summary>
+            <param name="epsilon">Amount of privacy lost. Controls the sensitivity of the computation.</param>
+            <param name="function">Function to produce values in [0,1] from the source tuples.</param>
+            <returns>Randomly selected element of [0,1] with exponential bias towards those that spilt the data into equal sized parts.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.ExponentialMechanism``1(System.Double,System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{`0,``0,System.Double}})">
+            <summary>
+            Selects an element of range using the provided score function to evaluate each option against the tuples in the data set.
+            Output is selected with probability proportional to the exponential of epsilon times the summed score function applied to each tuple in the data set.
+            </summary>
+            <typeparam name="R">Type of the output.</typeparam>
+            <param name="epsilon">Describes the accuracy of the mechanism, by dampening the influence of the score function, as well as the privacy loss.</param>
+            <param name="range">Set of possible outputs.</param>
+            <param name="scoreFunc">Function that scores each of the tuples of the data set against each of the possible results.</param>
+            <returns>Returns a random element of range, with probability exponentially favoring those elements that score well in aggregate with tuples in the data set.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Where(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            LINQ Where transformation.
+            </summary>
+            <param name="predicate">boolean predicate applied to each record</param>
+            <returns>PINQueryable containing the subset of records satisfying the input predicate.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Select``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            LINQ Select transformation.
+            </summary>
+            <typeparam name="S">Result type of the underlying records.</typeparam>
+            <param name="selector">Record-to-record transformation</param>
+            <returns>PINQueryable containing the transformations of records in the source data set.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.SelectMany``1(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Collections.Generic.IEnumerable{``0}}})">
+            <summary>
+            LINQ SelectMany transformation. Each record may only produce a limited number of records.
+            </summary>
+            <typeparam name="S">Result type of the underlying records.</typeparam>
+            <param name="k">Upper bound on number of records produced by each input record.</param>
+            <param name="selector">Record-to-RecordList transformation</param>
+            <returns>PINQueryable containing the first k records produced from each source record.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Take(System.Int32)">
+            <summary>
+            LINQ Take transformation.
+            </summary>
+            <param name="count">Number of records to return</param>
+            <returns>PINQueryable containing the first count records.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Skip(System.Int32)">
+            <summary>
+            LINQ Skip transformation
+            </summary>
+            <param name="count">Number of records to skip</param>
+            <returns>PINQueryable containing all but the first count records.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Join``3(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{System.Linq.IGrouping{``1,`0},System.Linq.IGrouping{``1,``0},``2}})">
+            <summary>
+            LINQ Join with an unprotected IQueryable.
+            </summary>
+            <typeparam name="S">Other record type</typeparam>
+            <typeparam name="K">Key type</typeparam>
+            <typeparam name="R">Result type</typeparam>
+            <param name="other">Second data set</param>
+            <param name="keySelector1">First key selector</param>
+            <param name="keySelector2">Second key selector</param>
+            <param name="resultSelector">Result selector</param>
+            <returns>PINQueryable containing the Join of the two data sets, each first GroupBy'd using their key selector functions.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Join``3(System.Linq.IQueryable{``0},PINQ.PINQAgent,System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{System.Linq.IGrouping{``1,`0},System.Linq.IGrouping{``1,``0},``2}})">
+            <summary>
+            LINQ Join with an unprotected IQueryable, but an intended PINQAgent protecting it. 
+            </summary>
+            <typeparam name="S">Other data type</typeparam>
+            <typeparam name="K">Key type</typeparam>
+            <typeparam name="R">Result type</typeparam>
+            <param name="other">Second data set</param>
+            <param name="otherAgent">Second data set's PINQAgent</param>
+            <param name="keySelector1">First key selector</param>
+            <param name="keySelector2">Second key selector</param>
+            <param name="resultSelector">Result selector</param>
+            <returns></returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Join``3(PINQ.PINQueryable{``0},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{System.Linq.IGrouping{``1,`0},System.Linq.IGrouping{``1,``0},``2}})">
+            <summary>
+            Entrypoint for Join with a PINQueryable. Passes control to the other PINQueryable to expose its IQueryable.
+            </summary>
+            <typeparam name="S">Second data type</typeparam>
+            <typeparam name="K">Key type</typeparam>
+            <typeparam name="R">Result type</typeparam>
+            <param name="other">Second PINQueryable</param>
+            <param name="keySelector1">First key selector</param>
+            <param name="keySelector2">Second key selector</param>
+            <param name="resultSelector">Result selector</param>
+            <returns>Passes control to other PINQueryable. Intends to return a PINQueryable containing the Join of the two data sets, after each is GroupBy'd using their key selectors.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.JoinHelper``3(PINQ.PINQueryable{``0},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{System.Linq.IGrouping{``1,``0},System.Linq.IGrouping{``1,`0},``2}})">
+            <summary>
+            Helper method for Join. Invokes first PINQueryable's join on its unprotected data.
+            </summary>
+            <typeparam name="S">First data type</typeparam>
+            <typeparam name="K">Key type</typeparam>
+            <typeparam name="R">Result type</typeparam>
+            <param name="other">First data set</param>
+            <param name="keySelector1">This key selector</param>
+            <param name="keySelector2">Other key selectar</param>
+            <param name="resultSelector">Result selector</param>
+            <returns>Invokes the other PINQueryable's Join method with unprotected data, and returns its result.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Join``3(System.Linq.IQueryable{``0},PINQ.PINQAgent,System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,``0,``2}})">
+            <summary>
+            Bounded Join with unprotected IQueryable and PINQAgent intended to protect it. The join imposes a limit on the number of records from each data set mapping to each key. 
+            </summary>
+            <typeparam name="S">Other data type</typeparam>
+            <typeparam name="K">Key type</typeparam>
+            <typeparam name="R">Result type</typeparam>
+            <param name="other">Other data set</param>
+            <param name="otherAgent">Other data set's PINQAgent</param>
+            <param name="keySelector1">First key selector</param>
+            <param name="keySelector2">Secord key selector</param>
+            <param name="bound1">bound on per-key records in first data set</param>
+            <param name="bound2">bound on pre-key records in second data set</param>
+            <param name="resultSelector">result selector</param>
+            <returns>PINQueryable containing the LINQ JOIN of the first bound1 and bound2 records for each key, from the two data sets.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Join``3(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,``0,``2}})">
+            <summary>
+            Bounded Join with unprotected IQueryable and PINQAgent intended to protect it. The join imposes a limit on the number of records from each data set mapping to each key. 
+            </summary>
+            <typeparam name="S">Other data type</typeparam>
+            <typeparam name="K">Key type</typeparam>
+            <typeparam name="R">Result type</typeparam>
+            <param name="other">Other data set</param>
+            <param name="keySelector1">First key selector</param>
+            <param name="keySelector2">Secord key selector</param>
+            <param name="bound1">bound on per-key records in first data set</param>
+            <param name="bound2">bound on pre-key records in second data set</param>
+            <param name="resultSelector">result selector</param>
+            <returns>PINQueryable containing the LINQ JOIN of the first bound1 and bound2 records for each key, from the two data sets.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Join``3(PINQ.PINQueryable{``0},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,``0,``2}})">
+            <summary>
+            Bounded Join with unprotected IQueryable and PINQAgent intended to protect it. The join imposes a limit on the number of records from each data set mapping to each key. 
+            </summary>
+            <typeparam name="S">Other data type</typeparam>
+            <typeparam name="K">Key type</typeparam>
+            <typeparam name="R">Result type</typeparam>
+            <param name="other">Other data set</param>
+            <param name="keySelector1">First key selector</param>
+            <param name="keySelector2">Secord key selector</param>
+            <param name="bound1">bound on per-key records in first data set</param>
+            <param name="bound2">bound on pre-key records in second data set</param>
+            <param name="resultSelector">result selector</param>
+            <returns>PINQueryable containing the LINQ JOIN of the first bound1 and bound2 records for each key, from the two data sets.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.JoinHelper``3(PINQ.PINQueryable{``0},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{``0,`0,``2}})">
+            <summary>
+            Bounded Join with unprotected IQueryable and PINQAgent intended to protect it. The join imposes a limit on the number of records from each data set mapping to each key. 
+            </summary>
+            <typeparam name="S">Other data type</typeparam>
+            <typeparam name="K">Key type</typeparam>
+            <typeparam name="R">Result type</typeparam>
+            <param name="other">Other data set</param>
+            <param name="keySelector1">First key selector</param>
+            <param name="keySelector2">Secord key selector</param>
+            <param name="bound1">bound on per-key records in first data set</param>
+            <param name="bound2">bound on pre-key records in second data set</param>
+            <param name="resultSelector">result selector</param>
+            <returns>PINQueryable containing the LINQ JOIN of the first bound1 and bound2 records for each key, from the two data sets.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.GroupJoin``3(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{`0,System.Collections.Generic.IEnumerable{``0},``2}})">
+            <summary>
+            LINQ GroupJoin with an unprotected IQueryable.
+            </summary>
+            <typeparam name="S">Other data type</typeparam>
+            <typeparam name="K">Key type</typeparam>
+            <typeparam name="R">Result type</typeparam>
+            <param name="other">Other IQueryable</param>
+            <param name="keySelector1">This key selector</param>
+            <param name="keySelector2">Other key selector</param>
+            <param name="resultSelector">Result selector</param>
+            <returns>PINQueryable containing the GroupJoin with the unprotected IQueryable.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.GroupJoin``3(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{System.Linq.IGrouping{``1,`0},System.Collections.Generic.IEnumerable{``0},``2}})">
+            <summary>
+            LINQ GroupJoin with an unprotected IQueryable, and result selector that expects pairs of groups.
+            </summary>
+            <typeparam name="S">Other data type</typeparam>
+            <typeparam name="K">Key type</typeparam>
+            <typeparam name="R">Result type</typeparam>
+            <param name="other">Other data set</param>
+            <param name="keySelector1">This key selector</param>
+            <param name="keySelector2">Other key selector</param>
+            <param name="resultSelector">Result selector</param>
+            <returns>PINQueryable containing the GroupJoin with the unprotected IQueryable, the first having been GroupBy'd its key selector.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.GroupJoin``3(System.Linq.IQueryable{``0},PINQ.PINQAgent,System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{System.Linq.IGrouping{``1,`0},System.Collections.Generic.IEnumerable{``0},``2}})">
+            <summary>
+            LINQ GroupJoin with an unprotected IQueryable and a PINQAgent intended to protect that IQueryable.
+            </summary>
+            <typeparam name="S">Other data type</typeparam>
+            <typeparam name="K">Key type</typeparam>
+            <typeparam name="R">Result type</typeparam>
+            <param name="other">Other data set</param>
+            <param name="otherAgent">Other data set's PINQAgent</param>
+            <param name="keySelector1">This key selector</param>
+            <param name="keySelector2">Other key selector</param>
+            <param name="resultSelector">Result selector</param>
+            <returns>PINQueryable containing the GroupJoin of the two data sets, the first having been GroupBy'd its key selector.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.GroupJoin``3(PINQ.PINQueryable{``0},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{System.Linq.IGrouping{``1,`0},System.Collections.Generic.IEnumerable{``0},``2}})">
+            <summary>
+            LINQ GroupJoin entry point.
+            </summary>
+            <typeparam name="S">Other data type</typeparam>
+            <typeparam name="K">Key type</typeparam>
+            <typeparam name="R">Result type</typeparam>
+            <param name="other">Other data set</param>
+            <param name="keySelector1">This key selector</param>
+            <param name="keySelector2">Other key selector</param>
+            <param name="resultSelector">Result selector</param>
+            <returns>Passes control to other PINQueryable. Intends to result in the GroupJoin of the two, each GroupBy'd their key selectors.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.GroupJoinHelper``3(PINQ.PINQueryable{``0},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{System.Linq.IGrouping{``1,``0},System.Collections.Generic.IEnumerable{`0},``2}})">
+            <summary>
+            GroupJoin helper method. Passes control to the other PINQueryable, with an unprotected data set.
+            </summary>
+            <typeparam name="S">Other data type</typeparam>
+            <typeparam name="K">Key type</typeparam>
+            <typeparam name="R">Result type</typeparam>
+            <param name="other">Other data set</param>
+            <param name="keySelector1">This key selector</param>
+            <param name="keySelector2">Other key selector</param>
+            <param name="resultSelector">Result selector</param>
+            <returns>Passes control to the other PINQueryable. Intends to return the GroupJoin between the two, each GroupBy'd their key selectors.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Concat(System.Linq.IQueryable{`0})">
+            <summary>
+            LINQ Concat with an unprotected IQueryable.
+            </summary>
+            <param name="other">Other IQueryable</param>
+            <returns>PINQueryable containing the concatenation of the two data sets.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Concat(System.Linq.IQueryable{`0},PINQ.PINQAgent)">
+            <summary>
+            LINQ Concat with an unprotected IQueryable, and a PINQAgent meant to protect it.
+            </summary>
+            <param name="other">Other IQueryable</param>
+            <param name="otherAgent">Other IQueryable's PINQAgent</param>
+            <returns>PINQueryable containing the concatenation of the two data sets.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Concat(PINQ.PINQueryable{`0})">
+            <summary>
+            LINQ Concat entry point.
+            </summary>
+            <param name="other">Other PINQueryable</param>
+            <returns>Passes control to other PINQueryable. Intends to return a PINQueryable containing their concatenation.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.ConcatHelper(PINQ.PINQueryable{`0})">
+            <summary>
+            Concat helper method. Passes control to the other PINQueryable with an unprotected IQueryable and PINQAgent.
+            </summary>
+            <param name="first">Other PINQueryable</param>
+            <returns>Passes control to other PINQueryable. Intends to return a PINQueryable containing their concatenation.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.GroupBy``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            LINQ GroupBy operation.
+            </summary>
+            <typeparam name="K">Key type</typeparam>
+            <param name="keySelector">Key selector</param>
+            <returns>PINQueryable containing a list of groups, one for each observed key, of the records mapping to that key.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Distinct">
+            <summary>
+            LINQ Distinct
+            </summary>
+            <returns>PINQueryable containing the distinct set of elements</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Distinct(System.Int32)">
+            <summary>
+            LINQ Distinct up to k elements
+            </summary>
+            <param name="k">max number of elements</param>
+            <returns>Set of at most k of each elements</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Distinct``1(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Distinct with key selector
+            </summary>
+            <typeparam name="K">Key type</typeparam>
+            <param name="k">max number of elements</param>
+            <param name="keySelector">key selector to distinct by</param>
+            <returns>Distinct with key function used rather than the elements</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Union(System.Linq.IQueryable{`0})">
+            <summary>
+            LINQ Union with an unprotected IQueryable.
+            </summary>
+            <param name="other">Other IQueryable</param>
+            <returns>PINQueryable containing the union of the two data sets.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Union(System.Linq.IQueryable{`0},PINQ.PINQAgent)">
+            <summary>
+            LINQ Union with an unprotected IQueryable, and a PINQAgent intended to protect it.
+            </summary>
+            <param name="other">Other IQueryable</param>
+            <param name="otherAgent">Other IQueryable's PINQAgent</param>
+            <returns>PINQueryable containing the union of the two data sets.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Union(PINQ.PINQueryable{`0})">
+            <summary>
+            LINQ Union entry point
+            </summary>
+            <param name="other">Other PINQueryable</param>
+            <returns>Passes control to other PINQueryable. Intends to return a PINQueryable containing their union.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.UnionHelper(PINQ.PINQueryable{`0})">
+            <summary>
+            Union Helper. Passes control to other PINQueryable with an unprotected IQueryable.
+            </summary>
+            <param name="first">Other PINQueryable</param>
+            <returns>Passes control to other PINQueryable. Intends to return a PINQueryable containing their union.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Intersect(System.Linq.IQueryable{`0})">
+            <summary>
+            LINQ Intersect with an unprotected IQueryable
+            </summary>
+            <param name="other">Other IQueryable</param>
+            <returns>PINQueryable containing the intersection of the two data sets.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Intersect(System.Linq.IQueryable{`0},PINQ.PINQAgent)">
+            <summary>
+            LINQ Intersect with an unprotected IQueryable and a PINQAgent intended to protect it.
+            </summary>
+            <param name="other">Other IQueryable</param>
+            <param name="otherAgent">Other IQueryable's PINQAgent</param>
+            <returns>PINQueryable containing the intersection of the two data sets.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Intersect(PINQ.PINQueryable{`0})">
+            <summary>
+            LINQ Intersect entry point.
+            </summary>
+            <param name="other">Otehr PINQueryable</param>
+            <returns>Passes control to the other PINQueryable. Intends to return a PINQueryable containing their intersection.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.IntersectHelper(PINQ.PINQueryable{`0})">
+            <summary>
+            Intersect helper function. Passes control to the other PINQueryable with an unprotected IQueryable.
+            </summary>
+            <param name="first">Other PINQueryable</param>
+            <returns>Passes control to the other PINQueryable. Intends to return a PINQueryable containing their intersection.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Except(System.Linq.IQueryable{`0})">
+            <summary>
+            LINQ Except with an unprotected IQueryable
+            </summary>
+            <param name="other">Other IQueryable</param>
+            <returns>PINQueryable containing all records except those in other.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Except(System.Linq.IQueryable{`0},PINQ.PINQAgent)">
+            <summary>
+            LINQ Except with an unprotected IQueryable and a PINQAgent intended to protect it.
+            </summary>
+            <param name="other">Other IQueryable</param>
+            <param name="otherAgent">Other IQueryable's PINQAgent</param>
+            <returns>PINQueryable containing all records except those in other.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Except(PINQ.PINQueryable{`0})">
+            <summary>
+            PINQ Except entry point. Passes control to the other PINQueryable.
+            </summary>
+            <param name="other">Other PINQueryable</param>
+            <returns>Passes control to the other PINQueryable. Intends to return a PINQueryable containing all records except those in other.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.ExceptHelper(PINQ.PINQueryable{`0})">
+            <summary>
+            Except helper. Passes control to other PINQueryable with an unprotected IQueryable.
+            </summary>
+            <param name="first">Other PINQueryable</param>
+            <returns>Passes control to the other PINQueryable. Intends to return a PINQueryable containing all records in other, except records in this.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Partition``1(``0[],System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Partitions the PINQueryable into a set of PINQueryables, one for each of the provided keys.
+            </summary>
+            <typeparam name="K">Type of the keys.</typeparam>
+            <param name="keys">Explicit set of possible key values.</param>
+            <param name="keyFunc">Function that yields the key associated with a record.</param>
+            <returns>An Dictionary mapping each key to a PINQueryable of records from the source data set that yield the key.</returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.#ctor(System.Linq.IQueryable{`0},PINQ.PINQAgent,System.Func{System.Linq.Expressions.Expression,System.Linq.Expressions.Expression})">
+            <summary>
+            PINQueryable Constructor.
+            </summary>
+            <param name="s">Source IQueryable</param>
+            <param name="a">Agent. null indicates no constraints on use.</param>
+            <param name="r">Expression rewriter. null indicates no rewriting performed.</param>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.#ctor(System.Linq.IQueryable{`0},PINQ.PINQAgent)">
+            <summary>
+            Constructor without an expression checker (all expressions are accepted).
+            A null agent parameter introduces an agent that accepts all requests.
+            </summary>
+            <param name="s">Source IQueryable.</param>
+            <param name="a">Agent. null indicates no constraints on use.</param>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.NewPINQueryable``1(System.Linq.IQueryable{``0},PINQ.PINQAgent)">
+            <summary>
+            Factory method used to produce new PINQueryable objects in transformation methods. 
+            Subtypes of PINQueryable should override this method to ensure the correct subtype of PINQueryable is created by each of their transformations.
+            </summary>
+            <typeparam name="S">Type of record underlying the IQueryable</typeparam>
+            <param name="s">Source IQueryable</param>
+            <param name="a">Agent</param>
+            <returns></returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.AsPINQueryable">
+            <summary>
+            Used to up-cast a more specialized PINQueryable
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PINQ.PINQueryable`1.Materialize">
+            <summary>
+            Materializes the contents of a PINQueryable. 
+            In principle, this result in no information disclosure, but can be a useful performance 
+            optimization for LINQ providers that are not good about spotting common subexpressions.
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

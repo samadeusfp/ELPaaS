@@ -1,0 +1,46 @@
+C:\Process Mining\DotNet\PINQ\ProtectedLog\obj\Debug\ProtectedLog.csprojAssemblyReference.cache
+C:\Process Mining\DotNet\PINQ\ProtectedLog\obj\Debug\ProtectedLog.csproj.CoreCompileInputs.cache
+C:\Process Mining\DotNet\PINQ\ProtectedLog\bin\Debug\ProtectedLog.exe.config
+C:\Process Mining\DotNet\PINQ\ProtectedLog\bin\Debug\ProtectedLog.exe
+C:\Process Mining\DotNet\PINQ\ProtectedLog\bin\Debug\ProtectedLog.pdb
+C:\Process Mining\DotNet\PINQ\ProtectedLog\bin\Debug\Angara.Serialization.dll
+C:\Process Mining\DotNet\PINQ\ProtectedLog\bin\Debug\Angara.Statistics.dll
+C:\Process Mining\DotNet\PINQ\ProtectedLog\bin\Debug\Angara.Table.dll
+C:\Process Mining\DotNet\PINQ\ProtectedLog\bin\Debug\LINQtoCSV.dll
+C:\Process Mining\DotNet\PINQ\ProtectedLog\bin\Debug\PINQ.dll
+C:\Process Mining\DotNet\PINQ\ProtectedLog\bin\Debug\System.Collections.Immutable.dll
+C:\Process Mining\DotNet\PINQ\ProtectedLog\bin\Debug\PINQ.pdb
+C:\Process Mining\DotNet\PINQ\ProtectedLog\bin\Debug\PINQ.xml
+C:\Process Mining\DotNet\PINQ\ProtectedLog\bin\Debug\Angara.Serialization.xml
+C:\Process Mining\DotNet\PINQ\ProtectedLog\bin\Debug\Angara.Statistics.xml
+C:\Process Mining\DotNet\PINQ\ProtectedLog\bin\Debug\Angara.Table.xml
+C:\Process Mining\DotNet\PINQ\ProtectedLog\bin\Debug\System.Collections.Immutable.xml
+C:\Process Mining\DotNet\PINQ\ProtectedLog\obj\Debug\ProtectedLog.csproj.CopyComplete
+C:\Process Mining\DotNet\PINQ\ProtectedLog\obj\Debug\ProtectedLog.exe
+C:\Process Mining\DotNet\PINQ\ProtectedLog\obj\Debug\ProtectedLog.pdb
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\ProtectedLog.exe.config
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\ProtectedLog.exe
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\ProtectedLog.pdb
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\Angara.Serialization.dll
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\Angara.Statistics.dll
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\Angara.Table.dll
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\LINQtoCSV.dll
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\PINQ.dll
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\System.Collections.Immutable.dll
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\PINQ.pdb
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\PINQ.xml
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\Angara.Serialization.xml
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\Angara.Statistics.xml
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\Angara.Table.xml
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\System.Collections.Immutable.xml
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\obj\Debug\ProtectedLog.csprojAssemblyReference.cache
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\obj\Debug\ProtectedLog.csproj.CoreCompileInputs.cache
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\obj\Debug\ProtectedLog.csproj.CopyComplete
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\obj\Debug\ProtectedLog.exe
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\obj\Debug\ProtectedLog.pdb
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\Grapevine.dll
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\System.Linq.Dynamic.dll
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\ProtectedLog.exe.manifest
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\bin\Debug\ProtectedLog.application
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\obj\Debug\ProtectedLog.exe.manifest
+C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\ProtectedLog\obj\Debug\ProtectedLog.application

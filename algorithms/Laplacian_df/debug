@@ -1,0 +1,9 @@
+Executing runLaplacian with params
+CWD      :C:\Users\X230\SHK\ELPaaS\algorithms\Laplacian_df
+FilePath :C:\Users\X230\SHK\ELPaaS/media/documents/Sepsis_Cases_-_Event_Log.xes
+Epsilon  :0.1
+n        :10
+p        :30
+dbName   :C:\Users\X230\SHK\ELPaaS/db.sqlite3
+Token    :0c5de3008622fed5029dedde83f7542c59c5a98c93eb5a316e5bb185f0d778cd
+C:\Users\X230\SHK\ELPaaS\algorithms\Laplacian_df/ProtectedLog/data/convert.RDone
