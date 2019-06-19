@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>Angara.Statistics</name></assembly>
+<members>
+<member name="M:Angara.Filzbach.Sampler.runmcmc(Angara.Filzbach.Parameters,Microsoft.FSharp.Core.FSharpFunc{Angara.Filzbach.Parameters,System.Double},System.Int32,System.Int32,Microsoft.FSharp.Core.FSharpOption{System.Int32},Microsoft.FSharp.Core.FSharpOption{Angara.Statistics.MT19937})">
+<summary>
+ Complete sampling procedure that does `burnCount` burn-in iterations
+ followed by collecting `sampleCount` samples from posterior.
+ Total number of iterations is `burnCount + thinning * sampleCount`.
+</summary>
+</member>
+<member name="M:Angara.Filzbach.Sampler.print(Angara.Filzbach.SamplerResult)">
+<summary>
+ Prints summary of results from `runmcmc` or `continuemcmc`.
+</summary>
+</member>
+<member name="M:Angara.Filzbach.Sampler.continuemcmc(Angara.Filzbach.Sampler,Microsoft.FSharp.Core.FSharpFunc{Angara.Filzbach.Parameters,System.Double},System.Int32,System.Int32,Microsoft.FSharp.Core.FSharpOption{System.Int32})">
+<summary>
+ Continuation of sampling procedure after incomplete burn-in. It does `burnCount` additional burn-in iterations
+ followed by collecting `sampleCount` samples from posterior.
+ Total number of iterations is `burnCount + thinning * sampleCount`.
+</summary>
+</member>
+<member name="M:Angara.Filzbach.Sampler.Probe(System.Boolean,Microsoft.FSharp.Core.FSharpFunc{Angara.Filzbach.Parameters,System.Double})">
+<summary>
+ Advance one iteration of either burn-in or sampling
+</summary>
+</member>
+<member name="T:Angara.Filzbach.Sampler">
+<summary>
+ An immutable state of Filzbach MCMC sampler.
+</summary>
+</member>
+<member name="P:Angara.Filzbach.Parameters.CountValues">
+<summary>
+ Total number of all parameter values.
+</summary>
+</member>
+<member name="P:Angara.Filzbach.Parameters.AllValues">
+<summary>
+ Get all values of all parameters.
+ For a parameter `&quot;p&quot;` the parameter values are at index `x.GetDefinition(&quot;p&quot;).index` in the `values` array.
+</summary>
+</member>
+<member name="M:Angara.Filzbach.Parameters.SetValues(System.Double[])">
+<summary>
+ Replaces all parameter values.
+ For a parameter `&quot;p&quot;` the parameter values are at index `x.GetDefinition(&quot;p&quot;).index` in the `values` array.
+</summary>
+</member>
+<member name="M:Angara.Filzbach.Parameters.GetValues(System.String)">
+<summary>
+ Get an array of all values of a parameter.
+</summary>
+</member>
+<member name="M:Angara.Filzbach.Parameters.GetValue(System.String,System.Int32)">
+<summary>
+ Get a value of a vector parameter.
+</summary>
+</member>
+<member name="M:Angara.Filzbach.Parameters.GetValue(System.String)">
+<summary>
+ Get a value of a scalar parameter.
+</summary>
+</member>
+<member name="M:Angara.Filzbach.Parameters.GetValue(System.Int32)">
+<summary>
+ Fast access to parameter values. See &lt;see cref=&quot;SetValues&quot;/&gt; for explanation of indices.
+</summary>
+</member>
+<member name="M:Angara.Filzbach.Parameters.GetName(System.Int32)">
+<summary>
+ Get a parameter name by value index.
+</summary>
+</member>
+<member name="M:Angara.Filzbach.Parameters.GetDefinition(System.String)">
+<summary>
+ Get a parameter definition.
+</summary>
+</member>
+<member name="M:Angara.Filzbach.Parameters.Add(System.String,System.Double,System.Double,System.Double,System.Int32,System.Int32,System.Int32,Microsoft.FSharp.Core.FSharpOption{System.Int32})">
+<summary>
+ Add a parameter.
+ This signature is compatible with `parameter_create` and `parameter_create_vector` functions
+ described in [Filzbach User Guide](http://research.microsoft.com/en-us/um/cambridge/groups/science/tools/filzbach/filzbach%20user%20gude%20v.1.1.pdf).
+ The `dsply` argument is not used here.
+</summary>
+</member>
+<member name="M:Angara.Filzbach.Parameters.Add(System.String,System.Double[],Angara.Statistics.Distribution)">
+<summary>
+ Add a parameter with a prior and starting values
+</summary>
+</member>
+<member name="M:Angara.Filzbach.Parameters.Add(System.String,Angara.Statistics.Distribution,Microsoft.FSharp.Core.FSharpOption{System.Int32})">
+<summary>
+ Add a parameter with a prior
+</summary>
+</member>
+<member name="M:Angara.Filzbach.Parameters.Add(System.String,System.Double[])">
+<summary>
+ Add a fixed vector parameter.
+</summary>
+</member>
+<member name="M:Angara.Filzbach.Parameters.Add(System.String,System.Double)">
+<summary>
+ Add a fixed scalar parameter.
+</summary>
+</member>
+<member name="M:Angara.Filzbach.Parameters.Add(System.String,System.Double[],System.Double,System.Double,Microsoft.FSharp.Core.FSharpOption{System.Int32},Microsoft.FSharp.Core.FSharpOption{System.Boolean},Microsoft.FSharp.Core.FSharpOption{Angara.Statistics.Distribution})">
+ <summary>Adds a parameter to the container.</summary>
+ <param name="name">Parameter name.</param>
+ <param name="values">An array of one or more parameter values.</param>
+ <param name="lower">Lower bound of parameter values.</param>
+ <param name="upper">Upper bound of parameter values.</param>
+ <param name="delay">Sampler behaviour: &lt;1 (default) -- initialize values with random numbers;
+ =1 -- start with the values supplied in the call;
+ &gt;1 -- release the parameter values after 'delay' iterations.</param>
+ <param name="isLog">If true, the sampler will use logarithmic transform for the parameter.
+ The default is false.</param>
+ <param name="prior">Prior knowledge. The default is a non-informative prior.</param>
+</member>
+<member name="T:Angara.Filzbach.Parameters">
+<summary>
+ A container for model parameters.
+</summary>
+</member>
+<member name="P:Angara.Filzbach.ParameterDefinition.delay">
+<summary>
+ If `delay&lt;1`, the sampler initializes the parameter value with a random number.
+ If `delay=1`, the sampler starts with the value from the definition record.
+ If `delay&gt;1`, the sampler doesn&apos;t change the parameter value for the first &apos;delay&apos; iterations.
+</summary>
+</member>
+<member name="P:Angara.Filzbach.ParameterDefinition.log_priordf">
+<summary>
+ A preset log_pdf of prior distribution; if isLog, then the first argument of prior is log-parameter.
+ This field automatically gets value from `prior`.
+</summary>
+</member>
+<member name="P:Angara.Filzbach.ParameterDefinition.isLog">
+<summary>
+ When `isLog=true` the sampler transforms the parameter to logarithmic space.
+</summary>
+</member>
+<member name="P:Angara.Filzbach.ParameterDefinition.prior">
+<summary>
+ Prior probability distribution of the parameter; all elements of a vector parameter reuse the same prior.
+</summary>
+</member>
+<member name="P:Angara.Filzbach.ParameterDefinition.upper">
+<summary>
+ An upper bound of parameter values.
+</summary>
+</member>
+<member name="P:Angara.Filzbach.ParameterDefinition.lower">
+<summary>
+ A lower bound of parameter values.
+</summary>
+</member>
+<member name="P:Angara.Filzbach.ParameterDefinition.size">
+<summary>
+ A number of values. For vector parameters &apos;size&gt;1`
+</summary>
+</member>
+<member name="P:Angara.Filzbach.ParameterDefinition.index">
+<summary>
+ An index of the parameter in a parameter values array.
+</summary>
+</member>
+<member name="M:Angara.Statistics.MT19937.uniform_uint32">
+<summary>
+ generates a random number on [0,0xffffffff]-interval 
+</summary>
+</member>
+<member name="M:Angara.Statistics.MT19937.uniform_int(System.Int32)">
+<summary>
+ generates a random number on [0,max]-int-interval
+</summary>
+</member>
+<member name="M:Angara.Statistics.MT19937.uniform_float64">
+<summary>
+ generates a random number on [0,1)-real-interval
+</summary>
+</member>
+<member name="M:Angara.Statistics.MT19937.normal">
+<summary>
+ generates a sample from standard normal distribution N(0,1) using ziggurat algorithm.
+</summary>
+</member>
+<member name="M:Angara.Statistics.MT19937.get_seed">
+<summary>
+ returns an array that allows to exactly restore the state of the generator.
+</summary>
+</member>
+<member name="M:Angara.Statistics.MT19937.bernoulli(System.Double)">
+<summary>
+ generates &apos;true&apos; with probability &apos;p&apos; or &apos;false&apos; with probability &apos;1-p&apos;
+</summary>
+</member>
+<member name="T:Angara.Statistics.Distribution.Binomial">
+<summary>
+ A number of successes in a sequence of n independent yes/no experiments, each of which yields success with probability p.
+</summary>
+</member>
+<member name="T:Angara.Statistics.Distribution.LogUniform">
+<summary>
+ A uniform distribution in log space.
+</summary>
+</member>
+<member name="M:Angara.Statistics.kde(System.Int32,System.Collections.Generic.IEnumerable{System.Double})">
+<summary>
+ Gaussian kernel density estimator for one-dimensional data, using
+ the method of Botev et al.
+</summary>
+</member>
+<member name="M:Angara.Statistics.kde2(System.Int32,System.Double,System.Double,System.Collections.Generic.IEnumerable{System.Double})">
+<summary>
+ Gaussian kernel density estimator for one-dimensional data, using
+ the method of Botev et al.
+</summary>
+</member>
+<member name="M:Angara.Statistics.ridders(System.Double,System.Double,System.Double,Microsoft.FSharp.Core.FSharpFunc{System.Double,System.Double})">
+<summary>
+ Root of a function using Ridders method.
+</summary>
+</member>
+<member name="M:Angara.Statistics.within(System.UInt32,System.Double,System.Double)">
+<summary>
+ Approximate comparison of two double values.
+ Tolerance `ulps` is in units of least precision.
+</summary>
+</member>
+<member name="M:Angara.Statistics.idct(System.Double[])">
+<summary>
+ Inverse discrete cosine transform.
+</summary>
+</member>
+<member name="M:Angara.Statistics.dct(System.Double[])">
+<summary>
+ Descrete cosine transform.
+</summary>
+</member>
+<member name="M:Angara.Statistics.fft(System.Numerics.Complex[])">
+<summary>
+ Fast Fourier transform. 
+</summary>
+</member>
+<member name="M:Angara.Statistics.ifft(System.Numerics.Complex[])">
+<summary>
+ Inverse Fast Fourier Transform.
+</summary>
+</member>
+<member name="M:Angara.Statistics.log_pdf(Angara.Statistics.Distribution,System.Double)">
+<summary>
+ Logarithm of a Probability Distribution Function
+</summary>
+</member>
+<member name="M:Angara.Statistics.qsummary(System.Collections.Generic.IEnumerable{System.Double})">
+<summary>
+ Produces quantile summary of the data.
+</summary>
+</member>
+<member name="M:Angara.Statistics.summary(System.Collections.Generic.IEnumerable{System.Double})">
+<summary>
+ Produces cumulant summary of the data using fast one-pass algorithm.
+</summary>
+</member>
+<member name="P:Angara.Statistics.log2pi">
+<summary>
+ 1/2 * log 2π
+</summary>
+</member>
+<member name="P:Angara.Statistics.sqrt2pi">
+<summary>
+ sqrt 2π
+</summary>
+</member>
+<member name="P:Angara.Statistics.e">
+<summary>
+ natural logarithm base
+</summary>
+</member>
+<member name="P:Angara.Statistics.pi2">
+<summary>
+ 2π
+</summary>
+</member>
+<member name="P:Angara.Statistics.pi">
+<summary>
+ π
+</summary>
+</member>
+<member name="P:Angara.Statistics.maxint">
+<summary>
+ Maximum exact integer `maxint+1.0 = maxint &amp;&amp; maxint-1.0 &lt; maxint` 
+</summary>
+</member>
+<member name="P:Angara.Statistics.log_tolerance">
+<summary>
+ Logarithm of `tolerance`
+</summary>
+</member>
+<member name="P:Angara.Statistics.tolerance">
+<summary>
+ `1.0 - tolerance &lt; 1.0 &amp;&amp; 1.0 - 0.5*tolerance = 1.0`
+</summary>
+</member>
+<member name="P:Angara.Statistics.log_improbable">
+<summary>
+ Logarithm of `improbable`
+</summary>
+</member>
+<member name="P:Angara.Statistics.improbable">
+<summary>
+ The smallest positive normalized `float` value
+</summary>
+</member>
+</members>
+</doc>

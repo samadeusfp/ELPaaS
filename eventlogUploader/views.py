@@ -56,9 +56,13 @@ def handle_file_upload(request):
             #laplacian
             if algorithm =='2':
                 epsilonValue = form.cleaned_data['epsilon']
+                handle_laplace_df_upload(epsilonValue, media_path, db_path, secure_token)  
+            if algorithm =='3':
+                epsilonValue = form.cleaned_data['epsilon']
                 nValue = form.cleaned_data['n']
                 pValue = form.cleaned_data['p']
-                handle_laplace_df_upload(epsilonValue, nValue, pValue, media_path, db_path, secure_token)  
+                handle_laplace_tv_upload(epsilonValue, nValue, pValue, media_path, db_path, secure_token)  
+
             # Redirect to the document list after POST
             return HttpResponseRedirect(reverse('index'))
 
@@ -87,12 +91,13 @@ def handle_pretsa_upload(kValue, tValue, path, pathDB, secure_token):
     return
 
 
-def handle_laplace_df_upload(epsilonValue, nValue, pValue, path, pathDB, secure_token):
-    command = subprocess.Popen(["python", os.getcwd()+"/algorithms/Laplacian_df/runLaplacian_df.py", str(path), str(epsilonValue), str(nValue), str(pValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/Laplacian_df")
+def handle_laplace_df_upload(epsilonValue, path, pathDB, secure_token):
+    command = subprocess.Popen(["python", os.getcwd()+"/algorithms/Laplacian_df/runLaplacian_df.py", str(path), str(epsilonValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/Laplacian_df")
     return
 
 
-def handle_laplace_tv_upload(epsilon, n, p, path, pathDB, secure_token):
+def handle_laplace_tv_upload(epsilonValue, nValue, pValue, path, pathDB, secure_token):
+    command = subprocess.Popen(["python", os.getcwd()+"/algorithms/Laplacian_tv/runLaplacian_tv.py", str(path), str(epsilonValue), str(nValue), str(pValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/Laplacian_tv")
     return
 
 

@@ -48,18 +48,16 @@ convert_traces <- function(csv, activity_lookup) {
 # Evaluation Directly-Follows Graph Variant & Heuristic Miner / Dependency Graph
 #
 
-lapply(c(1:10), function(x) {
+args = commandArgs(trailingOnly=TRUE)
+epsilon <- args[1]
+outPath <- args[2]
 
-  dep_threshold <- .9
-  obs_threshold <- .05
-  epsilon <- 0.01
-
-  dfg_private <- read_csv(url(paste0("http://localhost:1234/events?epsilon=", epsilon))) %>% 
+dfg_private <- read_csv(url(paste0("http://localhost:1234/events?epsilon=", epsilon))) %>% 
     convert_precedence()
   
   #write_csv(dfg_private, paste("lapl_rtf_0_",epsilon,x,".csv"))
-  write_prom_dfg(dfg_private, paste0("lapl_rtf_0_0.01_",x,".dfg"))
-  
+write_prom_dfg(dfg_private, outPath)
+
   #dfg_private %>%
   #  filter(antecedent != "End", consequent != "Start") %>% 
   #  filter(n > obs_threshold * max(n)) %>%
@@ -77,7 +75,6 @@ lapply(c(1:10), function(x) {
   #  dependency_graph(render = F) %>%
   #  export_graph(paste0("original",x, ".pdf"))
   
-})
 
 #
 # Evaluation Trace Variants & Heuristic Miner / Dependency Graph
