@@ -22,8 +22,8 @@ $('#id_algorithm').change(function(){
 			$('#div_id_epsilon').css("display", "block");
 			$('#div_id_k').css("display", "none");
 			$('#div_id_t').css("display", "none");
-			$('#div_id_n').css("display", "block");
-			$('#div_id_p').css("display", "block");
+			$('#div_id_n').css("display", "none");
+			$('#div_id_p').css("display", "none");
 		}
 		else if (valueSelected ==3){
 			$('#id_epsilon').show();
