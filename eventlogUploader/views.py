@@ -8,7 +8,7 @@ from django.conf import settings
 
 from eventlogUploader.models import Document
 from eventlogUploader.forms import DocumentForm, DownloadForm
-from django.contrib import messages 
+from django.contrib import messages
 import os
 import hashlib
 import datetime
@@ -30,12 +30,27 @@ def handle_file_upload(request):
         if form.is_valid():
             #get values from form
             algorithm = form.cleaned_data['algorithm']
+            algorithm_text=""
+            if algorithm == '1':
+                algorithm_text="PretSa"
+            if algorithm == '2':
+                algorithm_text="Laplace directly-follows based"
+            if algorithm == '3':
+                algorithm_text="Laplace trace-variant based"
             email = form.cleaned_data['email']         
 
             #generate token, save to db and to media folder
             #TODO seems to replace space characters with "_" but saves in db without
+            upload_time = datetime.datetime.now()
+            expiration_time = upload_time+ datetime.timedelta(+30)
+            
             secure_token = generate_token(request.FILES['docfile'], email, algorithm)
-            newdoc = Document(docfile = request.FILES['docfile'], token = secure_token, status="PROCESSING" )
+            newdoc = Document(docfile = request.FILES['docfile'],
+                              token = secure_token,
+                              status = "PROCESSING",
+                              algorithm = algorithm_text,
+                              uploaded_on = upload_time,
+                              expires_on = expiration_time)
             newdoc.save()
 
             #TODO /documents as django variable
@@ -45,7 +60,7 @@ def handle_file_upload(request):
             db_path = os.getcwd() + "/db.sqlite3"
 
             #send mail with token
-            send_mail_to_user(secure_token, email)
+            #send_mail_to_user(secure_token, email)
 
 
             #Pretsa

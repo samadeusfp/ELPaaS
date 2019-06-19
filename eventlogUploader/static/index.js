@@ -59,6 +59,9 @@ $('#view_file_form').on('submit', function(event){
 					for(var i=0; i<json.length;i++){
 						var document=json[i].docfile;
 						var status=json[i].status;
+						var algorithm=json[i].algorithm;
+						var uploaded_on=json[i].uploaded_on;
+						var expires_on=json[i].expires_on;
 						file_data="	<tr> \
 										<th>Document\
 										<td><a href="+media_adress+"/"+document+">"+document+"</a></td>\
@@ -69,15 +72,15 @@ $('#view_file_form').on('submit', function(event){
 									<\tr> \
 									<tr> \
 										<th>Algorithm\
-										<td>ALGORITHM(t= ?, k= ?)</td>\
+										<td>"+algorithm+"</td>\
 									<\tr> \
 									<tr> \
 										<th>Uploaded on\
-										<td>HH:MM:SS-DD:MM:YYYY</td>\
+										<td>"+uploaded_on+"</td>\
 									<\tr> \
 																	<tr> \
 										<th>Expires on\
-										<td>HH:MM:SS-DD:MM:YYYY</td>\
+										<td>"+expires_on+"</td>\
 									<\tr> "
 			
 									//			<thead>
