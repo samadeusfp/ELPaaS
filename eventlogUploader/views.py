@@ -60,7 +60,7 @@ def handle_file_upload(request):
             db_path = os.getcwd() + "/db.sqlite3"
 
             #send mail with token
-            #send_mail_to_user(secure_token, email)
+            send_mail_to_user(secure_token, email)
 
 
             #Pretsa
