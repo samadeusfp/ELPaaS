@@ -8,5 +8,5 @@ class Document(models.Model):
     token = models.CharField(max_length=100)
     status = models.CharField(max_length=30)
     algorithm = models.CharField(max_length=100)
-    uploaded_on = models.DateTimeField()
-    expires_on = models.DateTimeField()
+    uploaded_on = models.DateField()
+    expires_on = models.DateField()
