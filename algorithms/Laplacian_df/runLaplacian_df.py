@@ -50,7 +50,7 @@ while not page.status_code == 200:
         sys.exit()
 f.write("Server started")
 
-outPath = filePath.replace(".xes","_%s.xes" % (epsilon))
+outPath = filePath.replace(".xes","_%s.dfg" % (epsilon))
 
 #get privatized log files
 command = subprocess.Popen(["rscript",
