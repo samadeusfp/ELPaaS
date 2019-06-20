@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.core.mail import BadHeaderError, send_mail
@@ -32,7 +31,7 @@ def handle_file_upload(request):
             algorithm = form.cleaned_data['algorithm']
             algorithm_text=""
             if algorithm == '1':
-                algorithm_text="PretSa"
+                algorithm_text="PRETSA"
             if algorithm == '2':
                 algorithm_text="Laplace directly-follows based"
             if algorithm == '3':
@@ -68,10 +67,11 @@ def handle_file_upload(request):
                 kValue = form.cleaned_data['k']
                 tValue = form.cleaned_data['t']
                 handle_pretsa_upload(kValue, tValue, media_path, db_path, secure_token)
-            #laplacian
+            #laplacian df
             if algorithm =='2':
                 epsilonValue = form.cleaned_data['epsilon']
                 handle_laplace_df_upload(epsilonValue, media_path, db_path, secure_token)  
+            #laplacian tv
             if algorithm =='3':
                 epsilonValue = form.cleaned_data['epsilon']
                 nValue = form.cleaned_data['n']

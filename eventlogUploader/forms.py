@@ -5,15 +5,11 @@ from crispy_forms.helper import FormHelper
 class DocumentForm(forms.Form):
     docfile = forms.FileField(
         label='Select a file',
-        required = True,
-        #widget=forms.FileInput(
-        #        attrs={'class':'btn btn-primary'}
-        #)
-        
+        required = True, 
     )
 
     algorithm = forms.ChoiceField(
-        choices=(("1","PretSa"),
+        choices=(("1","PRETSA"),
                  ("2","Laplacian df-based"),
                  ("3","Laplacian tv-based")
                 )
@@ -40,18 +36,18 @@ class DocumentForm(forms.Form):
 
     #laplacian - tv
     n = forms.IntegerField(
-        label='Select n',
+        label='Select maximum Sequence Length',
         required = True,
         )
 
     #laplacian - tv
     p = forms.IntegerField(
-        label='Select p',
+        label='Select Pruning Pramater',
         required = True,
         )
 
     email = forms.EmailField(
-        label='Enter a valid e-mail adress',
+        label='Enter a valid E-mail Adress',
         required = True,
         )
 
