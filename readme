@@ -1,0 +1,22 @@
+Required packages:
+Python:
+sqlite3
+pandas
+scipy
+numpy
+anytree
+hashlib
+datetime
+subprocess
+requests
+time
+
+R:
+bupaR
+readR
+dplyr
+tidyr
+tidyverse
+stringr
+xesreadR
+DiagrammeRsvg
