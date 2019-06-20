@@ -8,104 +8,130 @@
         <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>        
         <script src="http://netdna.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         
-        
         <meta charset="utf-8">
         <title>ELPaaS - Event Log Privacy as a Service</title>
     </head>
     
     <body>
-		<header>
-			<h1>ELPaaS - Event Log Privacy as a Service</h1>
-		</header>
-		<br>
-		<!-- Buttons for fade in/out modals -->
-		<p>
-			<button class="btn btn-primary" type="button" data-toggle="modal" data-target="#view_file">
-				View a File
-			</button>
-			OR
-			<button class="btn btn-primary" type="button" data-toggle="modal" data-target="#upload_file">
-				Upload a File
-			</button>
-		</p>
 		
-		<!-- File View Modal -->
-			<div class="modal fade" tabindex="-1" role="dialog" id="view_file">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5>Enter a secure token</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									&times;
-							</button>
-						</div>
-						{% load crispy_forms_tags %}
-						<form action="{% url 'view' %}" method="post" id="view_file_form">
-						<div class="modal-body">
-							{% csrf_token %}
-							{{download_form|crispy}}
-						</div>
-						<div class="modal-footer">
-							<button type="submit" class="btn btn-primary" >Submit</button>
-						</div>
-						</form>	
-					</div>
-				</div>
-			</div>
-			
-		<!-- File Upload Modal -->
-			<div class="modal fade" tabindex="-1" role="dialog" id="upload_file">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5>Upload a Log-File</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									&times;
-							</button>
-						</div>
-						{% load crispy_forms_tags %}
-						<form action="{% url 'upload' %}" method="post" enctype="multipart/form-data" id="upload_file_form">
-						<div class="modal-body">
-							{% csrf_token %}
-							{{upload_form|crispy}}
-						</div>
-						<div class="modal-footer">
-							<button type="submit" class="btn btn-primary" >Submit</button>
-						</div>
-						</form>	
-					</div>
-				</div>
-			</div>
-			
-		<!-- Uploaded Files -->
-			<div class="card" id="file_view_area">
-				<div class="card-header" id="file_view_area_header">
-					<h3>Uploaded Documents</h3>
-				</div>
-			<div class="card-body" id="file_view_area_body">
-						<div id="information_area">
-							<!-- print informations here -->
-							No Documents selected. Please enter a Token via the view button!
-						</div>
-						<br>
-						<table class="table" id="file_table">
-							<tbody id="file_table_body">
-								<!-- dynamically loaded -->
-							</tbody>
-						</table>
-				</div>			
-			</div>	
-		<!-- Footer with copyright/contect stuff -->
-		<br><br>
-        <footer>
+		<div class="container-fluid">
+			<header class="navbar navbar-expand bg-light"><h2>ELPaaS - Event Log Privacy as a Service</h2>
+			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			  </button>
+			  <!--
+			  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+				  <li class="nav-item active">
+					<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+				  </li>
+				  <li class="nav-item">
+					<a class="nav-link" href="#">Algorithms</a>
+				  </li>
+				  <li class="nav-item">
+					<a class="nav-link" href="#">About Us</a>
+				  </li>
+				</ul>
+			  </div>
+			  -->
+			</header>
+		</div>
+		<div class="container">
+			<!-- Buttons for fade in/out modals -->
 			<p>
-				©Copyright 2050 by nobody. All rights reversed.
+				<div class="row">
+					<div class="col-4">
+					<button class="btn btn-primary" type="button" data-toggle="modal" data-target="#view_file">
+						View a File
+					</button>
+					OR
+					<button class="btn btn-primary" type="button" data-toggle="modal" data-target="#upload_file">
+						Upload a File
+					</button>
+					</div>
+				</div>
 			</p>
-		</footer>
-		<script>
-			var media_adress = "{% get_media_prefix %}";
-		</script>
-		<script type="text/javascript" src="{% static 'index.js' %}"></script>
-		
+			
+			<!-- File View Modal -->
+				<div class="modal fade" tabindex="-1" role="dialog" id="view_file">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5>Enter a secure token</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										&times;
+								</button>
+							</div>
+							{% load crispy_forms_tags %}
+							<form action="{% url 'view' %}" method="post" id="view_file_form">
+							<div class="modal-body">
+								{% csrf_token %}
+								{{download_form|crispy}}
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn btn-primary" >Submit</button>
+							</div>
+							</form>	
+						</div>
+					</div>
+				</div>
+				
+			<!-- File Upload Modal -->
+				<div class="modal fade" tabindex="-1" role="dialog" id="upload_file">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5>Upload a Log-File</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										&times;
+								</button>
+							</div>
+							{% load crispy_forms_tags %}
+							<form action="{% url 'upload' %}" method="post" enctype="multipart/form-data" id="upload_file_form">
+							<div class="modal-body">
+								{% csrf_token %}
+								{{upload_form|crispy}}
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn btn-primary" >Submit</button>
+							</div>
+							</form>	
+						</div>
+					</div>
+				</div>
+				
+			<!-- Uploaded Files -->
+			<div class="row">
+				<div class="col">
+					<div class="card" id="file_view_area">
+						<div class="card-header bg-light" id="file_view_area_header">
+							<h3>Uploaded Documents</h3>
+						</div>
+						<div class="card-body" id="file_view_area_body">
+							<div id="information_area">
+								<!-- print informations here -->
+								No Documents selected. Please enter a Token via the view button!
+							</div>
+							<br>
+							<table class="table" id="file_table">
+								<tbody id="file_table_body">
+									<!-- dynamically loaded -->
+								</tbody>
+							</table>
+						</div>			
+					</div>
+				</div>	
+			</div>
+			<!-- Footer for additional stuff -->
+			<br><br>
+			<footer>
+				<p>
+				</p>
+			</footer>
+			<script>
+				var media_adress = "{% get_media_prefix %}";
+			</script>
+			<script type="text/javascript" src="{% static 'index.js' %}"></script>
+		</div>
     </body>
 </html>
