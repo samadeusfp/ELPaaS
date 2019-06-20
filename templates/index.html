@@ -10,7 +10,6 @@
     </head>
     
     <body>
-		
 		<div class="container-fluid">
 			<header class="navbar navbar-expand bg-light"><h2>ELPaaS - Event Log Privacy as a Service</h2>
 			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -120,20 +119,32 @@
 				</div>	
 			</div>
 			<!-- Footer for additional stuff -->
-			<br><br>
-			<footer>
-				<p>
-				</p>
-			</footer>
-			<script>
-				var media_adress = "{% get_media_prefix %}";
-			</script>
-			<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>        
-			<script type="text/javascript" src="{% static 'popper.js' %}"></script>	
-			<script src="http://netdna.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-			<script type="text/javascript" src="{% static 'index.js' %}"></script>
+			<div class="container">
+				<footer class="page-footer">
+					<div class="row mt-4">
+						<div class="col-6">
+							</div>
+						<div class="col-2">
+							<img class="img-fluid mx-auto" src="{% static "images/hu.png" %}" alt="My image">				
+						</div>
+						<div class="col-2">
+							<img class="img-fluid mx-auto" src="{% static "images/cau.png" %}" alt="My image">				
+						</div>
+						<div class="col-2">
+							<img class="img-fluid mx-auto" src="{% static "images/sintef.jpg" %}" alt="My image">				
+						</div>
+					</div>
+				</footer>
+			</div>
 		</div>
-			
+
+		<script>
+			var media_adress = "{% get_media_prefix %}";
+		</script>
+		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>        
+		<script type="text/javascript" src="{% static 'popper.js' %}"></script>	
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+		<script type="text/javascript" src="{% static 'index.js' %}"></script>
     </body>
 </html>
