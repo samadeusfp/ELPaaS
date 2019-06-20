@@ -30,15 +30,16 @@ find . -path "*/migrations/*.pyc"  -delete
 rm db.sqlite3"
 -Run "python manage.py makemigrations"
 -Run "python manage.py migrate"
+-Enable the Sending of e-Mails:
+	In ElPaas/settings.py scroll down to the bottom and exchange the data in the
+	following fields with the smtp settings of your desired mail hoster that
+	should be used:
+		EMAIL_HOST
+		EMAIL_PORT
+		EMAIL_Host_USER
+		EMAIL_HOST_PASSWORD
+
+
 
 How to run the server:
 -"python manage.py runserver"
-
-Enable the Sending of e-Mails:
-In ElPaas/settings.py scroll down to the bottom and exchange the data in the
-following fields with the smtp settings of your desired mail hoster that
-should be used:
-EMAIL_HOST
-EMAIL_PORT
-EMAIL_Host_USER
-EMAIL_HOST_PASSWORD
