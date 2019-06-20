@@ -59,7 +59,7 @@ def handle_file_upload(request):
             db_path = os.getcwd() + "/db.sqlite3"
 
             #send mail with token
-            #send_mail_to_user(secure_token, email)
+            send_mail_to_user(secure_token, email)
 
 
             #Pretsa
@@ -85,12 +85,7 @@ def handle_file_upload(request):
 
 #initial rendering of index page, renders upload form and uploaded files if token has been inputted
 def index(request):
-    upload_form = DocumentForm(initial={
-                                        "t":"0.2",
-                                        "k":"4",
-                                        "epsilon":"0.1",
-                                        "n":"10",
-                                        "p":"30"})
+    upload_form = DocumentForm(initial = {'algorithm':"1"})
     download_form = DownloadForm()
 
     # Load documents for the list page
