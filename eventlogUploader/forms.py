@@ -19,12 +19,12 @@ class DocumentForm(forms.Form):
     )
 
     algorithm = forms.ChoiceField(
-        choices=(('', 'Choose an Algorithm'),
+        choices=(('0', 'Choose an Algorithm'),
                  ("1","PRETSA"),
                  ("2","Laplacian df-based"),
                  ("3","Laplacian tv-based")
                 ),
-        help_text ="Assumes a .csv File as Input. The File needs to contain the columns 'Case ID', 'Activity' and 'Duration'"
+        help_text =""
     )
 
     #pretsa

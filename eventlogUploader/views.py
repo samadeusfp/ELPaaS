@@ -85,7 +85,7 @@ def handle_file_upload(request):
 
 #initial rendering of index page, renders upload form and uploaded files if token has been inputted
 def index(request):
-    upload_form = DocumentForm(initial = {'algorithm':''})
+    upload_form = DocumentForm(initial = {'algorithm':'0'})
     download_form = DownloadForm()
 
     # Load documents for the list page
