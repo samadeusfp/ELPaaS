@@ -1,15 +1,16 @@
 $(document).ready(function() {
+	$("#id_algorithm").val("1");
 	//assumes pretsa is initial algorithm
 	$('#div_id_epsilon').css("display", "none");
 	$('#div_id_k').css("display", "block");
 	$('#div_id_t').css("display", "block");
 	$('#div_id_n').css("display", "none");
 	$('#div_id_p').css("display", "none");
+
 	//$('[data-toggle="popover"]').popover();
 	
 
 })
-
 
 $('#id_algorithm').change(function(){
 	var valueSelected = this.value;
