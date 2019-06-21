@@ -67,7 +67,7 @@ class DocumentForm(forms.Form):
         )
 
     email = forms.EmailField(
-        label='Enter a valid E-mail Adress',
+        label='Enter a valid E-mail address',
         required = True,
         )
 
