@@ -15,7 +15,6 @@ try:
     t = sys.argv[3]
     dbName = sys.argv[4]
     secure_token = sys.argv[5]
-
     sys.setrecursionlimit(3000)
     filePath = filePath.replace(" ","_")
     if filePath.endswith(".xes"):
@@ -35,7 +34,7 @@ try:
     cutOutCases = pretsa_alg.runPretsa(int(k),float(t))
     privateEventLog = pretsa_alg.getPrivatisedEventLog()
     privateEventLog.to_csv(targetFilePath, sep=";",index=False)
-    puffer,targetFile = filePath.split("media/")
+    puffer,targetFile = targetFilePath.split("media/")
     conn = sqlite3.connect(dbName)
     c = conn.cursor()
     c.execute("UPDATE eventlogUploader_document SET status = ?, docfile = ? WHERE token = ?", ("FINISHED", targetFile, secure_token))
