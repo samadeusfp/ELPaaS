@@ -7,24 +7,24 @@ class DocumentForm(forms.Form):
         super(DocumentForm, self).__init__(*args, **kwargs)
 
         #change help texts to popover
-        for field in self.fields:
-            help_text = self.fields[field].help_text
-            self.fields[field].help_text = None
-            if help_text != '':
-                self.fields[field].widget.attrs.update({'class':'has-popover', 'data-toggle':'popover', 'data-trigger':'focus' ,'data-content':help_text, 'data-placement':'right', 'data-container':'body'})
-    
+        #for field in self.fields:
+        #    help_text = self.fields[field].help_text
+        #    self.fields[field].help_text = None
+        #    if help_text != '':
+        #        self.fields[field].widget.attrs.update({'class':'has-popover', 'data-toggle':'popover' , 'data-trigger':'focus', 'data-content':help_text, 'data-placement':'right', 'data-container':'body'})
+         
     docfile = forms.FileField(
-        label='Select a file',
+        label='Select a .xes-file',
         required = True,
     )
 
     algorithm = forms.ChoiceField(
-        choices=(('0', 'Choose an Algorithm'),
+        choices=(
                  ("1","PRETSA"),
                  ("2","Laplacian df-based"),
                  ("3","Laplacian tv-based")
                 ),
-        help_text =""
+        #help_text ="Assumes a .csv File as Input. Returns a .csv File. The File needs to contain the columns 'Case ID', 'Activity' and 'Duration'"
     )
 
     #pretsa
