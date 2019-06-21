@@ -32,6 +32,9 @@ class DocumentForm(forms.Form):
         label='Select t',
         required = True,
         initial = "0.1",
+        min_value=0,
+        max_value=1,
+        decimal_places =2,
         )
 
     #pretsa
