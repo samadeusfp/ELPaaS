@@ -61,13 +61,13 @@ class DocumentForm(forms.Form):
 
     #laplacian - tv
     p = forms.IntegerField(
-        label='Select Pruning Pramater',
+        label='Select Pruning Parameter',
         required = True,
         initial = "30",
         )
 
     email = forms.EmailField(
-        label='Enter a valid E-mail address',
+        label='Enter a valid E-mail Adress',
         required = True,
         )
 
