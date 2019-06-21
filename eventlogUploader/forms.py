@@ -19,7 +19,8 @@ class DocumentForm(forms.Form):
     )
 
     algorithm = forms.ChoiceField(
-        choices=(("1","PRETSA"),
+        choices=(('', 'Choose an Algorithm'),
+                 ("1","PRETSA"),
                  ("2","Laplacian df-based"),
                  ("3","Laplacian tv-based")
                 ),
