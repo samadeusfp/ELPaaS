@@ -1,18 +1,18 @@
-import sys
-import sqlite3
-import os
-import subprocess
-import requests
-import time
-
-filePath = sys.argv[1]
-epsilon = sys.argv[2]
-n = sys.argv[3]
-p = sys.argv[4]
-dbName = sys.argv[5]
-secure_token = sys.argv[6]
-
 try:
+    import sys
+    import sqlite3
+    import os
+    import subprocess
+    import requests
+    import time
+
+    filePath = sys.argv[1]
+    epsilon = sys.argv[2]
+    n = sys.argv[3]
+    p = sys.argv[4]
+    dbName = sys.argv[5]
+    secure_token = sys.argv[6]
+    
     #preprocess file
     os.mkdir(secure_token)
     command = subprocess.Popen(["rscript",
@@ -66,6 +66,12 @@ try:
     conn.commit()
     conn.close()
 except:
+    filePath = sys.argv[1]
+    epsilon = sys.argv[2]
+    n = sys.argv[3]
+    p = sys.argv[4]
+    dbName = sys.argv[5]
+    secure_token = sys.argv[6]
     conn = sqlite3.connect(dbName)
     c = conn.cursor()
     c.execute("UPDATE eventlogUploader_document SET status = ? WHERE token = ?", ("ERROR", secure_token))

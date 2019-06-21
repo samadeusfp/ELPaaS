@@ -1,19 +1,20 @@
-import sys
-import pandas as pd
-import sqlite3
-import os
-import pretsa
-from pm4py.objects.log.importer.xes import factory as xes_import_factory
-from pm4py.objects.log.exporter.csv import factory as csv_exporter
-
-#set parameters
-
-filePath = sys.argv[1]
-k = sys.argv[2]
-t = sys.argv[3]
-dbName = sys.argv[4]
-secure_token = sys.argv[5]
 try:
+    import sys
+    import pandas as pd
+    import sqlite3
+    import os
+    import pretsa
+    from pm4py.objects.log.importer.xes import factory as xes_import_factory
+    from pm4py.objects.log.exporter.csv import factory as csv_exporter
+
+    #set parameters
+
+    filePath = sys.argv[1]
+    k = sys.argv[2]
+    t = sys.argv[3]
+    dbName = sys.argv[4]
+    secure_token = sys.argv[5]
+
     sys.setrecursionlimit(3000)
     filePath = filePath.replace(" ","_")
     if filePath.endswith(".xes"):
@@ -34,6 +35,11 @@ try:
     privateEventLog = pretsa_alg.getPrivatisedEventLog()
     privateEventLog.to_csv(targetFilePath, sep=";",index=False)
 except:
+    filePath = sys.argv[1]
+    k = sys.argv[2]
+    t = sys.argv[3]
+    dbName = sys.argv[4]
+    secure_token = sys.argv[5]
     conn = sqlite3.connect(dbName)
     c = conn.cursor()
     c.execute("UPDATE eventlogUploader_document SET status = ? WHERE token = ?", ("ERROR", secure_token))
