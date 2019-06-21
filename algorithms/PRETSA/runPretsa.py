@@ -1,4 +1,5 @@
 try:
+    import smtplib
     import sys
     import pandas as pd
     import sqlite3
@@ -34,12 +35,13 @@ try:
     cutOutCases = pretsa_alg.runPretsa(int(k),float(t))
     privateEventLog = pretsa_alg.getPrivatisedEventLog()
     privateEventLog.to_csv(targetFilePath, sep=";",index=False)
-    puffer,targetFile = outPath.split("media/")
+    puffer,targetFile = filePath.split("media/")
     conn = sqlite3.connect(dbName)
     c = conn.cursor()
     c.execute("UPDATE eventlogUploader_document SET status = ?, docfile = ? WHERE token = ?", ("FINISHED", targetFile, secure_token))
     conn.commit()
     conn.close()
+
 except:
     filePath = sys.argv[1]
     k = sys.argv[2]
