@@ -12,3 +12,5 @@ If you use ELPaaS or the source code from it in an academic setting please cite 
     year    = "2019"
 }
 ```
+## License
+We provide our code, for the web application, under the MIT license. However, this project uses frameworks that are not published under MIT license, like the Microsoft PINQ framework, that we use for differential private queries. Please consider the respective licenses if you want to use this application in a commercial setting.
