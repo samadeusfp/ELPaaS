@@ -56,10 +56,10 @@ RUN  apt-get install -y --no-install-recommends \
 	libssl-dev \
 	libcurl4-gnutls-dev \
 	libxml2-dev \
-	libicu-dev
-RUN install2.r devtools
+	libicu-dev \
+	r-cran-xml2
 
-RUN install2.r xml2 xesreadR
+RUN install2.r xesreadR
 
 COPY . /opt/
 
