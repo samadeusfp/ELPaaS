@@ -1,0 +1,15 @@
+version: '2.4'
+
+services:
+  elpaas:
+    build: .
+    image: elpaas:latest
+    restart: on-failure
+    ports:
+     - "8080:8000"    
+    environment:
+      DJANGO__bool__DEBUG: "True"
+      DJANGO__ALLOWED_HOSTS: "*"
+      DJANGO__EMAIL_HOST: "localhost"
+      DJANGO__EMAIL_HOST_USER: "user"
+      DJANGO__EMAIL_HOST_PASSWORD: "pass"
