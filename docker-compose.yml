@@ -6,7 +6,7 @@ services:
     image: elpaas:latest
     restart: on-failure
     ports:
-     - "8080:8000"  
+     - "8282:8000"  
     environment:
       DJANGO__bool__DEBUG: "True"
       DJANGO__ALLOWED_HOSTS: "*"
