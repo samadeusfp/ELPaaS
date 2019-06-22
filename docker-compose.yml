@@ -6,10 +6,10 @@ services:
     image: elpaas:latest
     restart: on-failure
     ports:
-     - "8282:8000"    
+     - "8080:8000"  
     environment:
-      DJANGO__bool__DEBUG: ${DEBUG}
+      DJANGO__bool__DEBUG: "True"
       DJANGO__ALLOWED_HOSTS: "*"
-      DJANGO__EMAIL_HOST: ${EMAIL_HOST}
-      DJANGO__EMAIL_HOST_USER: ${EMAIL_USER}
-      DJANGO__EMAIL_HOST_PASSWORD: ${EMAIL_PASS}
+      DJANGO__EMAIL_HOST: "localhost"
+      DJANGO__EMAIL_HOST_USER: "user"
+      DJANGO__EMAIL_HOST_PASSWORD: "pass"    

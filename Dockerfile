@@ -59,7 +59,8 @@ RUN  apt-get install -y --no-install-recommends \
 	libicu-dev \
 	r-cran-xml2
 
-RUN install2.r xesreadR
+
+RUN install2.r xesreadR 
 
 COPY . /opt/
 
