@@ -17,5 +17,10 @@ If you use ELPaaS or the source code from it in an academic setting please cite 
 We show the basic functionality in ELPaaS in the following video:
 https://youtu.be/XLq124VpZ6Q
 
+## Test Deployment
+We have set-up a test deployment at:
+https://elpaas.fmannhardt.de
+Note that we may disable the test deployment at any time or limit the rate of requests to prevent server resources from being overloaded. 
+
 ## License
 We provide our code, for the web application, under the MIT license. However, this project uses frameworks that are not published under MIT license, like the Microsoft PINQ framework, that we use for differential private queries. Please consider the respective licenses if you want to use this application in a commercial setting.

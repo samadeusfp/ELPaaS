@@ -22,20 +22,6 @@ RUN apt-get update \
 RUN install2.r bupaR readR dplyr tidyr tidyverse stringr xesreadR DiagrammeRsvg
 
 ###################
-# Python
-###################
-
-WORKDIR /opt/
-
-COPY *.yml /opt/
-RUN conda env create -f /opt/environment.yml
-
-# TODO copy python scripts
-
-ENV PATH /opt/conda/envs/env/bin:$PATH
-RUN echo "source activate env" > ~/.bashrc
-
-###################
 # MONO
 ###################
 
@@ -45,12 +31,29 @@ RUN apt-get update \
     && echo "deb https://download.mono-project.com/repo/debian stable-stretch main" | tee /etc/apt/sources.list.d/mono-official-stable.list \
     && apt-get update
 
-RUN  apt-get install -y --no-install-recommends mono-complete 
+RUN  apt-get install -y --no-install-recommends mono-complete ca-certificates-mono
+
+###################
+# Python
+###################
+
+WORKDIR /opt/
+
+COPY *.yml /opt/
+RUN conda env create -f /opt/environment.yml
+
+ENV PATH /opt/conda/envs/env/bin:$PATH
+RUN echo "source activate env" > ~/.bashrc
 
 ###################
 # Deployment
 ###################
 
-COPY * /opt/
+COPY . /opt/
 
-CMD ["python", "manage.py", "runserver"]
+EXPOSE 8000
+
+RUN ["python", "manage.py", "makemigrations"]
+RUN ["python", "manage.py", "migrate"]
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

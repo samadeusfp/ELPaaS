@@ -3,15 +3,14 @@ channels:
   - defaults
 dependencies:
   - python=3.7 
+  - pip
   - pandas
   - scipy
   - numpy
   - requests
-  - django
   - pip:
-      - subprocess
       - pm4py
-      - time
-      - sqlite3
       - anytree
-      - datetime
+      - django
+      - django-crispy-forms
+      - django-env-overrides
