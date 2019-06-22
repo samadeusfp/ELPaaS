@@ -19,7 +19,8 @@ https://youtu.be/XLq124VpZ6Q
 
 ## Test Deployment
 We have set-up a test deployment at:
-https://elpaas.fmannhardt.de
+http://elpaas.fmannhardt.de
+
 Note that we may disable the test deployment at any time or limit the rate of requests to prevent server resources from being overloaded. 
 
 ## License

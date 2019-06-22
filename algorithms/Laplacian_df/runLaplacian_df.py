@@ -13,7 +13,7 @@ try:
 
     #preprocess file
     os.mkdir(secure_token)
-    command = subprocess.Popen(["rscript",
+    command = subprocess.Popen(["Rscript",
                                 os.getcwd()+"/ProtectedLog/data/convert.R",
                                 str(filePath),
                                 str(secure_token)])
@@ -23,6 +23,7 @@ try:
 
     #start pinq server
     server = subprocess.Popen([
+        "mono",
         "ProtectedLog/bin/Release/ProtectedLog.exe",
         str(secure_token)+"/activities.csv",
         str(secure_token)+"/precedence.csv",
@@ -42,7 +43,7 @@ try:
     outPath = filePath.replace(".xes","_%s.dfg" % (epsilon))
 
     #get privatized log files
-    command = subprocess.Popen(["rscript",
+    command = subprocess.Popen(["Rscript",
                                 os.getcwd()+"/ProtectedLog/data/discovery.R",
                                 str(epsilon),
                                 outPath]
@@ -62,7 +63,7 @@ try:
 except Exception as e:
     f=open("debug","w+")
     f.write(str(e))
-    f.write(str(e.__class__.__name__) + ": " + e.message))
+    f.write(str(e.__class__.__name__) + ": " + e.message)
     f.close()
     filePath = sys.argv[1]
     epsilon = sys.argv[2]

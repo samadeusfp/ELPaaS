@@ -9,6 +9,7 @@ RUN apt-get update \
 		r-base \
 		r-base-dev \
 		r-recommended \
+		libxml2-dev \
         && echo 'options(repos = c(CRAN = "https://cloud.r-project.org/"), download.file.method = "libcurl")' >> /etc/R/Rprofile.site \
         && echo 'source("/etc/R/Rprofile.site")' >> /etc/littler.r \
 	&& ln -s /usr/share/doc/littler/examples/install.r /usr/local/bin/install.r \
@@ -48,6 +49,17 @@ RUN echo "source activate env" > ~/.bashrc
 ###################
 # Deployment
 ###################
+
+# Fix xesreadR TODO move up
+RUN  apt-get install -y --no-install-recommends \
+	libcurl3 \
+	libssl-dev \
+	libcurl4-gnutls-dev \
+	libxml2-dev \
+	libicu-dev
+RUN install2.r devtools
+
+RUN install2.r xml2 xesreadR
 
 COPY . /opt/
 
