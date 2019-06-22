@@ -39,7 +39,7 @@ RUN  apt-get install -y --no-install-recommends mono-complete ca-certificates-mo
 
 WORKDIR /opt/
 
-COPY *.yml /opt/
+COPY environment.yml /opt/
 RUN conda env create -f /opt/environment.yml
 
 ENV PATH /opt/conda/envs/env/bin:$PATH
