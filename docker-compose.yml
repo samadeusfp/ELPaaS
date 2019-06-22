@@ -12,4 +12,5 @@ services:
       DJANGO__ALLOWED_HOSTS: "*"
       DJANGO__EMAIL_HOST: "localhost"
       DJANGO__EMAIL_HOST_USER: "user"
-      DJANGO__EMAIL_HOST_PASSWORD: "pass"    
+      DJANGO__EMAIL_HOST_PASSWORD: "pass"
+      DJANGO__EMAIL_SENDER: "elpaas@abc.de"

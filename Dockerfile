@@ -9,7 +9,13 @@ RUN apt-get update \
 		r-base \
 		r-base-dev \
 		r-recommended \
+		r-cran-xml \
+		r-cran-xml2 \
+		libcurl3 \
+		libssl-dev \
+		libcurl4-gnutls-dev \
 		libxml2-dev \
+		libicu-dev \
         && echo 'options(repos = c(CRAN = "https://cloud.r-project.org/"), download.file.method = "libcurl")' >> /etc/R/Rprofile.site \
         && echo 'source("/etc/R/Rprofile.site")' >> /etc/littler.r \
 	&& ln -s /usr/share/doc/littler/examples/install.r /usr/local/bin/install.r \
@@ -20,7 +26,8 @@ RUN apt-get update \
 	&& rm -rf /tmp/downloaded_packages/ /tmp/*.rds \
 	&& rm -rf /var/lib/apt/lists/*
 
-RUN install2.r bupaR readR dplyr tidyr tidyverse stringr xesreadR DiagrammeRsvg
+RUN install2.r dplyr tidyr stringr	readr
+RUN install2.r xesreadR bupaR 
 
 ###################
 # MONO
@@ -49,18 +56,6 @@ RUN echo "source activate env" > ~/.bashrc
 ###################
 # Deployment
 ###################
-
-# Fix xesreadR TODO move up
-RUN  apt-get install -y --no-install-recommends \
-	libcurl3 \
-	libssl-dev \
-	libcurl4-gnutls-dev \
-	libxml2-dev \
-	libicu-dev \
-	r-cran-xml2
-
-
-RUN install2.r xesreadR 
 
 COPY . /opt/
 

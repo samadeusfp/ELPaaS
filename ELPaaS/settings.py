@@ -136,6 +136,7 @@ EMAIL_PORT = 587
 
 #Enter a valid email adress and pw here
 EMAIL_HOST_USER = 'your-username@hu-berlin.de'
+EMAIL_SENDER = EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = 'your-password'
 
 import django_env_overrides

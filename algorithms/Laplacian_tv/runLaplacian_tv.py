@@ -20,8 +20,8 @@ try:
                                 str(filePath),
                                 str(secure_token)])
     command.communicate()
-    if command.returncode != 1:
-        raise Error
+    if command.returncode != 0:
+        raise RuntimeError
 
     #start pinq server
     server = subprocess.Popen([
@@ -33,15 +33,20 @@ try:
         "100000"
         ])
 
-    page = requests.get("http://localhost:1234/")
+    print("Trying to reach PINQ server")
     timeout = 120
-    while not page.status_code == 200:
-        time.sleep(5)
+    isReachable = False
+    while not isReachable:
+        try: 
+            page = requests.get("http://localhost:1234/")
+            isReachable = page.status_code == 200
+        except requests.exceptions.RequestException as e:
+            print("Waiting for PINQ ...")            
         timeout -=5
-        page = requests.get("http://localhost:1234/")
         if timeout<=0:
             server.kill()
-            raise InputError
+            raise RuntimeError
+        time.sleep(5) 
 
     outPath = filePath.replace(".xes","_%s_%s_%s.xes" % (epsilon, n, p))
 
@@ -56,8 +61,8 @@ try:
                                ,cwd=os.getcwd()+"/ProtectedLog/data/")
     command.communicate()
     server.kill()
-    if command.returncode != 1:
-        raise InputError
+    if command.returncode != 0:
+        raise RuntimeError
 
     #write to db
     puffer,targetFile = outPath.split("media/")

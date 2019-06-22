@@ -1,13 +1,9 @@
-library(tidyverse)
+library(dplyr)
 library(readr)
 library(stringr)
 library(bupaR)
 library(xesreadR)
-library(dplyr)
-source("heuristic_miner.R")
 source("prom_utils.R")
-library(DiagrammeRsvg)
-
 
 convert_precedence <- function(csv) {
   csv %>% 
@@ -44,39 +40,6 @@ convert_traces <- function(csv, activity_lookup) {
            lifecyle = "complete")
 }
 
-#
-# Evaluation Directly-Follows Graph Variant & Heuristic Miner / Dependency Graph
-#
-
-
-#dfg_private <- read_csv(url(paste0("http://localhost:1234/events?epsilon=", epsilon))) %>% 
- ##   convert_precedence()
-  
-  #write_csv(dfg_private, paste("lapl_rtf_0_",epsilon,x,".csv"))
-#write_prom_dfg(dfg_private, outPath)
-
-  #dfg_private %>%
-  #  filter(antecedent != "End", consequent != "Start") %>% 
-  #  filter(n > obs_threshold * max(n)) %>%
-  #  dependency_matrix() %>%
-  #  filter(dep > dep_threshold) %>%
-  #  dependency_graph(render = F) %>%
-  #  export_graph(paste0("private",x, ".pdf"))
-  
-  #dfg_original <- read_csv(file = "log-precedence-matrix.csv")
-  #dfg_original %>%
-  #  filter(antecedent != "End", consequent != "Start") %>% 
-  #  filter(n > obs_threshold * max(n)) %>%
-  #  dependency_matrix() %>%
-  #  filter(dep > dep_threshold) %>%
-  #  dependency_graph(render = F) %>%
-  #  export_graph(paste0("original",x, ".pdf"))
-  
-
-#
-# Evaluation Trace Variants & Heuristic Miner / Dependency Graph
-#
-
 args = commandArgs(trailingOnly=TRUE)
 epsilon <- args[1]
 sequence_length <- args[2]
@@ -97,25 +60,3 @@ log_private <- read_csv(url(paste0("http://localhost:1234/traces?epsilon=", epsi
               lifecycle_id = "lifecyle", timestamp = "timestamp", resource_id = "resource")
   
 write_xes(log_private, outPath)
-
-#~   log_private %>%
-#~     precedence_matrix() %>%
-#~     filter(n > obs_threshold * max(n)) %>%
-#~     dependency_matrix() %>%
-#~     filter(dep > dep_threshold) %>%
-#~     dependency_graph(render = F) %>%
-#~     export_graph(paste0("variants-private",x, ".pdf"))
-  
-#~   log_original <- read_xes("log-original.xes")
-#~   log_original %>%
-#~     precedence_matrix() %>%
-#~     filter(antecedent != "End", consequent != "Start") %>% 
-#~     filter(n > obs_threshold * max(n)) %>%
-#~     dependency_matrix() %>%
-#~     filter(dep > dep_threshold) %>%
-#~     dependency_graph(render = F) %>%
-#~     export_graph(paste0("variants-original",x, ".pdf"))
-  
-#~   process_map(log_private)
-#~	})
-
