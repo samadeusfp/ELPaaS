@@ -18,8 +18,12 @@ from django.urls import path
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('eventlogUploader.urls'))
+    path('', include('eventlogUploader.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += [
+    url(r'^captcha/', include('captcha.urls')),
+]

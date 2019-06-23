@@ -14,6 +14,7 @@ pm4py
 django
 django-crispy-forms
 django-env-overrides
+django-simple-captcha
 
 R:
 bupaR

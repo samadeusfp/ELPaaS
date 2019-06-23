@@ -1,6 +1,7 @@
 from django import forms
 from decimal import Decimal
 from crispy_forms.helper import FormHelper
+from captcha.fields import CaptchaField
 
 class DocumentForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -70,6 +71,8 @@ class DocumentForm(forms.Form):
         label='Enter a valid E-mail Adress',
         required = True,
         )
+
+    captcha = CaptchaField()
 
 class DownloadForm(forms.Form):
     token = forms.CharField(
