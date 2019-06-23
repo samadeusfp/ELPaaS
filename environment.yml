@@ -14,3 +14,4 @@ dependencies:
       - django
       - django-crispy-forms
       - django-env-overrides
+      - django-simple-captcha

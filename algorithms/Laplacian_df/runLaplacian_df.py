@@ -20,34 +20,38 @@ try:
                                 str(secure_token)])
     command.communicate()
     if command.returncode != 0:
-        raise RuntimeError
+        raise Exception("Cannot convert data")
 
     #start pinq server
     server = subprocess.Popen([
         "mono",
+        "-v",
         "ProtectedLog/bin/Release/ProtectedLog.exe",
         str(secure_token)+"/activities.csv",
         str(secure_token)+"/precedence.csv",
         str(secure_token)+"/log-sequences.csv",
         "100000"
         ])
+
     print("Trying to reach PINQ server")
     timeout = 120
     isReachable = False
     while not isReachable:
+        if timeout<=0:
+            server.kill()
+            raise Exception("Cannot find PINQ")        
         try: 
             page = requests.get("http://localhost:1234/")
             isReachable = page.status_code == 200
         except requests.exceptions.RequestException as e:
             print("Waiting for PINQ ...")            
-        timeout -=5
-        if timeout<=0:
-            server.kill()
-            raise RuntimeError
+        timeout -=5        
         time.sleep(5)        
 
+    print("Found PINQ server")
     outPath = filePath.replace(".xes","_%s.dfg" % (epsilon))
 
+    print("Running `discovery.R`")
     #get privatized log files
     command = subprocess.Popen(["Rscript",
                                 os.getcwd()+"/ProtectedLog/data/discovery.R",
@@ -57,7 +61,7 @@ try:
     command.communicate()
     server.kill()
     if command.returncode != 0:
-        raise RuntimeError
+        raise Exception("Cannot communicate to PINQ")
 
     #write to db
     puffer,targetFile = outPath.split("media/")
