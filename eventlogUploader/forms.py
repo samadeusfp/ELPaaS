@@ -72,7 +72,9 @@ class DocumentForm(forms.Form):
         required = True,
         )
 
-    captcha = CaptchaField()
+    captcha = CaptchaField(
+        label='Enter the shown symbols'
+        )
 
 class DownloadForm(forms.Form):
     token = forms.CharField(
