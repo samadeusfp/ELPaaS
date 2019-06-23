@@ -124,6 +124,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -135,4 +136,8 @@ EMAIL_PORT = 587
 
 #Enter a valid email adress and pw here
 EMAIL_HOST_USER = 'your-username@hu-berlin.de'
+EMAIL_SENDER = EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = 'your-password'
+
+import django_env_overrides
+django_env_overrides.apply_to(globals())

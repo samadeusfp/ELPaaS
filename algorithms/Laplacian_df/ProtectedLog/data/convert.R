@@ -1,6 +1,6 @@
+library(dplyr)
 library(bupaR)
 library(readr)
-library(dplyr)
 library(tidyr)
 
 # utility functions from bupaR
@@ -108,9 +108,9 @@ log <- read_xes(args[1])
 out_dir <-args[2]
 
 activity_lookup <- write_activities_pinq(log, paste0(out_dir,"/activities.csv"))
-write_xes(log, paste0(out_dir,"/original.xes"))
+#write_xes(log, paste0(out_dir,"/original.xes"))
 write_precedence_pinq(log, paste0(out_dir,"/precedence.csv"))
 write_precedence_percase_pinq(log, paste0(out_dir,"/precedence-percase.csv"))
-write_csv(precedence_matrix(log), paste0(out_dir,"/precedence-matrix.csv"))
+#write_csv(precedence_matrix(log), paste0(out_dir,"/precedence-matrix.csv"))
 write_sequences_pinq(log, activity_lookup, paste0(out_dir,"/log-sequences.csv"))
 quit()

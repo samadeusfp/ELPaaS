@@ -1,0 +1,16 @@
+name: env
+channels:
+  - defaults
+dependencies:
+  - python=3.7 
+  - pip
+  - pandas
+  - scipy
+  - numpy
+  - requests
+  - pip:
+      - pm4py
+      - anytree
+      - django
+      - django-crispy-forms
+      - django-env-overrides

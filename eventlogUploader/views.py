@@ -59,8 +59,7 @@ def handle_file_upload(request):
             db_path = os.getcwd() + "/db.sqlite3"
 
             #send mail with token
-            #send_mail_to_user(secure_token, email)
-
+            send_mail_to_user(secure_token, email)
 
             #Pretsa
             if algorithm =='1':
@@ -133,6 +132,6 @@ Best regards,
 your ELPaaS team
 \n
 Note: This in an autmated mail. Please do not reply to this mail.""".format(secure_token=str(secure_token))
-    from_email = settings.EMAIL_HOST_USER
+    from_email = settings.EMAIL_SENDER
     send_mail(subject, message, from_email, [email])
     return

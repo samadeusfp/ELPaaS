@@ -11,6 +11,9 @@ subprocess
 requests
 time
 pm4py
+django
+django-crispy-forms
+django-env-overrides
 
 R:
 bupaR

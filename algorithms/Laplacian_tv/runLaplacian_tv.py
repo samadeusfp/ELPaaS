@@ -15,16 +15,17 @@ try:
     
     #preprocess file
     os.mkdir(secure_token)
-    command = subprocess.Popen(["rscript",
+    command = subprocess.Popen(["Rscript",
                                 os.getcwd()+"/ProtectedLog/data/convert.R",
                                 str(filePath),
                                 str(secure_token)])
     command.communicate()
-    if command.returncode != 1:
-        raise Error
+    if command.returncode != 0:
+        raise RuntimeError
 
     #start pinq server
     server = subprocess.Popen([
+        "mono",
         "ProtectedLog/bin/Release/ProtectedLog.exe",
         str(secure_token)+"/activities.csv",
         str(secure_token)+"/precedence.csv",
@@ -32,20 +33,25 @@ try:
         "100000"
         ])
 
-    page = requests.get("http://localhost:1234/")
+    print("Trying to reach PINQ server")
     timeout = 120
-    while not page.status_code == 200:
-        time.sleep(5)
+    isReachable = False
+    while not isReachable:
+        try: 
+            page = requests.get("http://localhost:1234/")
+            isReachable = page.status_code == 200
+        except requests.exceptions.RequestException as e:
+            print("Waiting for PINQ ...")            
         timeout -=5
-        page = requests.get("http://localhost:1234/")
         if timeout<=0:
             server.kill()
-            raise InputError
+            raise RuntimeError
+        time.sleep(5) 
 
     outPath = filePath.replace(".xes","_%s_%s_%s.xes" % (epsilon, n, p))
 
     #get privatized log files
-    command = subprocess.Popen(["rscript",
+    command = subprocess.Popen(["Rscript",
                                 os.getcwd()+"/ProtectedLog/data/discovery.R",
                                 str(epsilon),
                                 str(n),
@@ -55,8 +61,8 @@ try:
                                ,cwd=os.getcwd()+"/ProtectedLog/data/")
     command.communicate()
     server.kill()
-    if command.returncode != 1:
-        raise InputError
+    if command.returncode != 0:
+        raise RuntimeError
 
     #write to db
     puffer,targetFile = outPath.split("media/")
