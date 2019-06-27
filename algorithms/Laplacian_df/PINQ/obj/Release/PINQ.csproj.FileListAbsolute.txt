@@ -1,6 +1,0 @@
-C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\PINQ\bin\Release\PINQ.dll
-C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\PINQ\bin\Release\PINQ.pdb
-C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\PINQ\obj\Release\PINQ.csprojAssemblyReference.cache
-C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\PINQ\obj\Release\PINQ.csproj.CoreCompileInputs.cache
-C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\PINQ\obj\Release\PINQ.dll
-C:\Users\felixm\Dropbox\Shared\2018-10 BISE Data Sovereignty\evaluation\PINQ\PINQ\obj\Release\PINQ.pdb

@@ -16,7 +16,7 @@ try:
     #preprocess file
     os.mkdir(secure_token)
     command = subprocess.Popen(["Rscript",
-                                os.getcwd()+"/ProtectedLog/data/convert.R",
+                                os.getcwd()+"/convert.R",
                                 str(filePath),
                                 str(secure_token)])
     command.communicate()
@@ -26,7 +26,7 @@ try:
     #start pinq server
     server = subprocess.Popen([
         "mono",
-        "ProtectedLog/bin/Release/ProtectedLog.exe",
+        "bin/PDDP.exe",
         str(secure_token)+"/activities.csv",
         str(secure_token)+"/precedence.csv",
         str(secure_token)+"/log-sequences.csv",
@@ -37,28 +37,29 @@ try:
     timeout = 120
     isReachable = False
     while not isReachable:
+        if timeout<=0:
+            server.kill()
+            raise Exception("Cannot find PINQ")        
         try: 
-            page = requests.get("http://localhost:1234/")
+            page = requests.get("http://localhost:1234/") #TODO choose random port
             isReachable = page.status_code == 200
         except requests.exceptions.RequestException as e:
             print("Waiting for PINQ ...")            
-        timeout -=5
-        if timeout<=0:
-            server.kill()
-            raise RuntimeError
-        time.sleep(5) 
+        timeout -=5        
+        time.sleep(5)        
 
+    print("Found PINQ server")
     outPath = filePath.replace(".xes","_%s_%s_%s.xes" % (epsilon, n, p))
 
     #get privatized log files
     command = subprocess.Popen(["Rscript",
-                                os.getcwd()+"/ProtectedLog/data/discovery.R",
+                                os.getcwd()+"/discovery.R",
                                 str(epsilon),
                                 str(n),
                                 str(p),
                                 str(os.getcwd())+"/"+str(secure_token)+"/",
                                 outPath]
-                               ,cwd=os.getcwd()+"/ProtectedLog/data/")
+                               ,cwd=os.getcwd())
     command.communicate()
     server.kill()
     if command.returncode != 0:

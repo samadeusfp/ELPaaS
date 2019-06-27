@@ -40,8 +40,9 @@ rm db.sqlite3"
 	should be used:
 		EMAIL_HOST
 		EMAIL_PORT
-		EMAIL_Host_USER
+		EMAIL_HOST_USER		
 		EMAIL_HOST_PASSWORD
+		EMAIL_SENDER
 
 
 
