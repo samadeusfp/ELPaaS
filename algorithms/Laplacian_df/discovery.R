@@ -3,6 +3,7 @@ library(readr)
 library(stringr)
 library(bupaR)
 library(xesreadR)
+library(tidyr)
 source("prom_utils.R")
 
 

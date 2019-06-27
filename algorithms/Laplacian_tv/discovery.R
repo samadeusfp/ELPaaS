@@ -2,6 +2,7 @@ library(dplyr)
 library(readr)
 library(stringr)
 library(bupaR)
+library(tidyr)
 library(xesreadR)
 source("prom_utils.R")
 
