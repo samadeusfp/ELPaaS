@@ -60,7 +60,7 @@ try:
     command.communicate()
     server.kill()
     if command.returncode != 0:
-        raise Exception("Cannot communicate to PINQ")
+        raise Exception("Cannot communicate to R")
 
     #write to db
     puffer,targetFile = outPath.split("media/")

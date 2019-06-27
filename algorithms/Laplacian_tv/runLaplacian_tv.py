@@ -21,7 +21,7 @@ try:
                                 str(secure_token)])
     command.communicate()
     if command.returncode != 0:
-        raise RuntimeError
+        raise Exception("Cannot communicate to R")
 
     #start pinq server
     server = subprocess.Popen([
@@ -63,7 +63,7 @@ try:
     command.communicate()
     server.kill()
     if command.returncode != 0:
-        raise RuntimeError
+        raise Exception("Cannot communicate to R")
 
     #write to db
     puffer,targetFile = outPath.split("media/")
