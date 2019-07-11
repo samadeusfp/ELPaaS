@@ -36,14 +36,14 @@ def handle_file_upload(request):
                 algorithm_text="Laplace directly-follows based"
             if algorithm == '3':
                 algorithm_text="Laplace trace-variant based"
-            email = form.cleaned_data['email']         
+            #email = form.cleaned_data['email']         
 
             #generate token, save to db and to media folder
             #TODO seems to replace space characters with "_" but saves in db without
             upload_time = datetime.datetime.now()
             expiration_time = upload_time+ datetime.timedelta(+30)
             
-            secure_token = generate_token(request.FILES['docfile'], email, algorithm)
+            secure_token = generate_token(request.FILES['docfile'], algorithm)
             newdoc = Document(docfile = request.FILES['docfile'],
                               token = secure_token,
                               status = "PROCESSING",
@@ -59,7 +59,7 @@ def handle_file_upload(request):
             db_path = os.getcwd() + "/db.sqlite3"
 
             #send mail with token
-            send_mail_to_user(secure_token, email)
+            #send_mail_to_user(secure_token, email)
 
             #Pretsa
             if algorithm =='1':
@@ -110,9 +110,8 @@ def handle_laplace_tv_upload(epsilonValue, nValue, pValue, path, pathDB, secure_
     return
 
 
-def generate_token(docfile, email, algorithm):
+def generate_token(docfile, algorithm):
     m = hashlib.sha256()
-    m.update(str.encode(email))
     m.update(str.encode(algorithm))
     m.update(str.encode(str(datetime.datetime.now())))
     return m.hexdigest()

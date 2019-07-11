@@ -67,10 +67,10 @@ class DocumentForm(forms.Form):
         initial = "30",
         )
 
-    email = forms.EmailField(
-        label='Enter a valid E-mail Adress',
-        required = True,
-        )
+    #email = forms.EmailField(
+    #    label='Enter a valid E-mail Adress',
+    #    required = True,
+    #    )
 
     captcha = CaptchaField(
         label='Enter the shown symbols'

@@ -66,7 +66,17 @@ $('#view_file_form').on('submit', function(event){
 				}
 				else{
 					var token = json[0].token;
-					$("#information_area").html("Token: "+token);
+					$("#information_area").html(
+						"<div class=\"text-center\">\
+							<b>Token:&nbsp;&nbsp;&nbsp;&nbsp;"
+							+token+
+						"	</b>\
+						</div>\
+						<p>\
+						<div class=\"text-center\">\
+								<button id=\"token_copy_button\" class=\"btn btn-secondary\" onclick=\"copyTokenToClipboard()\">Copy Token</button>\
+						</div>"
+					);
 					var doc_table = $("#file_table_body");
 					for(var i=0; i<json.length;i++){
 						var document=json[i].docfile;
@@ -94,21 +104,18 @@ $('#view_file_form').on('submit', function(event){
 										<th>Expires on\
 										<td>"+expires_on+"</td>\
 									<\tr> "
-			
-									//			<thead>
-								//<tr>
-									//<th scope="col">Document</th>
-									//<th scope="col">Status</th>
-									//<th scope="col">Uploaded on</th>
-								//</tr>
-							//</thead>
-						
-						
-						//<a href="{% static 'document.docfile.name' %}">{{ document.docfile.name }}</a>
-						//new_row='<tr><td><a href="'+media_adress+"/"+document+'">'+document+'</a></td><td>'+status+'</td><td>DATETIME</td></tr>'
 						doc_table.html(file_data)
 					}
 				}
 			}
 	})
 })
+
+function copyTokenToClipboard() {
+  var $temp = $("<input>");
+  $("body").append($temp);
+  alert($("#token").text());
+  $temp.val($("#token").text()).select();
+  document.execCommand("copy");
+  $temp.remove();
+}
