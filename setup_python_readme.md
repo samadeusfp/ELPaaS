@@ -4,32 +4,32 @@
 
 ### Python
 
-sqlite3
-pandas
-scipy
-numpy
-anytree
-hashlib
-datetime
-subprocess
-requests
-time
-pm4py
-django
-django-crispy-forms
-django-env-overrides
-django-simple-captcha
+* sqlite3
+* pandas
+* scipy
+* numpy
+* anytree
+* hashlib
+* datetime
+* subprocess
+* requests
+* time
+* pm4py
+* django
+* django-crispy-forms
+* django-env-overrides
+* django-simple-captcha
 
 ### R
 
-bupaR
-readR
-dplyr
-tidyr
-tidyverse
-stringr
-xesreadR
-DiagrammeRsvg
+* bupaR
+* readR
+* dplyr
+* tidyr
+* tidyverse
+* stringr
+* xesreadR
+* DiagrammeRsvg
 
 ## Preparation
 
