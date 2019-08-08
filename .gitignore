@@ -8,6 +8,7 @@ eventlogUploader/__pycache__/
 eventlogUploader/migrations/
 
 ELPaaS/__pycache__/
+ElPaaS/algorithms/PRETSA/__pycache__/
 docker-compose.override.yml
 docker-compose.production.yml
-*/__pycache__/*
+
