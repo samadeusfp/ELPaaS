@@ -67,7 +67,7 @@ $('#view_file_form').on('submit', function(event){
 				else{
 					var token = json[0].token;
 					$("#information_area").html(
-						"<div class=\"text-center\">\
+						"<div class=\"text-center\" id=\"token\">\
 							<b>Token:&nbsp;&nbsp;&nbsp;&nbsp;"
 							+token+
 						"	</b>\
@@ -112,10 +112,13 @@ $('#view_file_form').on('submit', function(event){
 })
 
 function copyTokenToClipboard() {
-  var $temp = $("<input>");
-  $("body").append($temp);
-  alert($("#token").text());
-  $temp.val($("#token").text()).select();
+  var $temp = $("#token").text();
+  $temp = $temp.trim().split(":")[1].trim();
+  //$("body").append($temp);
+  var dummy = document.createElement("textarea");
+  document.body.appendChild(dummy);
+  dummy.value = $temp;
+  dummy.select();
   document.execCommand("copy");
-  $temp.remove();
+  document.body.removeChild(dummy);
 }

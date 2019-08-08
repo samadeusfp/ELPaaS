@@ -78,7 +78,7 @@ def handle_file_upload(request):
                 handle_laplace_tv_upload(epsilonValue, nValue, pValue, media_path, db_path, secure_token)  
 
             # Redirect to the document list after POST
-            return HttpResponseRedirect(reverse('index'))
+        return HttpResponseRedirect(reverse('index'))
 
 
 
