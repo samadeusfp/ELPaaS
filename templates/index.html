@@ -59,9 +59,8 @@
 								</button>
 							</div>
 							{% load crispy_forms_tags %}
-							<form action="{% url 'view' %}" method="post" id="view_file_form">
+							<form action="{% url 'view' %}" method="get" id="view_file_form">
 							<div class="modal-body">
-								{% csrf_token %}
 								{{download_form|crispy}}
 							</div>
 							<div class="modal-footer">
@@ -106,11 +105,45 @@
 						<div class="card-body" id="file_view_area_body">
 							<div id="information_area">
 								<!-- print informations here -->
-								No Documents selected. Please enter a Token via the view button!
+								{% if token %}
+									<div class="text-center" id="token">
+										<b>Token:&nbsp;&nbsp;&nbsp;&nbsp;
+										{{token}}
+										</b>
+									</div>
+									<p>
+									<div class="text-center">
+										<button id="token_copy_button" class="btn btn-secondary" onclick="copyTokenToClipboard()">Copy Token</button>
+									</div>
+								{% else %} 
+									No Documents selected. Please enter a Token via the view button!
+								{% endif %}
 							</div>
 							<br>
 							<table class="table" id="file_table">
 								<tbody id="file_table_body">
+									{% if document %}
+									<tr>
+										<th>Document
+										<td><a href={% get_media_prefix %}{{"/"}}{{document.0.docfile}}>"{{document.0.docfile}}"</a></td>
+									</tr>
+									<tr> 
+										<th>Status
+										<td>{{document.0.status}}</td>
+									</tr> 
+									<tr> 
+										<th>Algorithm
+										<td>{{document.0.algorithm}}</td>
+									</tr> 
+									<tr> 
+										<th>Uploaded on
+										<td>{{document.0.uploaded_on}}</td>
+									</tr> 
+									<tr> 
+										<th>Expires on
+										<td>{{document.0.expires_on}}</td>
+									</tr>
+									{% endif %}
 									<!-- dynamically loaded -->
 								</tbody>
 							</table>

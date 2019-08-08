@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.core.mail import BadHeaderError, send_mail
@@ -15,12 +16,18 @@ import subprocess
 
 
 def handle_view_file(request):
-    if request.method == 'POST':
-        form = DownloadForm(request.POST)
-        if form.is_valid():
-            input_token = form.cleaned_data['token']
-            documents=list(Document.objects.filter(token = input_token).values())
-            return JsonResponse(documents, safe= False)
+    if request.method == 'GET':
+        token = request.GET['token']
+        document=list(Document.objects.filter(token = token).values())
+        upload_form = DocumentForm(initial = {'algorithm':'1'})
+        download_form = DownloadForm()
+
+    # Load documents for the list page
+        if len(document)<=0:
+            return redirect('index')
+        else:
+            return render(request,'index.html',{'document':document, 'token': token, 'upload_form': upload_form, 'download_form': download_form})
+    return redirect('index')
 
 
 def handle_file_upload(request):
@@ -55,8 +62,8 @@ def handle_file_upload(request):
             #TODO /documents as django variable
             #get all parameter for execution script
             file_name = request.FILES['docfile'].name
-            media_path = os.getcwd() + "/media/documents/" + file_name
-            db_path = os.getcwd() + "/db.sqlite3"
+            media_path = os.getcwd() + "\media\documents\\" + file_name
+            db_path = os.getcwd() + "\db.sqlite3"
 
             #send mail with token
             #send_mail_to_user(secure_token, email)
@@ -78,20 +85,18 @@ def handle_file_upload(request):
                 handle_laplace_tv_upload(epsilonValue, nValue, pValue, media_path, db_path, secure_token)  
 
             # Redirect to the document list after POST
-        return HttpResponseRedirect(reverse('index'))
+            return redirect('/view/?token='+secure_token, permanent=True)
+    return redirect('index')
 
 
-
+    
 #initial rendering of index page, renders upload form and uploaded files if token has been inputted
 def index(request):
     upload_form = DocumentForm(initial = {'algorithm':'1'})
     download_form = DownloadForm()
+    return render(request, 'index.html', {'upload_form': upload_form, 'download_form': download_form})
 
-    # Load documents for the list page
-    documents = Document.objects.all()
 
-    # Render list page with the documents
-    return render(request, 'index.html', {'documents': documents, 'upload_form': upload_form, 'download_form': download_form})
 
 
 #todo have config file that reads installed methods from folders and links correctly
