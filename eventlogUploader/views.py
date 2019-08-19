@@ -62,7 +62,7 @@ def handle_file_upload(request):
             #TODO /documents as django variable
             #get all parameter for execution script
             file_name = request.FILES['docfile'].name
-            media_path = os.getcwd() + "\media\documents\\" + file_name
+            media_path = os.getcwd() + "\media\documents\\" +secure_token+ "\\" + file_name
             db_path = os.getcwd() + "\db.sqlite3"
 
             #send mail with token
