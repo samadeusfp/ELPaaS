@@ -19,14 +19,26 @@ def handle_view_file(request):
     if request.method == 'GET':
         token = request.GET['token']
         document=list(Document.objects.filter(token = token).values())
+        if document:
+            document_name=document[0]['docfile']
+            document_name=document_name.replace(token,"")[1:]
         upload_form = DocumentForm(initial = {'algorithm':'1'})
         download_form = DownloadForm()
 
     # Load documents for the list page
-        if len(document)<=0:
-            return redirect('index')
+        if not document:
+            return render(request,'index.html',{'not_found': True,
+                                                'upload_form': upload_form,
+                                                'download_form': download_form}
+                          )
+
         else:
-            return render(request,'index.html',{'document':document, 'token': token, 'upload_form': upload_form, 'download_form': download_form})
+            return render(request,'index.html',{'document':document,
+                                                'document_name':document_name,
+                                                'token': token,
+                                                'upload_form': upload_form,
+                                                'download_form': download_form}
+                          )
     return redirect('index')
 
 
@@ -62,7 +74,7 @@ def handle_file_upload(request):
             #TODO /documents as django variable
             #get all parameter for execution script
             file_name = request.FILES['docfile'].name
-            media_path = os.getcwd() + "\media\documents\\" +secure_token+ "\\" + file_name
+            media_path = os.getcwd() + "\media\\" +secure_token+ "\\" + file_name
             db_path = os.getcwd() + "\db.sqlite3"
 
             #send mail with token
@@ -87,6 +99,15 @@ def handle_file_upload(request):
             # Redirect to the document list after POST
             return redirect('/view/?token='+secure_token, permanent=True)
     return redirect('index')
+
+
+    
+def delete_file(request, token =None):
+    instance = Document.objects.get(token=token)
+    instance.delete()
+    upload_form = DocumentForm(initial = {'algorithm':'1'})
+    download_form = DownloadForm()
+    return render(request, 'index.html', {'upload_form': upload_form, 'download_form': download_form, 'deleted': True})
 
 
     

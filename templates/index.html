@@ -115,38 +115,54 @@
 									<div class="text-center">
 										<button id="token_copy_button" class="btn btn-secondary" onclick="copyTokenToClipboard()">Copy Token</button>
 									</div>
-								{% else %} 
-									No Documents selected. Please enter a Token via the view button!
+									<p>
+									<div class="text-center">
+										<a id="delete_document" class="btn btn-outline-danger" method="get" href={% url 'delete_file' token=token %}>Delete Document</a>
+									</div>
+									
+								{% elif deleted %}
+								<div class="alert alert-success" role="alert">
+									The Document has been deleted.	
+								</div>
+								{% elif not_found %}
+								
+								<div class="alert alert-danger" role="alert">
+									No Document for this Token found!
+								</div>
+								{% else %}
+								<div class="alert alert-warning" role="alert">
+									No Documents selected. Please enter a Token or upload a new Log File!
+								</div>
 								{% endif %}
 							</div>
 							<br>
-							<table class="table" id="file_table">
-								<tbody id="file_table_body">
-									{% if document %}
-									<tr>
-										<th>Document
-										<td><a href={% get_media_prefix %}{{"/"}}{{document.0.docfile}}>"{{document.0.docfile}}"</a></td>
-									</tr>
-									<tr> 
-										<th>Status
-										<td>{{document.0.status}}</td>
-									</tr> 
-									<tr> 
-										<th>Algorithm
-										<td>{{document.0.algorithm}}</td>
-									</tr> 
-									<tr> 
-										<th>Uploaded on
-										<td>{{document.0.uploaded_on}}</td>
-									</tr> 
-									<tr> 
-										<th>Expires on
-										<td>{{document.0.expires_on}}</td>
-									</tr>
-									{% endif %}
-									<!-- dynamically loaded -->
-								</tbody>
-							</table>
+							{% if document %}
+								<table class="table" id="file_table">
+									<tbody id="file_table_body">
+										<tr>
+											<th>Document
+											<td><a href={% get_media_prefix %}{{"/"}}{{document.0.docfile}}>"{{document_name}}"</a></td>
+										</tr>
+										<tr> 
+											<th>Status
+											<td>{{document.0.status}}</td>
+										</tr> 
+										<tr> 
+											<th>Algorithm
+											<td>{{document.0.algorithm}}</td>
+										</tr> 
+										<tr> 
+											<th>Uploaded on
+											<td>{{document.0.uploaded_on}}</td>
+										</tr> 
+										<tr> 
+											<th>Expires on
+											<td>{{document.0.expires_on}}</td>
+										</tr>
+										<!-- dynamically loaded -->
+									</tbody>
+								</table>
+							{% endif %}
 						</div>			
 					</div>
 				</div>	

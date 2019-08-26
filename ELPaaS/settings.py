@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'eventlogUploader',
     'crispy_forms',
-    'captcha'
+    'captcha',
+    'django_cleanup',
 ]
 
 MIDDLEWARE = [
