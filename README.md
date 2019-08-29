@@ -5,7 +5,7 @@ We welcome other researchers to integrate their privacy algorithms for process m
 
 If you use ELPaaS or the source code from it in an academic setting please cite our tool paper:
 ```
-@ARTICLE {ELPaaS2019,
+@ARTICLE{ELPaaS2019,
     author  = "Martin Bauer and Stephan A. Fahrenkrog-Petersen and Agnes Koschmider and Felix Mannhardt and Han van der Aa and Matthias Weidlich",
     title   = "ELPaaS: Event Log Privacy as a Service",
     journal = "Under review",
@@ -19,9 +19,15 @@ https://youtu.be/XLq124VpZ6Q
 
 ## Test Deployment
 We have set-up a test deployment at:
-http://elpaas.fmannhardt.de
+https://elpaas.fmannhardt.de
 
 Note that we may disable the test deployment at any time or limit the rate of requests to prevent server resources from being overloaded. 
+
+## Installation & Deployment
+You can install ELPaaS in your own environment to avoid sharing your data with a untrusted third party.
+Here are installation instructions for:
+* [Docker](setup_docker_readme.md)
+* [Standard Python](setup_python_readme.md) 
 
 ## License
 We provide our code, for the web application, under the MIT license. However, this project uses frameworks that are not published under MIT license, like the Microsoft PINQ framework, that we use for differential private queries. Please consider the respective licenses if you want to use this application in a commercial setting.
