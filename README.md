@@ -5,11 +5,25 @@ We welcome other researchers to integrate their privacy algorithms for process m
 
 If you use ELPaaS or the source code from it in an academic setting please cite our tool paper:
 ```
-@ARTICLE{ELPaaS2019,
-    author  = "Martin Bauer and Stephan A. Fahrenkrog-Petersen and Agnes Koschmider and Felix Mannhardt and Han van der Aa and Matthias Weidlich",
-    title   = "ELPaaS: Event Log Privacy as a Service",
-    journal = "Under review",
-    year    = "2019"
+@inproceedings{DBLP:conf/bpm/0006FKMAW19,
+  author    = {Martin Bauer and
+               Stephan A. Fahrenkrog{-}Petersen and
+               Agnes Koschmider and
+               Felix Mannhardt and
+               Han van der Aa and
+               Matthias Weidlich},
+  title     = {ELPaaS: Event Log Privacy as a Service},
+  booktitle = {Proceedings of the Dissertation Award, Doctoral Consortium, and Demonstration
+               Track at {BPM} 2019 co-located with 17th International Conference
+               on Business Process Management, {BPM} 2019, Vienna, Austria, September
+               1-6, 2019.},
+  pages     = {159--163},
+  year      = {2019},
+  crossref  = {DBLP:conf/bpm/2019d},
+  url       = {http://ceur-ws.org/Vol-2420/paperDT9.pdf},
+  timestamp = {Fri, 30 Aug 2019 13:15:06 +0200},
+  biburl    = {https://dblp.org/rec/bib/conf/bpm/0006FKMAW19},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 ```
 
