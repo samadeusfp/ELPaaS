@@ -17,14 +17,6 @@ If you use ELPaaS or the source code from it in an academic setting please cite 
                Han van der Aa and
                Matthias Weidlich},
   title     = {ELPaaS: Event Log Privacy as a Service},
-<<<<<<< HEAD
-  booktitle = {{BPM} (PhD/Demos)},
-  series    = {{CEUR} Workshop Proceedings},
-  volume    = {2420},
-  pages     = {159--163},
-  publisher = {CEUR-WS.org},
-  year      = {2019}
-=======
   booktitle = {Proceedings of the Dissertation Award, Doctoral Consortium, and Demonstration
                Track at {BPM} 2019 co-located with 17th International Conference
                on Business Process Management, {BPM} 2019, Vienna, Austria, September
@@ -36,7 +28,6 @@ If you use ELPaaS or the source code from it in an academic setting please cite 
   timestamp = {Fri, 30 Aug 2019 13:15:06 +0200},
   biburl    = {https://dblp.org/rec/bib/conf/bpm/0006FKMAW19},
   bibsource = {dblp computer science bibliography, https://dblp.org}
->>>>>>> 4297b3eae825cb2d3b99883c06c68e75d3a2aa7b
 }
 ```
 The bib code is courtesy of [dblp](https://dblp1.uni-trier.de/rec/bibtex0/conf/bpm/0006FKMAW19).
