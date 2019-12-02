@@ -130,16 +130,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-#Enter smtp data of your mailhost - right now HU Berlin
-EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'mailhost.cms.hu-berlin.de'
-EMAIL_PORT = 587
+#Celery stuff
+CELERY_BROKER_URL = 'amqp://127.0.0.1'
 
-#Enter a valid email adress and pw here
-EMAIL_HOST_USER = 'your-username@hu-berlin.de'
-EMAIL_HOST_PASSWORD = 'your-password'
-EMAIL_SENDER = EMAIL_HOST_USER # change if different from user
 
 import django_env_overrides
 django_env_overrides.apply_to(globals())

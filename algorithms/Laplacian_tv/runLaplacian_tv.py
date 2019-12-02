@@ -16,7 +16,7 @@ try:
     #preprocess file
     os.mkdir(secure_token)
     command = subprocess.Popen(["Rscript",
-                                os.getcwd()+"/convert.R",
+                                os.getcwd()+os.path.sep+"convert.R",
                                 str(filePath),
                                 str(secure_token)])
     command.communicate()
@@ -25,11 +25,11 @@ try:
 
     #start pinq server
     server = subprocess.Popen([
-        "mono",
+        #"mono",
         "bin/PDDP.exe",
-        str(secure_token)+"/activities.csv",
-        str(secure_token)+"/precedence.csv",
-        str(secure_token)+"/log-sequences.csv",
+        str(secure_token)+os.path.sep+"activities.csv",
+        str(secure_token)+os.path.sep+"precedence.csv",
+        str(secure_token)+os.path.sep+"log-sequences.csv",
         "100000"
         ])
 
@@ -53,11 +53,11 @@ try:
 
     #get privatized log files
     command = subprocess.Popen(["Rscript",
-                                os.getcwd()+"/discovery.R",
+                                os.getcwd()+os.path.sep+"discovery.R",
                                 str(epsilon),
                                 str(n),
                                 str(p),
-                                str(os.getcwd())+"/"+str(secure_token)+"/",
+                                str(os.getcwd())+os.path.sep+str(secure_token)+os.path.sep,
                                 outPath]
                                ,cwd=os.getcwd())
     command.communicate()
@@ -66,19 +66,34 @@ try:
         raise Exception("Cannot communicate to R")
 
     #write to db
-    puffer,targetFile = outPath.split("media/")
+    print("Writing to DB")
+    puffer,targetFile = outPath.split("media"+os.path.sep)
     conn = sqlite3.connect(dbName)
     c = conn.cursor()
     c.execute("UPDATE eventlogUploader_document SET status = ?, docfile = ? WHERE token = ?", ("FINISHED", targetFile, secure_token))
     conn.commit()
     conn.close()
+
+    #cleanup
+    shutil.rmtree(os.getcwd()+os.path.sep+secure_token)
 except:
+    f=open("debug","w+")
+    f.write(str(e))
+    if hasattr(e, 'message'):
+        f.write(str(e.__class__.__name__) + ": " + e.message)
     filePath = sys.argv[1]
     epsilon = sys.argv[2]
     n = sys.argv[3]
     p = sys.argv[4]
     dbName = sys.argv[5]
     secure_token = sys.argv[6]
+    f.write(filePath)
+    f.write(epsilon)
+    f.write(dbName)
+    f.write(secure_token)
+    f.close()
+    #cleanup
+    shutil.rmtree(os.getcwd()+os.path.sep+secure_token)
     conn = sqlite3.connect(dbName)
     c = conn.cursor()
     c.execute("UPDATE eventlogUploader_document SET status = ? WHERE token = ?", ("ERROR", secure_token))

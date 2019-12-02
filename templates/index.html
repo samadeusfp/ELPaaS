@@ -10,26 +10,12 @@
     </head>
     
     <body>
+		<!-- Header -->
 		<div class="container-fluid">
 			<header class="navbar navbar-expand bg-light"><h2>ELPaaS - Event Log Privacy as a Service</h2>
 			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			  </button>
-			  <!--
-			  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav mr-auto">
-				  <li class="nav-item active">
-					<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-				  </li>
-				  <li class="nav-item">
-					<a class="nav-link" href="#">Algorithms</a>
-				  </li>
-				  <li class="nav-item">
-					<a class="nav-link" href="#">About Us</a>
-				  </li>
-				</ul>
-			  </div>
-			  -->
 			</header>
 		</div>
 		<div class="container">
@@ -60,13 +46,17 @@
 							</div>
 							{% load crispy_forms_tags %}
 							<form action="{% url 'view' %}" method="get" id="view_file_form">
-							<div class="modal-body">
-								{{download_form|crispy}}
-							</div>
-							<div class="modal-footer">
-								<button type="submit" class="btn btn-primary" >Submit</button>
-							</div>
+								<div class="modal-body">
+									 <label for="id_token" class="col-form-label  requiredField">
+										Please enter a secure token<span class="asteriskField">*</span> 
+									</label> <div class=""> 
+									<input type="text" name="token" class="textinput textInput form-control" required="" id="id_token"> 
+								</div>
+								<div class="modal-footer">
+									<button type="submit" class="btn btn-primary" >Submit</button>
+								</div>
 							</form>	
+							</div>
 						</div>
 					</div>
 				</div>
@@ -77,15 +67,13 @@
 						<div class="modal-content">
 							<div class="modal-header">
 								<h5>Upload a Log-File</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										&times;
-								</button>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
 							</div>
 							{% load crispy_forms_tags %}
 							<form action="{% url 'upload' %}" method="post" enctype="multipart/form-data" id="upload_file_form">
 							<div class="modal-body">
 								{% csrf_token %}
-								{{upload_form|crispy}}
+								{{ upload_form|crispy }}
 							</div>
 							<div class="modal-footer">
 								<button type="submit" class="btn btn-primary" >Submit</button>
@@ -95,7 +83,7 @@
 					</div>
 				</div>
 				
-			<!-- Uploaded Files -->
+			<!-- Uploaded Files View -->
 			<div class="row">
 				<div class="col">
 					<div class="card" id="file_view_area">

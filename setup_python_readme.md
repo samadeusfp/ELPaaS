@@ -19,6 +19,8 @@
 * django-crispy-forms
 * django-env-overrides
 * django-simple-captcha
+* celery
+* django-celery-beat
 
 ### R
 
@@ -30,6 +32,9 @@
 * stringr
 * xesreadR
 * DiagrammeRsvg
+
+### Misc
+* [RabbitMQ for Celery](https://www.rabbitmq.com/)
 
 ## Preparation
 
@@ -64,7 +69,12 @@ python manage.py migrate
 
 ## Start
 How to run the server:
-
+* Run
+```
+celery -A ELPaaS worker -B -l info -P eventlet
+```
+* This will start Celery and all cron jobs in the background.
+* Then, in a different shell run
 ```
 python manage.py runserver
 ```

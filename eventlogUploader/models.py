@@ -5,7 +5,6 @@ import shutil
 
 def upload_path_generation(instance, filename):
     return os.path.join('%s/'%instance.token, filename)
-# Create your models here.
 
     
 class Document(models.Model):
