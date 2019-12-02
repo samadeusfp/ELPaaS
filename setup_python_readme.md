@@ -59,11 +59,20 @@ python manage.py migrate
 
 ## Start
 How to run the server:
-* First start Celery and Celery Beat by running in the command line
+* First start Celery and Celery Beat by running
 ```
 celery -A ELPaaS worker -B -l info -P eventlet
 ```
-* Then, in a different shell start then server by running
+* Then, in a different shell start the server by running
 ```
 python manage.py runserver
+```
+
+* Note, that on Windows machines you need to start Celery and Celery Beat seperately, by starting Celery
+```
+celery -A ELPaaS worker -l info -P eventlet
+```
+* And then starting Celery Beat in a different terminal
+```
+$ celery -A ELPaaS beat
 ```
