@@ -5,6 +5,7 @@ try:
     import sqlite3
     import os
     import pretsa
+    import random
     from pm4py.objects.log.importer.xes import factory as xes_import_factory
     from pm4py.objects.log.exporter.csv import factory as csv_exporter
 
@@ -13,9 +14,11 @@ try:
     filePath = sys.argv[1]
     k = sys.argv[2]
     t = sys.argv[3]
-    dbName = sys.argv[4]
-    secure_token = sys.argv[5]
+    anon = sys.argv[4]
+    dbName = sys.argv[5]
+    secure_token = sys.argv[6]
     sys.setrecursionlimit(3000)
+    
     filePath = filePath.replace(" ","_")
     if filePath.endswith(".xes"):
         log = xes_import_factory.apply(filePath)
@@ -29,10 +32,21 @@ try:
         if not 'Duration' in xes_csv_file.columns:
             xes_csv_file.loc[:,"Duration"] = 0.0
         xes_csv_file.to_csv(filePath,sep=";",encoding="utf-8-sig",index=False)
+    
     eventLog = pd.read_csv(filePath, delimiter=";",skipinitialspace=True, encoding="utf-8-sig")
     pretsa_alg = pretsa.Pretsa(eventLog)
     cutOutCases = pretsa_alg.runPretsa(int(k),float(t))
     privateEventLog = pretsa_alg.getPrivatisedEventLog()
+    
+    if anon:
+        caseIDs = pd.Series(privateEventLog['Case ID'].unique())
+        caseList = caseIDs.tolist()
+        intList = list(range(caseIDs.size))
+        random.shuffle(intList)
+
+        for i,row in privateEventLog.iterrows():
+            privateEventLog.at[i,'Case ID'] = intList[caseList.index(row['Case ID'])]
+            
     privateEventLog.to_csv(targetFilePath, sep=";",index=False)
     puffer,targetFile = targetFilePath.split("media/")
     conn = sqlite3.connect(dbName)
@@ -45,8 +59,9 @@ except:
     filePath = sys.argv[1]
     k = sys.argv[2]
     t = sys.argv[3]
-    dbName = sys.argv[4]
-    secure_token = sys.argv[5]
+    anon = sys.argv[4]
+    dbName = sys.argv[5]
+    secure_token = sys.argv[6]
     conn = sqlite3.connect(dbName)
     c = conn.cursor()
     c.execute("UPDATE eventlogUploader_document SET status = ? WHERE token = ?", ("ERROR", secure_token))

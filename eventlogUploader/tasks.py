@@ -11,8 +11,8 @@ from eventlogUploader.models import Document
 import shutil
 
 @shared_task
-def handle_pretsa_upload(kValue, tValue, path, pathDB, secure_token):
-    command = Popen(["python", os.getcwd()+"/algorithms/PRETSA/runPretsa.py", str(path), str(kValue), str(tValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/PRETSA")
+def handle_pretsa_upload(kValue, tValue, anonValue, path, pathDB, secure_token):
+    command = Popen(["python", os.getcwd()+"/algorithms/PRETSA/runPretsa.py", str(path), str(kValue), str(tValue), str(anonValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/PRETSA")
     return
 
 @shared_task
@@ -23,6 +23,11 @@ def handle_laplace_df_upload(epsilonValue, path, pathDB, secure_token):
 @shared_task
 def handle_laplace_tv_upload(epsilonValue, nValue, pValue, path, pathDB, secure_token):
     command = Popen(["python", os.getcwd()+"/algorithms/Laplacian_tv/runLaplacian_tv.py", str(path), str(epsilonValue), str(nValue), str(pValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/Laplacian_tv")
+    return
+    
+@shared_task
+def handle_test_upload(path, pathDB, secure_token):
+    command = Popen(["python", os.getcwd()+"/algorithms/test/runtest.py", str(path), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/test")
     return
 
 @shared_task

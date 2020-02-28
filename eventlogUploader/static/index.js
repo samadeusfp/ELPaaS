@@ -4,6 +4,7 @@ $(document).ready(function() {
 	$('#div_id_epsilon').css("display", "none");
 	$('#div_id_k').css("display", "block");
 	$('#div_id_t').css("display", "block");
+	$('#div_id_anon').css("display", "block");
 	$('#div_id_n').css("display", "none");
 	$('#div_id_p').css("display", "none");
 	//$('[data-toggle="popover"]').popover();
@@ -21,6 +22,7 @@ $('#id_algorithm').change(function(){
 			$('#div_id_epsilon').css("display", "none");
 			$('#div_id_k').css("display", "block");
 			$('#div_id_t').css("display", "block");
+			$('#div_id_anon').css("display", "block");
 			$('#div_id_n').css("display", "none");
 			$('#div_id_p').css("display", "none");
 
@@ -31,6 +33,7 @@ $('#id_algorithm').change(function(){
 			$('#div_id_epsilon').css("display", "block");
 			$('#div_id_k').css("display", "none");
 			$('#div_id_t').css("display", "none");
+			$('#div_id_anon').css("display", "none");
 			$('#div_id_n').css("display", "none");
 			$('#div_id_p').css("display", "none");
 		}
@@ -40,6 +43,7 @@ $('#id_algorithm').change(function(){
 			$('#div_id_epsilon').css("display", "block");
 			$('#div_id_k').css("display", "none");
 			$('#div_id_t').css("display", "none");
+			$('#div_id_anon').css("display", "none");
 			$('#div_id_n').css("display", "block");
 			$('#div_id_p').css("display", "block");
 	}

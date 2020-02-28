@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.shortcuts import render_to_response
+#from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.core.mail import BadHeaderError, send_mail
@@ -13,7 +13,7 @@ import hashlib
 import datetime
 import subprocess
 
-from .tasks import handle_pretsa_upload, handle_laplace_df_upload, handle_laplace_tv_upload
+from .tasks import handle_pretsa_upload, handle_laplace_df_upload, handle_laplace_tv_upload, handle_test_upload
 
 def handle_view_file(request):
     if request.method == 'GET':
@@ -54,6 +54,8 @@ def handle_file_upload(request):
                 algorithm_text="Laplace directly-follows based"
             elif algorithm == '3':
                 algorithm_text="Laplace trace-variant based"
+            elif algorithm == '4':
+                algorithm_text="Test"
 
             #generate token, save to db and to media folder
             upload_time = datetime.datetime.now()
@@ -77,7 +79,8 @@ def handle_file_upload(request):
             if algorithm =='1':
                 kValue = form.cleaned_data['k']
                 tValue = form.cleaned_data['t']
-                handle_pretsa_upload.delay(kValue, tValue, media_path, db_path, secure_token)
+                anonValue = form.cleaned_data['anon']
+                handle_pretsa_upload.delay(kValue, tValue, anonValue, media_path, db_path, secure_token)
             elif algorithm =='2':
                 epsilonValue = form.cleaned_data['epsilon']
                 handle_laplace_df_upload.delay(epsilonValue, media_path, db_path, secure_token)  
@@ -86,6 +89,10 @@ def handle_file_upload(request):
                 nValue = form.cleaned_data['n']
                 pValue = form.cleaned_data['p']
                 handle_laplace_tv_upload.delay(epsilonValue, nValue, pValue, media_path, db_path, secure_token)  
+            if algorithm =='4':
+                kValue = form.cleaned_data['k']
+                tValue = form.cleaned_data['t']
+                handle_test_upload.delay( media_path, db_path, secure_token)
 
             return redirect('/view/?token='+secure_token, permanent=True)
     return redirect('index')

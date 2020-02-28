@@ -23,7 +23,8 @@ class DocumentForm(forms.Form):
         choices=(
                  ("1","PRETSA"),
                  ("2","Laplacian df-based"),
-                 ("3","Laplacian tv-based")
+                 ("3","Laplacian tv-based"),
+                 ("4","test")
                 ),
         #help_text ="Assumes a .csv File as Input. Returns a .csv File. The File needs to contain the columns 'Case ID', 'Activity' and 'Duration'"
     )
@@ -31,6 +32,7 @@ class DocumentForm(forms.Form):
     #pretsa
     t = forms.DecimalField(
         label='Select t',
+        help_text='T-closeness: ensures that within each equivalence class there will be a representative distribution of sensitive attributes. The variation allowed compared to the entire data set will be less than value of t. Small values close to 0 allow less variation, value of 1 allows all variation.',
         required = True,
         initial = "0.1",
         min_value=0,
@@ -41,14 +43,24 @@ class DocumentForm(forms.Form):
     #pretsa
     k = forms.IntegerField(
         label='Select k',
+        help_text='K-anonymity: ensures that there are at least k entries in each equivalence class after data is anonymized. \n Greater value will mean greater but not unbreachable privacy, high values (>50) makes small data sets too generalized to be usable. ',
         required = True,
         initial = "4",
+        )
+       
+    #pretsa
+    anon = forms.BooleanField(
+        label='Pseudonymize CaseIDs',
+        help_text='Requires column "Case ID" - replaces continuous case names with a random unique int.',
+        required = False,
+        initial = False,
         )
 
 
     #laplacian - df and tv
     epsilon = forms.DecimalField(
         label='Select Epsilon',
+        help_text='Specifies the allowed uniqueness of either trace variant frequencies (tv) or single events frequencies in directly-follow matrices (df). Adds the necassary amount of lapacian noise to satisy epsilon differential privacy. Smaller epsilon value allows for less variance in uniqueness of entries and therefore more privacy by adding more noise.',
         required = True,
         initial = "0.1",
         )
@@ -56,6 +68,7 @@ class DocumentForm(forms.Form):
     #laplacian - tv
     n = forms.IntegerField(
         label='Select maximum Sequence Length',
+        help_text='Maximum length of a subsequence in a trace which will be internally queried. Higher value will take longer to compute and the likelihood grows that new traces not found in the original event log will appear.',
         required = True,
         initial = "10",
         )
@@ -63,9 +76,12 @@ class DocumentForm(forms.Form):
     #laplacian - tv
     p = forms.IntegerField(
         label='Select Pruning Parameter',
+        help_text='Low-frequency subset of traces that occur less often than this value will be ignored. ',
         required = True,
         initial = "30",
         )
+    
+  
 
     #email = forms.EmailField(
     #    label='Enter a valid E-mail Adress',

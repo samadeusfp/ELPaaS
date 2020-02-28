@@ -4,21 +4,23 @@
 
 ### Python
 
-* sqlite3
+* sqlite3-*
 * pandas
 * scipy
 * numpy
 * anytree
-* hashlib
+* hashlib-*
 * datetime
-* subprocess
+* subprocess-*
 * requests
-* time
+* time-*
 * pm4py
 * django
 * django-crispy-forms
 * django-env-overrides
 * django-simple-captcha
+* django-cleanup !!!!!!!!!!!!!!!!!!
+* eventlet !!!!!!!!!!!!!!!!!!!!!
 * celery
 * django-celery-beat
 
