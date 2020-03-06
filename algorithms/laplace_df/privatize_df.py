@@ -1,7 +1,5 @@
 from opyenxes.classification.XEventNameClassifier import XEventNameClassifier
 import numpy as np
-import random
-from exponential_mechanism_tv_query import exp_mech as exp
 
 TRACE_START = "TRACE_START"
 TRACE_END = "TRACE_END"
@@ -17,7 +15,7 @@ def privatize_df(log, event_int_mapping, epsilon, output):
     df_relations = apply_laplace_noise_df(df_relations, epsilon)
     print("Done")
     #write to disk
-    print("Writing privatized Directly Follows Frequencies to disk   ", end = '')
+    print("Writing privatpized Directly Follows Frequencies to disk   ", end = '')
     write_to_dfg(df_relations, event_int_mapping, output)
     print("Done")
 
