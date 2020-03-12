@@ -22,7 +22,7 @@ def handle_laplace_df_upload(epsilonValue, path, pathDB, secure_token):
 
 @shared_task
 def handle_laplace_tv_upload(epsilonValue, nValue, pValue, path, pathDB, secure_token):
-    command = Popen(["python", os.getcwd()+"/algorithms/Laplacian_tv/runLaplacian_tv.py", str(path), str(epsilonValue), str(nValue), str(pValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/Laplacian_tv")
+    command = Popen(["python", os.getcwd()+"/algorithms/laplace_tv/trace_variant_query.py", str(path), str(epsilonValue), str(nValue), str(pValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/laplace_tv")
     return
     
 @shared_task

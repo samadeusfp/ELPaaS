@@ -60,7 +60,7 @@ class DocumentForm(forms.Form):
     #laplacian - df and tv
     epsilon = forms.DecimalField(
         label='Select Epsilon',
-        help_text='Specifies the allowed uniqueness of either trace variant frequencies (tv) or single events frequencies in directly-follow matrices (df). Adds the necassary amount of lapacian noise to satisy epsilon differential privacy. Smaller epsilon value allows for less variance in uniqueness of entries and therefore more privacy by adding more noise.',
+        help_text='Specifies the allowed uniqueness of either trace variant frequencies (tv) or single events frequencies in directly-follow matrices (df). Adds the necassary amount of lapacian noise to satisy epsilon differential privacy.  Smaller epsilon value allows for less variance in uniqueness of entries and therefore more privacy by adding more noise.',
         required = True,
         initial = "0.1",
         )
