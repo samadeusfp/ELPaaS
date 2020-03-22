@@ -76,7 +76,7 @@ class DocumentForm(forms.Form):
     #laplacian - tv
     p = forms.IntegerField(
         label='Select Pruning Parameter',
-        help_text='Low-frequency subset of traces that occur less often than this value will be ignored. ',
+        help_text='Low-frequency noisy trace counts that occur less often than this value will be ignored. ',
         required = True,
         initial = "30",
         )
