@@ -13,7 +13,7 @@ import hashlib
 import datetime
 import subprocess
 
-from .tasks import handle_pretsa_upload, handle_laplace_df_upload, handle_laplace_tv_upload, handle_test_upload
+from .tasks import handle_pretsa_upload, handle_laplace_df_upload, handle_laplace_tv_upload, handle_risk_upload
 
 def handle_view_file(request):
     if request.method == 'GET':
@@ -55,7 +55,7 @@ def handle_file_upload(request):
             elif algorithm == '3':
                 algorithm_text="Laplace trace-variant based"
             elif algorithm == '4':
-                algorithm_text="Test"
+                algorithm_text="Quantifying Re-identification Risk"
 
             #generate token, save to db and to media folder
             upload_time = datetime.datetime.now()
@@ -90,9 +90,10 @@ def handle_file_upload(request):
                 pValue = form.cleaned_data['p']
                 handle_laplace_tv_upload.delay(epsilonValue, nValue, pValue, media_path, db_path, secure_token)  
             if algorithm =='4':
-                kValue = form.cleaned_data['k']
-                tValue = form.cleaned_data['t']
-                handle_test_upload.delay( media_path, db_path, secure_token)
+                identifier = form.cleaned_data['unique_identifier']
+                incList = form.cleaned_data['attributes']
+                exList = form.cleaned_data['attributes_to_exclude']
+                handle_risk_upload.delay( media_path, identifier, incList, exList, db_path, secure_token)
 
             return redirect('/view/?token='+secure_token, permanent=True)
     return redirect('index')

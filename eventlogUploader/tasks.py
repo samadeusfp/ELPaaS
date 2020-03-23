@@ -26,8 +26,8 @@ def handle_laplace_tv_upload(epsilonValue, nValue, pValue, path, pathDB, secure_
     return
     
 @shared_task
-def handle_test_upload(path, pathDB, secure_token):
-    command = Popen(["python", os.getcwd()+"/algorithms/test/runtest.py", str(path), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/test")
+def handle_risk_upload(path, pathDB, secure_token):
+    command = Popen(["python", os.getcwd()+"/algorithms/re_ident_risk/re_ident_risk.py", str(path), str(identifier), str(incList), str(exList), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/test")
     return
 
 @shared_task

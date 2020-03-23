@@ -7,9 +7,11 @@ $(document).ready(function() {
 	$('#div_id_anon').css("display", "block");
 	$('#div_id_n').css("display", "none");
 	$('#div_id_p').css("display", "none");
+	$('#div_id_unique_identifier').css("display", "none");
+	$('#div_id_attributes').css("display", "none");
+	$('#div_id_attributes_to_exclude').css("display", "none");
 	//$('[data-toggle="popover"]').popover();
 	
-
 })
 
 $('#id_algorithm').change(function(){
@@ -25,6 +27,9 @@ $('#id_algorithm').change(function(){
 			$('#div_id_anon').css("display", "block");
 			$('#div_id_n').css("display", "none");
 			$('#div_id_p').css("display", "none");
+			$('#div_id_unique_identifier').css("display", "none");
+			$('#div_id_attributes').css("display", "none");
+			$('#div_id_attributes_to_exclude').css("display", "none");
 
 		}
 		else if (valueSelected ==2){
@@ -36,6 +41,9 @@ $('#id_algorithm').change(function(){
 			$('#div_id_anon').css("display", "none");
 			$('#div_id_n').css("display", "none");
 			$('#div_id_p').css("display", "none");
+			$('#div_id_unique_identifier').css("display", "none");
+			$('#div_id_attributes').css("display", "none");
+			$('#div_id_attributes_to_exclude').css("display", "none");
 		}
 		else if (valueSelected ==3){
 			//$(this).attr("data-content","Assumes a .xes File as Input. Returns a .xes File.").data("bs.popover");
@@ -46,7 +54,23 @@ $('#id_algorithm').change(function(){
 			$('#div_id_anon').css("display", "none");
 			$('#div_id_n').css("display", "block");
 			$('#div_id_p').css("display", "block");
-	}
+			$('#div_id_unique_identifier').css("display", "none");
+			$('#div_id_attributes').css("display", "none");
+			$('#div_id_attributes_to_exclude').css("display", "none");
+	    }
+		else if (valueSelected ==4){
+			//$(this).attr("data-content","Assumes a .xes File as Input. Returns a .xes File.").data("bs.popover");
+			//$('[data-toggle="popover"]').popover("show")
+			$('#div_id_epsilon').css("display", "none");
+			$('#div_id_k').css("display", "none");
+			$('#div_id_t').css("display", "none");
+			$('#div_id_anon').css("display", "none");
+			$('#div_id_n').css("display", "none");
+			$('#div_id_p').css("display", "none");
+			$('#div_id_unique_identifier').css("display", "block");
+			$('#div_id_attributes').css("display", "block");
+			$('#div_id_attributes_to_exclude').css("display", "block");
+	    }			
 })
 
 

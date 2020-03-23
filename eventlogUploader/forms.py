@@ -24,7 +24,7 @@ class DocumentForm(forms.Form):
                  ("1","PRETSA"),
                  ("2","Laplacian df-based"),
                  ("3","Laplacian tv-based"),
-                 ("4","test")
+                 ("4","Quantifying Re-identification Risk")
                 ),
         #help_text ="Assumes a .csv File as Input. Returns a .csv File. The File needs to contain the columns 'Case ID', 'Activity' and 'Duration'"
     )
@@ -60,7 +60,7 @@ class DocumentForm(forms.Form):
     #laplacian - df and tv
     epsilon = forms.DecimalField(
         label='Select Epsilon',
-        help_text='Specifies the allowed uniqueness of either trace variant frequencies (tv) or single events frequencies in directly-follow matrices (df). Adds the necassary amount of lapacian noise to satisy epsilon differential privacy.  Smaller epsilon value allows for less variance in uniqueness of entries and therefore more privacy by adding more noise.',
+        help_text='Adds lapacian noise to either trace variant frequencies (tv) or single events frequencies in directly-follow matrices (df) to satisy epsilon differential privacy.  Smaller epsilon value allows for less variance in uniqueness of entries and therefore more privacy by adding more noise.',
         required = True,
         initial = "0.1",
         )
@@ -80,7 +80,28 @@ class DocumentForm(forms.Form):
         required = True,
         initial = "30",
         )
-    
+        
+    #re-identification risk
+    unique_identifier = forms.CharField(
+        label='Select unique identifier column name',
+        required= True,
+        initial = "Case ID",
+    )
+    #re-identification risk
+    attributes = forms.CharField(
+        label='Attribute names to include in assessment.',
+        help_text='Leave blank to include all attribute or choose attributes to exlude. Use ; as delimiter ',
+        required= False,
+        initial = "",
+    )
+    #re-identification risk
+    attributes_to_exclude = forms.CharField(
+        label='Attribute names to exlude in assessment.',
+        help_text='Leave blank to include all or those in include field. Use ; as delimiter ',
+        required= False,
+        initial = "",
+    )
+  
   
 
     #email = forms.EmailField(

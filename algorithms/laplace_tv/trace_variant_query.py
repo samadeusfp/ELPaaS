@@ -177,7 +177,7 @@ try:
 
     #cleanup
     shutil.rmtree(os.getcwd()+os.path.sep+secure_token)
-except:
+except Exception as e:
     f=open("debug","w+")
     f.write(str(e))
     if hasattr(e, 'message'):
