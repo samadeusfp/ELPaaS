@@ -3,6 +3,7 @@ $(document).ready(function() {
 	//assumes pretsa is initial algorithm
 	$('#div_id_epsilon').css("display", "none");
 	$('#div_id_k').css("display", "block");
+	$('#div_id_pripel_k').css("display", "none");
 	$('#div_id_t').css("display", "block");
 	$('#div_id_anon').css("display", "block");
 	$('#div_id_n').css("display", "none");
@@ -23,6 +24,7 @@ $('#id_algorithm').change(function(){
 			//$(this).popover("show")
 			$('#div_id_epsilon').css("display", "none");
 			$('#div_id_k').css("display", "block");
+			$('#div_id_pripel_k').css("display", "none");
 			$('#div_id_t').css("display", "block");
 			$('#div_id_anon').css("display", "block");
 			$('#div_id_n').css("display", "none");
@@ -37,6 +39,7 @@ $('#id_algorithm').change(function(){
 			//$().popover("show")
 			$('#div_id_epsilon').css("display", "block");
 			$('#div_id_k').css("display", "none");
+			$('#div_id_pripel_k').css("display", "none");
 			$('#div_id_t').css("display", "none");
 			$('#div_id_anon').css("display", "none");
 			$('#div_id_n').css("display", "none");
@@ -50,6 +53,7 @@ $('#id_algorithm').change(function(){
 			//$('[data-toggle="popover"]').popover("show")
 			$('#div_id_epsilon').css("display", "block");
 			$('#div_id_k').css("display", "none");
+			$('#div_id_pripel_k').css("display", "none");
 			$('#div_id_t').css("display", "none");
 			$('#div_id_anon').css("display", "none");
 			$('#div_id_n').css("display", "block");
@@ -61,8 +65,23 @@ $('#id_algorithm').change(function(){
 		else if (valueSelected ==4){
 			//$(this).attr("data-content","Assumes a .xes File as Input. Returns a .xes File.").data("bs.popover");
 			//$('[data-toggle="popover"]').popover("show")
+			$('#div_id_epsilon').css("display", "block");
+			$('#div_id_k').css("display", "none");
+			$('#div_id_pripel_k').css("display", "block");
+			$('#div_id_t').css("display", "none");
+			$('#div_id_anon').css("display", "none");
+			$('#div_id_n').css("display", "block");
+			$('#div_id_p').css("display", "none");
+			$('#div_id_unique_identifier').css("display", "none");
+			$('#div_id_attributes').css("display", "none");
+			$('#div_id_attributes_to_exclude').css("display", "none");
+	    }
+		else if (valueSelected ==5){
+			//$(this).attr("data-content","Assumes a .xes File as Input. Returns a .xes File.").data("bs.popover");
+			//$('[data-toggle="popover"]').popover("show")
 			$('#div_id_epsilon').css("display", "none");
 			$('#div_id_k').css("display", "none");
+			$('#div_id_pripel_k').css("display", "none");
 			$('#div_id_t').css("display", "none");
 			$('#div_id_anon').css("display", "none");
 			$('#div_id_n').css("display", "none");

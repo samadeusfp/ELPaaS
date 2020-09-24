@@ -24,7 +24,8 @@ class DocumentForm(forms.Form):
                  ("1","PRETSA"),
                  ("2","Laplacian df-based"),
                  ("3","Laplacian tv-based"),
-                 ("4","Quantifying Re-identification Risk")
+                 ("4","PRIPEL"),
+                 ("5","Quantifying Re-identification Risk")
                 ),
         #help_text ="Assumes a .csv File as Input. Returns a .csv File. The File needs to contain the columns 'Case ID', 'Activity' and 'Duration'"
     )
@@ -47,6 +48,13 @@ class DocumentForm(forms.Form):
         required = True,
         initial = "4",
         )
+    #pripel
+    pripel_k = forms.IntegerField(
+        label='Select k',
+        help_text='Prunning parameter of the trace-variant-query. At least k traces must appear in a noisy variant count to be part of the result of the query. ',
+        required = True,
+        initial = "4",
+        )
        
     #pretsa
     anon = forms.BooleanField(
@@ -57,7 +65,7 @@ class DocumentForm(forms.Form):
         )
 
 
-    #laplacian - df and tv
+    #laplacian - df and tv, pripel
     epsilon = forms.DecimalField(
         label='Select Epsilon',
         help_text='Adds lapacian noise to either trace variant frequencies (tv) or single events frequencies in directly-follow matrices (df) to satisy epsilon differential privacy.  Smaller epsilon value allows for less variance in uniqueness of entries and therefore more privacy by adding more noise.',
@@ -65,9 +73,9 @@ class DocumentForm(forms.Form):
         initial = "0.1",
         )
 
-    #laplacian - tv
+    #laplacian - tv, pripel
     n = forms.IntegerField(
-        label='Select maximum Sequence Length',
+        label='Select N',
         help_text='Maximum length of a subsequence in a trace which will be internally queried. Higher value will take longer to compute and the likelihood grows that new traces not found in the original event log will appear.',
         required = True,
         initial = "10",

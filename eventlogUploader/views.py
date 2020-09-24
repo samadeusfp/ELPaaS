@@ -13,7 +13,7 @@ import hashlib
 import datetime
 import subprocess
 
-from .tasks import handle_pretsa_upload, handle_laplace_df_upload, handle_laplace_tv_upload, handle_risk_upload
+from .tasks import handle_pretsa_upload, handle_laplace_df_upload, handle_laplace_tv_upload, handle_pripel_upload, handle_risk_upload
 
 def handle_view_file(request):
     if request.method == 'GET':
@@ -55,6 +55,8 @@ def handle_file_upload(request):
             elif algorithm == '3':
                 algorithm_text="Laplace trace-variant based"
             elif algorithm == '4':
+                algorithm_text="PRIPEL"
+            elif algorithm == '5':
                 algorithm_text="Quantifying Re-identification Risk"
 
             #generate token, save to db and to media folder
@@ -88,8 +90,13 @@ def handle_file_upload(request):
                 epsilonValue = form.cleaned_data['epsilon']
                 nValue = form.cleaned_data['n']
                 pValue = form.cleaned_data['p']
-                handle_laplace_tv_upload.delay(epsilonValue, nValue, pValue, media_path, db_path, secure_token)  
-            if algorithm =='4':
+                handle_laplace_tv_upload.delay(epsilonValue, nValue, pValue, media_path, db_path, secure_token) 
+            elif algorithm =='4':
+                epsilonValue = form.cleaned_data['epsilon']
+                nValue = form.cleaned_data['n']
+                kValue = form.cleaned_data['pripel_k']
+                handle_pripel_upload.delay(epsilonValue, nValue, kValue, media_path, db_path, secure_token)  
+            elif algorithm =='5':
                 identifier = form.cleaned_data['unique_identifier']
                 incList = form.cleaned_data['attributes']
                 exList = form.cleaned_data['attributes_to_exclude']

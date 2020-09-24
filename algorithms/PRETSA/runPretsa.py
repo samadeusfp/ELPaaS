@@ -48,7 +48,8 @@ try:
             privateEventLog.at[i,'Case ID'] = intList[caseList.index(row['Case ID'])]
             
     privateEventLog.to_csv(targetFilePath, sep=";",index=False)
-    puffer,targetFile = targetFilePath.split("media/")
+    print(targetFilePath)
+    puffer,targetFile = targetFilePath.split("media"+os.path.sep)
     conn = sqlite3.connect(dbName)
     c = conn.cursor()
     c.execute("UPDATE eventlogUploader_document SET status = ?, docfile = ? WHERE token = ?", ("FINISHED", targetFile, secure_token))

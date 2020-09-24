@@ -17,17 +17,22 @@ def handle_pretsa_upload(kValue, tValue, anonValue, path, pathDB, secure_token):
 
 @shared_task
 def handle_laplace_df_upload(epsilonValue, path, pathDB, secure_token):
-    command = Popen(["python", os.getcwd()+"/algorithms/Laplacian_df/runLaplacian_df.py", str(path), str(epsilonValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/Laplacian_df")
+    command = Popen(["python", os.getcwd()+"/algorithms/laplace_df/privatize_df.py", str(path), str(epsilonValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/laplace_df")
     return
 
 @shared_task
 def handle_laplace_tv_upload(epsilonValue, nValue, pValue, path, pathDB, secure_token):
     command = Popen(["python", os.getcwd()+"/algorithms/laplace_tv/trace_variant_query.py", str(path), str(epsilonValue), str(nValue), str(pValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/laplace_tv")
     return
+
+@shared_task    
+def handle_pripel_upload(epsilonValue, nValue, kValue, path, pathDB, secure_token):
+    command = Popen(["python", os.getcwd()+"/algorithms/pripel/pripel.py", str(path), str(epsilonValue), str(nValue), str(kValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/pripel")
+    return
     
 @shared_task
 def handle_risk_upload(path, pathDB, secure_token):
-    command = Popen(["python", os.getcwd()+"/algorithms/re_ident_risk/re_ident_risk.py", str(path), str(identifier), str(incList), str(exList), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/test")
+    command = Popen(["python", os.getcwd()+"/algorithms/re_ident_risk/re_ident_risk.py", str(path), str(identifier), str(incList), str(exList), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/re_ident_risk")
     return
 
 @shared_task
