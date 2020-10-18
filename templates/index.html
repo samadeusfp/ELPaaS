@@ -11,6 +11,13 @@
 			.text-muted {
 				font-size: 0.6em;
 			}
+			.btn {
+				margin: 5px auto;
+			}
+			
+			#column_form .selectmultiple {
+				height: 180px;
+			}
 		</style>
     </head>
     
@@ -89,6 +96,28 @@
 					</div>
 				</div>
 				
+				<!-- Column Select Modal -->
+				<div class="modal fade" tabindex="-1" role="dialog" id="select_columns">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5>Select Columns</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+							</div>
+							{% load crispy_forms_tags %}
+							<form action="{% url 'risk' %}" method="post" enctype="multipart/form-data" id="column_form">
+							<div class="modal-body">
+								{% csrf_token %}
+								{{ column_form|crispy }}
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn btn-primary" >Submit</button>
+							</div>
+							</form>	
+						</div>
+					</div>
+				</div>
+				
 			<!-- Uploaded Files View -->
 			<div class="row">
 				<div class="col">
@@ -105,11 +134,12 @@
 										{{token}}
 										</b>
 									</div>
-									<p>
+									<div class="text-center">
+										<button id="column_select_button" class="btn btn-primary" type="button" data-toggle="modal" data-target="#select_columns">Select Columns</button>
+									</div>
 									<div class="text-center">
 										<button id="token_copy_button" class="btn btn-secondary" onclick="copyTokenToClipboard()">Copy Token</button>
 									</div>
-									<p>
 									<div class="text-center">
 										<a id="delete_document" class="btn btn-outline-danger" method="get" href={% url 'delete_file' token=token %}>Delete Document</a>
 									</div>

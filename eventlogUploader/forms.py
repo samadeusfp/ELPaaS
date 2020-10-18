@@ -101,7 +101,8 @@ class DocumentForm(forms.Form):
         required= False,
         initial = "",
     )
-  
+    
+    
   
 
     #email = forms.EmailField(
@@ -118,3 +119,53 @@ class DownloadForm(forms.Form):
         label='Please enter a secure token',
         required= True
     )
+
+class ColumnSelectForm(forms.Form):
+    def __init__(self, case_attr_var=None,event_attr_var=None,projection_var=None, token_var=None, *args, **kwargs):
+        super(ColumnSelectForm, self).__init__(*args, **kwargs)
+        
+        self.fields['projection'] = forms.ChoiceField(
+        label='Specify Projection',
+        choices=(
+                 ("1","activities and timestamps"),
+                 ("2","activities, event and case attributes"),
+                 ("3","activities and event attributes"),
+                 ("4","activities and case attributes"),
+                 ("5","activities")
+                ),
+        )
+        self.fields['case_attr'] = forms.MultipleChoiceField(
+            label='Specify case attributes',
+            help_text='case attributes are consistent for single trace e.g. Age, Day of Birth...',
+            widget=forms.SelectMultiple,
+            choices=case_attr_var)
+        self.fields['event_attr'] = forms.MultipleChoiceField(
+            label='Specify event attributes',
+            help_text='event attributes are consistent for single event e.g. Timestamp, org:group...',
+            widget=forms.SelectMultiple,
+            choices=event_attr_var)
+            
+            
+        self.fields['token'] = forms.CharField(
+            label='secure token here',
+            #widget=forms.HiddenInput(),
+            initial=token_var)
+            
+          
+#    def __init__(self, *args, **kwargs):
+#        column_var = kwargs.pop('columns', None)
+#        super(ColumnSelectForm, self).__init__(*args, **kwargs)
+#        if column_var:
+#            self.OPTIONS = column_var
+    
+    
+#    colums = open('/media/'
+#    OPTIONS = (("1", "CASE ID"),)
+#    OPTIONS = kwargs
+    
+#    def update_choices(self,choices, *args, **kwargs):
+    
+    
+#    Columns = forms.MultipleChoiceField(widget=forms.SelectMultiple,
+#                                          choices=OPTIONS)
+   

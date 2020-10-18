@@ -27,8 +27,14 @@ def handle_laplace_tv_upload(epsilonValue, nValue, pValue, path, pathDB, secure_
     
 @shared_task
 def handle_risk_upload(path, pathDB, secure_token):
-    command = Popen(["python", os.getcwd()+"/algorithms/re_ident_risk/re_ident_risk.py", str(path), str(identifier), str(incList), str(exList), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/test")
+    command = Popen(["python", os.getcwd()+"/algorithms/re_ident_risk/columns.py", str(path), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/re_ident_risk")
     return
+    
+@shared_task
+def handle_risk_upload_with_columns(projection, case_attributes, event_attributes, path, pathDB, secure_token):
+    command = Popen(["python", os.getcwd()+"/algorithms/re_ident_risk/re_ident_test.py", str(path), str(projection), str(case_attributes), str(event_attributes), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/re_ident_risk")
+    return
+
 
 @shared_task
 def remove_overdue_files():

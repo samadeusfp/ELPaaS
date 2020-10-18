@@ -18,5 +18,4 @@ class Document(models.Model):
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs) #delete save entry
         shutil.rmtree(os.path.join(settings.MEDIA_ROOT, self.token))
-
-
+        

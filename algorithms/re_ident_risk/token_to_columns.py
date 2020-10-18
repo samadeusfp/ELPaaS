@@ -4,27 +4,21 @@ try:
     import pandas as pd
     import sqlite3
     import os
-    import pretsa
     import random
     from pm4py.objects.log.importer.xes import factory as xes_import_factory
     from pm4py.objects.log.exporter.csv import factory as csv_exporter
 
     #set parameters
 
-    filePath = sys.argv[1]
-    k = sys.argv[2]
-    t = sys.argv[3]
-    anon = sys.argv[4]
-    dbName = sys.argv[5]
-    secure_token = sys.argv[6]
-    sys.setrecursionlimit(3000)
+    secure_token = sys.argv[1]
+
     
     filePath = filePath.replace(" ","_")
     if filePath.endswith(".xes"):
         log = xes_import_factory.apply(filePath)
         filePath = filePath + ".csv"
         csv_exporter.export(log, filePath)
-    targetFilePath = filePath.replace(".csv","_t%s_k%s_pretsa.csv" % (t,k))
+    targetFilePath = filePath.replace(".csv","_columns.csv")
     #run PRETSA
     if filePath.endswith(".xes.csv"):
         xes_csv_file = pd.read_csv(filePath, delimiter=",",skipinitialspace=True, encoding="utf-8-sig")
@@ -34,36 +28,35 @@ try:
         xes_csv_file.to_csv(filePath,sep=";",encoding="utf-8-sig",index=False)
     
     eventLog = pd.read_csv(filePath, delimiter=";",skipinitialspace=True, encoding="utf-8-sig")
-    pretsa_alg = pretsa.Pretsa(eventLog)
-    cutOutCases = pretsa_alg.runPretsa(int(k),float(t))
-    privateEventLog = pretsa_alg.getPrivatisedEventLog()
     
-    if anon:
-        caseIDs = pd.Series(privateEventLog['Case ID'].unique())
-        caseList = caseIDs.tolist()
-        intList = list(range(caseIDs.size))
-        random.shuffle(intList)
+    column_list = list(eventLog.columns.values.tolist()) 
+    column_list.remove('Activity')
+    column_list.remove('Case ID')
 
-        for i,row in privateEventLog.iterrows():
-            privateEventLog.at[i,'Case ID'] = intList[caseList.index(row['Case ID'])]
-            
-    privateEventLog.to_csv(targetFilePath, sep=";",index=False)
     puffer,targetFile = targetFilePath.split("media"+os.path.sep)
+    column_path = puffer +"media" +os.path.sep + secure_token +os.path.sep + "columns.txt"
+    targetFile = secure_token +os.path.sep + "columns.txt"
+    print(column_path)
+    with open(column_path, 'w') as filehandle:
+        filehandle.writelines("%s\n" % column for column in column_list)
+    
+    #write to db
+    
+    
     conn = sqlite3.connect(dbName)
     c = conn.cursor()
     c.execute("UPDATE eventlogUploader_document SET status = ?, docfile = ? WHERE token = ?", ("FINISHED", targetFile, secure_token))
     conn.commit()
     conn.close()
+    
 
 except:
     filePath = sys.argv[1]
-    k = sys.argv[2]
-    t = sys.argv[3]
-    anon = sys.argv[4]
-    dbName = sys.argv[5]
-    secure_token = sys.argv[6]
+    dbName = sys.argv[2]
+    secure_token = sys.argv[3]
     conn = sqlite3.connect(dbName)
     c = conn.cursor()
     c.execute("UPDATE eventlogUploader_document SET status = ? WHERE token = ?", ("ERROR", secure_token))
     conn.commit()
     conn.close()
+    

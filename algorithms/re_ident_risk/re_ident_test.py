@@ -1,48 +1,33 @@
-import sys
-import sqlite3
-import os
-import subprocess
-import requests
-import time
-import urllib3
-import shutil
-import test
-import smtplib
-import pandas as pd
-import numpy as np
-import random
-
-from pm4py.objects.log.importer.xes import factory as xes_import_factory
-from pm4py.objects.log.exporter.csv import factory as csv_exporter
-from scipy.stats import itemfreq
-from datetime import datetime
-
-
-
 try:
-
-###################################################################################
-####################################################################################
-###################################################################################
-
-
+    import smtplib
+    import sys
+    import pandas as pd
+    import numpy as np
+    import sqlite3
+    import os
+    import random
+    from datetime import datetime
+    from pm4py.objects.log.importer.xes import factory as xes_import_factory
+    from pm4py.objects.log.exporter.csv import factory as csv_exporter
+    from scipy.stats import itemfreq
+    
     def generate_projection_view(projections_local, case_attribute_local, activity_local, event_attribute_local,
-                                 timestamp_local):
+                             timestamp_local):
         """ Depending on the projection, the corresponding columns are selected."""
 
-        if projections_local == 'A':
+        if projections_local == "1":
             qi = []
             events = activity_local + timestamp_local
-        elif projections_local == 'B':
+        elif projections_local == "2":
             qi = case_attribute_local
             events = activity_local + event_attribute_local
-        elif projections_local == 'C':
+        elif projections_local == "3":
             qi = []
             events = activity_local + event_attribute_local
-        elif projections_local == 'D':
+        elif projections_local == "4":
             qi = case_attribute_local
             events = activity_local
-        elif projections_local == 'E':
+        elif projections_local == "5":
             qi = []
             events = activity_local
         else:
@@ -74,7 +59,6 @@ try:
         The other events[1] ... events[len(events)-1] correspond to the other event attributes or timestamps.
         
         1. Activities and their correspondig attributes are selected randomly. We call them points. 
-        
         2. Each case, more precisely all its points, are compared with the others.
         If the case is the only one with these points, it is declared as unique.
         The sum(uniques) represents the number of cases that are unique with the given points.
@@ -192,98 +176,69 @@ try:
         return 0
 
 
-        #if __name__ == "__main__":
-    pd.options.mode.chained_assignment = None 
-    ################################################
-    # Variables to customise
-    ################################################
-    # path of sources
-    path_data_sources = 'results/SepsisCases-EventLog/'
-
-    # source filename: The event log has to be in the format where one case corresponds to one row
-    # and the columns to the activities, event and case attributes for each case.
-    csv_source_file_name = 'SepsisCases-EventLog_Age-CompleteTimestamp-Activity-org-group.csv'
-
-    # delimiter of csv-file
-    csv_delimiter = ','
-    
-    # read csv. data from disk
-    df_data = pd.read_csv(filepath_or_buffer=path_data_sources + csv_source_file_name, delimiter=csv_delimiter,
-                          low_memory=False, nrows=100)
-    
-    # Specify columns
-    unique_identifier = ['Case ID']
-    case_attribute = ['Age']
-    activity = ['Activity']
-    event_attribute = ['org:group']
-    timestamp = ['CompleteTimestamp']
-
-    # Specify Projection
-    # A: activities and timestamps 
-    # B: activities, event and case attributes
-    # C: activities and event attributes
-    # D: activities and case attributes
-    # E: activities
-    projection = 'C'
-    
-    # Specify number or relative frequency of points
-    number_points = 1
-
-    # # # # # # # # # # # # # # # # # # # # #
-    # Data preparation concatenating events
-    quasi_identifier, events_to_concat = generate_projection_view(projection, case_attribute, activity,
-                                                                  event_attribute, timestamp)
-    attributes = unique_identifier + quasi_identifier 
-    df_aggregated_data = prepare_data(events_to_concat, df_data, attributes)
-    print("Data preparation finished")
-    
-    unicity = calculate_unicity(df_aggregated_data, quasi_identifier, events_to_concat, number_points)
-    print(unicity)
-    
-    ####################################################################################
-    ####################################################################################
-    ####################################################################################
-    
-    
-    
     #set parameters
-
+    
     filePath = sys.argv[1]
-    identifier = sys.argv[2]
-    incList = sys.argv[3]
-    exList = sys.argv[4]
+    projection = sys.argv[2]
+    case_attribute_string = sys.argv[3]
+    event_attribute_string = sys.argv[4]
     dbName = sys.argv[5]
     secure_token = sys.argv[6]
+    sys.setrecursionlimit(3000)
     
-    unique_identifier = [identifier]
+    case_attribute = list(case_attribute_string.split(","))
+    event_attribute = list(event_attribute_string.split(","))
+    
+    attributes_non_unique = case_attribute + event_attribute
+    attributes_non_unique.append('Activity')
+    attributes_non_unique.append('time:timestamp')
+    
+    attributes = list(set(attributes_non_unique)) 
+    unique_identifier = ['Case ID']
+    activity = ['Activity']
+    timestamp = ['time:timestamp']
 
-    attributes = []
-    if incList:
-        attributes = incList.split(';')
-
-    attributes_to_exclude = []
-    if exList:
-        attributes_to_exclude = exList.split(';')
-
+    
+    current_file_name= ""
+    #########################################
+    for filename in os.listdir(filePath):
+        if filename.endswith(".xes.csv"): 
+            current_file_name= filename
+            
+    
+    
+    #df_data = pd.read_csv(filePath, delimiter=";",skipinitialspace=True, encoding="utf-8-sig")
+    
+    
+    
+    buffer_path = os.path.join(filePath, "buffer.csv")
+    filePath = os.path.join(filePath, current_file_name)
+    df_data = pd.read_csv(filePath, delimiter=";",skipinitialspace=True, encoding="utf-8-sig")
+    #xes_csv_file.rename(columns={'concept:name': 'Activity', 'case:concept:name': 'Case ID'}, inplace=True)
+    #if not 'Duration' in xes_csv_file.columns:
+    #    xes_csv_file.loc[:,"Duration"] = 0.0
+    ##########################################
     filePath = filePath.replace(" ","_")
-    log = xes_import_factory.apply(filePath)
-    filePath = filePath + ".csv"
-    csv_exporter.export(log, filePath)
-    targetFilePath = filePath.replace(".csv","_results.csv")
-
     
-
+    #if filePath.endswith(".xes"):
+    #    log = xes_import_factory.apply(filePath)
+    #    filePath = filePath + ".csv"
+    #    csv_exporter.export(log, filePath)
+    #targetFilePath = filePath.replace(".csv","_results")
+    #run PRETSA
+    #if filePath.endswith(".xes.csv"):
+    #    xes_csv_file = pd.read_csv(filePath, delimiter=",",skipinitialspace=True, encoding="utf-8-sig")
+    #    xes_csv_file.rename(columns={'concept:name': 'Activity', 'case:concept:name': 'Case ID'}, inplace=True)
+    #    if not 'Duration' in xes_csv_file.columns:
+    #        xes_csv_file.loc[:,"Duration"] = 0.0
+    #    #xes_csv_file.to_csv(filePath,sep=";",encoding="utf-8-sig",index=False)
+    
     #eventLog = pd.read_csv(filePath, delimiter=";",skipinitialspace=True, encoding="utf-8-sig")
-    #eventLog.to_csv(targetFilePath, sep=";",index=False)
-
-    ################################################
-    ################################################
-
-    # read csv. data from disk
-    df_data = pd.read_csv(filepath_or_buffer=path_data_sources + csv_source_file_name, delimiter=csv_delimiter)
-    if not attributes:
-        attributes = [attr for attr in list(df_data) if attr not in (attributes_to_exclude + unique_identifier)]
-
+    
+    #######################
+    ####csv2simple_auto####
+    #######################
+    
     # drop all unnecessary columns
     df_important_columns = df_data[unique_identifier + attributes]
 
@@ -304,6 +259,7 @@ try:
 
     # use attributes in file name
     list_file_name = []
+    
 
     # loop through all variable attributes
     for attribute in attributes:
@@ -349,63 +305,67 @@ try:
 
     # get index (unique identifier) from enumerated data
     df_for_export.index = df_enumerated_data.index
-
-    # meaningful filename: original-filename + attributes
-    filename_beginning_part = csv_source_file_name.split(sep='.')[0].replace(" ", "")
-    filename_end_part = '-'.join(list_file_name)
-
-
-    # in case only "constant_attribute" OR "variable_attribute" is given, replace double underscore with a single one
-    filename_concat = filename_beginning_part + '_' + filename_end_part + '.csv'
-
-    # if filename too long use only quantity of attributes and current time
-    if len(filename_concat) > 75:
-        filename_concat = filename_beginning_part + '_' + str(len(attributes)) + '-Attributes_' + \
-                          str(datetime.now().strftime('%Y-%m-%d_%H-%M')) + '.csv'
-
-    path_data_export = path_data_export + filename_beginning_part + '/'
-    # if export folder does not exist, create the folder
-    if not os.path.exists(path_data_export):
-        os.makedirs(path_data_export)
-
-    # write to disk
-    df_for_export.to_csv(path_or_buf=path_data_export + filename_concat)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    puffer,targetFile = targetFilePath.split("media\\")
+    df_for_export.to_csv(buffer_path,sep=";")
+    ###########################################################################################################################################################
+    ###########################################################################################################################################################
+    ###########################################################################################################################################################
+    ###########################################################################################################################################################
+    ###########################################################################################################################################################    
+    pd.options.mode.chained_assignment = None   
+    df_two = pd.read_csv(buffer_path, delimiter=";",low_memory=False, nrows=1000)   
+    # Specify number or relative frequency of points
+    number_points = 1    
+    
+    quasi_identifier, events_to_concat = generate_projection_view(projection, case_attribute, activity,
+                                                                  event_attribute, timestamp)
+    attributes_quasi = unique_identifier + quasi_identifier 
+    
+    df_aggregated_data = prepare_data(events_to_concat, df_two, attributes_quasi)
+    print("Data preparation finished")
+    
+    unicity = calculate_unicity(df_aggregated_data, quasi_identifier, events_to_concat, number_points)
+    print("unicity = ", unicity)
+    
+    
+    ###########################################################################################################################################################
+    result_filename = current_file_name.replace(".csv","_results.txt")
+    puffer,targetFile = filePath.split("media"+os.path.sep)
+    result_path = puffer +"media" +os.path.sep + secure_token +os.path.sep + result_filename
+    targetFile = secure_token + os.path.sep + result_filename
+    
+    with open(result_path, 'w') as filehandle:
+        filehandle.write("Unicity = %s \n" % unicity )
+        filehandle.write("Based on activities \n")
+        if projection == "1":
+            filehandle.write("Timestamps \n")
+        if projection == "2" or projection == "4":
+            filehandle.write("Case attributes: \n")
+            filehandle.writelines("%s\n" % cases for cases in case_attribute)
+            filehandle.write("\n")
+        if projection == "2" or projection == "3":
+            filehandle.write("Event attributes: \n")
+            filehandle.writelines("%s\n" % event_attr for event_attr in event_attribute)
+        
+    ###########################################################################################################################################################
+    
+    
     conn = sqlite3.connect(dbName)
     c = conn.cursor()
     c.execute("UPDATE eventlogUploader_document SET status = ?, docfile = ? WHERE token = ?", ("FINISHED", targetFile, secure_token))
     conn.commit()
     conn.close()
-
-    #print(eventLog)
+    print("DB submit done")
 
 except:
     filePath = sys.argv[1]
-    dbName = sys.argv[2]
-    secure_token = sys.argv[3]
+    projection = sys.argv[2]
+    case_attribute_string = sys.argv[3]
+    event_attribute_string = sys.argv[4]
+    dbName = sys.argv[5]
+    secure_token = sys.argv[6]
+    print()
+    print("ERROR_except")
+    print()
     conn = sqlite3.connect(dbName)
     c = conn.cursor()
     c.execute("UPDATE eventlogUploader_document SET status = ? WHERE token = ?", ("ERROR", secure_token))
