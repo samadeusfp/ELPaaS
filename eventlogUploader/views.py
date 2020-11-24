@@ -10,13 +10,15 @@ from eventlogUploader.forms import DocumentForm, DownloadForm, ColumnSelectForm
 from django.contrib import messages
 import os
 import hashlib
+from django.utils import timezone
+import pytz
 import datetime
 import subprocess
 import time
 
 
 
-from .tasks import handle_pretsa_upload, handle_laplace_df_upload, handle_laplace_tv_upload, handle_risk_upload, handle_risk_upload_with_columns
+from .tasks import handle_pretsa_upload, handle_laplace_df_upload, handle_laplace_tv_upload,handle_pripel_upload, handle_risk_upload, handle_risk_upload_with_columns
 
 def handle_view_file(request):
     if request.method == 'GET':
@@ -25,10 +27,12 @@ def handle_view_file(request):
         if document:
             document_name=document[0]['docfile']
             document_name=document_name.replace(token,"")[1:]
+            #print(document[0]['algorithm'])
         upload_form = DocumentForm(initial = {'algorithm':'1'})
         download_form = DownloadForm()
-        
-        columns = tuple(token_to_column_list(token))
+        columns = tuple()
+        if document[0]['algorithm']=='Quantifying Re-identification Risk':
+            columns = tuple(token_to_column_list(token))
         column_form = ColumnSelectForm(case_attr_var= columns,event_attr_var= columns,token_var=token)
 
         #Load documents for the list page
@@ -101,10 +105,13 @@ def handle_file_upload(request):
             elif algorithm == '3':
                 algorithm_text="Laplace trace-variant based"
             elif algorithm == '4':
+                algorithm_text="PRIPEL"
+            elif algorithm == '5':
                 algorithm_text="Quantifying Re-identification Risk"
 
             #generate token, save to db and to media folder
-            upload_time = datetime.datetime.now()
+            upload_time = timezone.now()
+            #upload_time = datetime.datetime.now(tzinfo=pytz.UTC)
             expiration_time = upload_time+ datetime.timedelta(+30)
             
             secure_token = generate_token(request.FILES['docfile'], algorithm)
@@ -120,25 +127,28 @@ def handle_file_upload(request):
             file_name = request.FILES['docfile'].name
             media_path = os.path.join(os.getcwd(), "media",secure_token,file_name)
             db_path = os.path.join(os.getcwd(),"db.sqlite3")
+            redirect_var = "/view/?token="  
 
             #call algorithm script using celery - see functions in tasks.py
             if algorithm =='1':
                 kValue = form.cleaned_data['k']
                 tValue = form.cleaned_data['t']
                 anonValue = form.cleaned_data['anon']
-                handle_pretsa_upload.delay(kValue, tValue, anonValue, media_path, db_path, secure_token)
-                redirect_var = "/view/?token="
+                handle_pretsa_upload.delay(kValue, tValue, anonValue, media_path, db_path, secure_token)   
             elif algorithm =='2':
                 epsilonValue = form.cleaned_data['epsilon']
                 handle_laplace_df_upload.delay(epsilonValue, media_path, db_path, secure_token)
-                redirect_var = "/view/?token="
             elif algorithm =='3':
                 epsilonValue = form.cleaned_data['epsilon']
                 nValue = form.cleaned_data['n']
                 pValue = form.cleaned_data['p']
                 handle_laplace_tv_upload.delay(epsilonValue, nValue, pValue, media_path, db_path, secure_token)
-                redirect_var = "/view/?token="                
             elif algorithm =='4':
+                epsilonValue = form.cleaned_data['epsilon']
+                nValue = form.cleaned_data['n']
+                kValue = form.cleaned_data['pripel_k']
+                handle_pripel_upload.delay(epsilonValue, nValue, kValue, media_path, db_path, secure_token)             
+            elif algorithm =='5':
                 identifier = form.cleaned_data['unique_identifier']
                 incList = form.cleaned_data['attributes']
                 exList = form.cleaned_data['attributes_to_exclude']
@@ -175,7 +185,7 @@ def index(request):
 def generate_token(docfile, algorithm):
     m = hashlib.sha256()
     m.update(str.encode(algorithm))
-    m.update(str.encode(str(datetime.datetime.now())))
+    m.update(str.encode(str(datetime.datetime.now(tz=timezone.utc))))
     return m.hexdigest()
     
 def token_to_column_list(secure_token):

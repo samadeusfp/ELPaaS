@@ -129,6 +129,7 @@ try:
     privatize_df(log, event_mapping, epsilon, outPath)
     #write to db
     print("Writing to DB")
+    print(outPath)
     puffer,targetFile = outPath.split("media"+os.path.sep)
     conn = sqlite3.connect(dbName)
     c = conn.cursor()
