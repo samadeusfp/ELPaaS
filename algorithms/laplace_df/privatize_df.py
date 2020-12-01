@@ -122,11 +122,12 @@ try:
     secure_token = sys.argv[4]
     #preprocess file
     os.mkdir(secure_token)
-    
+    print("print1")
     outPath = filePath.replace(".xes","_%s" % (epsilon))
     log = import_log.importer.xes.factory.apply(filePath)
     event_mapping = create_event_int_mapping(log)
     privatize_df(log, event_mapping, epsilon, outPath)
+    print("print2")
     #write to db
     print("Writing to DB")
     print(outPath)
@@ -140,6 +141,7 @@ try:
     #cleanup
     shutil.rmtree(os.getcwd()+os.path.sep+secure_token)
 except Exception as e:
+    print("print_error")
     f=open("debug","w+")
     f.write(str(e))
     if hasattr(e, 'message'):

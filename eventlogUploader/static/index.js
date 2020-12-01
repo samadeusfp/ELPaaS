@@ -15,6 +15,7 @@ $(document).ready(function() {
 	$('#div_id_case_attr').css("display", "none");
 	$('#div_id_event_attr').css("display", "none");
 	$('#div_id_token').css("display", "none");
+	$('#div_id_metadata').css("display", "block");
 	//$('[data-toggle="popover"]').popover();
 	
 })
@@ -36,6 +37,7 @@ $('#id_algorithm').change(function(){
 			$('#div_id_unique_identifier').css("display", "none");
 			$('#div_id_attributes').css("display", "none");
 			$('#div_id_attributes_to_exclude').css("display", "none");
+			$('#div_id_metadata').css("display", "block");
 			
 
 		}
@@ -52,6 +54,7 @@ $('#id_algorithm').change(function(){
 			$('#div_id_unique_identifier').css("display", "none");
 			$('#div_id_attributes').css("display", "none");
 			$('#div_id_attributes_to_exclude').css("display", "none");
+			$('#div_id_metadata').css("display", "block");
 			
 		}
 		else if (valueSelected ==3){
@@ -67,6 +70,7 @@ $('#id_algorithm').change(function(){
 			$('#div_id_unique_identifier').css("display", "none");
 			$('#div_id_attributes').css("display", "none");
 			$('#div_id_attributes_to_exclude').css("display", "none");
+			$('#div_id_metadata').css("display", "block");
 			
 	    }
 		else if (valueSelected ==4){
@@ -82,6 +86,7 @@ $('#id_algorithm').change(function(){
 			$('#div_id_unique_identifier').css("display", "none");
 			$('#div_id_attributes').css("display", "none");
 			$('#div_id_attributes_to_exclude').css("display", "none");
+			$('#div_id_metadata').css("display", "block");
 			
 	    }
 		else if (valueSelected ==5){
@@ -97,6 +102,7 @@ $('#id_algorithm').change(function(){
 			$('#div_id_unique_identifier').css("display", "none");
 			$('#div_id_attributes').css("display", "none");
 			$('#div_id_attributes_to_exclude').css("display", "none");
+			$('#div_id_metadata').css("display", "none");
 			
 			
 			//Check File API Support

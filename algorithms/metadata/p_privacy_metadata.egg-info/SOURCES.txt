@@ -1,0 +1,10 @@
+README.md
+setup.py
+p_privacy_metadata/ELA.py
+p_privacy_metadata/__init__.py
+p_privacy_metadata/privacyExtension.py
+p_privacy_metadata.egg-info/PKG-INFO
+p_privacy_metadata.egg-info/SOURCES.txt
+p_privacy_metadata.egg-info/dependency_links.txt
+p_privacy_metadata.egg-info/pbr.json
+p_privacy_metadata.egg-info/top_level.txt

@@ -55,8 +55,10 @@ def handle_view_file(request):
 def setValues(request):
     case_attributes = {}
     case_attributes = request.POST.getlist('case_attr')
+    print(case_attributes)
     event_attributes = {}
     event_attributes = request.POST.getlist('event_attr')
+    print(event_attributes)
     
     return case_attributes,event_attributes
     
@@ -76,6 +78,12 @@ def handle_column_select(request):
             
         case_string= convert_list_to_string(case_attributes)
         event_string= convert_list_to_string(event_attributes)
+        
+        if not case_string:
+            case_string ='$empty_string$'
+        if not event_string:
+            event_string ='$empty_string$'
+        
         
         media_path = os.path.join(os.getcwd(), "media", token)
         db_path = os.path.join(os.getcwd(),"db.sqlite3")
@@ -134,20 +142,24 @@ def handle_file_upload(request):
                 kValue = form.cleaned_data['k']
                 tValue = form.cleaned_data['t']
                 anonValue = form.cleaned_data['anon']
-                handle_pretsa_upload.delay(kValue, tValue, anonValue, media_path, db_path, secure_token)   
+                metadataValue = form.cleaned_data['metadata']
+                handle_pretsa_upload.delay(kValue, tValue, anonValue, media_path, db_path, secure_token, metadataValue)   
             elif algorithm =='2':
                 epsilonValue = form.cleaned_data['epsilon']
-                handle_laplace_df_upload.delay(epsilonValue, media_path, db_path, secure_token)
+                metadataValue = form.cleaned_data['metadata']
+                handle_laplace_df_upload.delay(epsilonValue, media_path, db_path, secure_token, metadataValue)
             elif algorithm =='3':
                 epsilonValue = form.cleaned_data['epsilon']
                 nValue = form.cleaned_data['n']
                 pValue = form.cleaned_data['p']
-                handle_laplace_tv_upload.delay(epsilonValue, nValue, pValue, media_path, db_path, secure_token)
+                metadataValue = form.cleaned_data['metadata']
+                handle_laplace_tv_upload.delay(epsilonValue, nValue, pValue, media_path, db_path, secure_token, metadataValue)
             elif algorithm =='4':
                 epsilonValue = form.cleaned_data['epsilon']
                 nValue = form.cleaned_data['n']
                 kValue = form.cleaned_data['pripel_k']
-                handle_pripel_upload.delay(epsilonValue, nValue, kValue, media_path, db_path, secure_token)             
+                metadataValue = form.cleaned_data['metadata']
+                handle_pripel_upload.delay(epsilonValue, nValue, kValue, media_path, db_path, secure_token, metadataValue)             
             elif algorithm =='5':
                 identifier = form.cleaned_data['unique_identifier']
                 incList = form.cleaned_data['attributes']

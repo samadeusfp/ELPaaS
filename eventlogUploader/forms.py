@@ -71,7 +71,7 @@ class DocumentForm(forms.Form):
         label='Select maximum Sequence Length',
         help_text='Maximum length of a subsequence in a trace which will be internally queried. Higher value will take longer to compute and the likelihood grows that new traces not found in the original event log will appear.',
         required = True,
-        initial = "10",
+        initial = "6",
         )
 
     #laplacian - tv
@@ -109,7 +109,12 @@ class DocumentForm(forms.Form):
         required = True,
         initial = "4",
     )
-     
+    #metadata
+    metadata = forms.BooleanField(
+        label='Include privacy metadata in .xes output',
+        required = False,
+        initial = True,
+        ) 
     
   
 
@@ -145,11 +150,13 @@ class ColumnSelectForm(forms.Form):
         self.fields['case_attr'] = forms.MultipleChoiceField(
             label='Specify case attributes',
             help_text='case attributes are consistent for single trace e.g. Age, Day of Birth...',
+            required= False,
             widget=forms.SelectMultiple,
             choices=case_attr_var)
         self.fields['event_attr'] = forms.MultipleChoiceField(
             label='Specify event attributes',
             help_text='event attributes are consistent for single event e.g. Timestamp, org:group...',
+            required= False,
             widget=forms.SelectMultiple,
             choices=event_attr_var)
             

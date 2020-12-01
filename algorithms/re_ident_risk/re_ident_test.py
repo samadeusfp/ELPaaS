@@ -188,6 +188,13 @@ try:
     
     case_attribute = list(case_attribute_string.split(","))
     event_attribute = list(event_attribute_string.split(","))
+    if case_attribute[0] == '$empty_string$':
+        print("empty case attributes")
+        case_attribute = list()
+    if event_attribute[0] == '$empty_string$':
+        print("empty case attributes")
+        event_attribute = list()
+    
     
     attributes_non_unique = case_attribute + event_attribute
     attributes_non_unique.append('Activity')

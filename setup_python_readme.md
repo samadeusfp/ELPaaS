@@ -19,10 +19,11 @@
 * django-crispy-forms
 * django-env-overrides
 * django-simple-captcha
-* django-cleanup !!!!!!!!!!!!!!!!!!
-* eventlet !!!!!!!!!!!!!!!!!!!!!
+* django-cleanup !
+* eventlet !
 * celery
 * django-celery-beat
+* p-privacy-metadata
 
 ### R
 

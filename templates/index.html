@@ -134,9 +134,11 @@
 										{{token}}
 										</b>
 									</div>
+									{% if document.0.algorithm == "Quantifying Re-identification Risk" %}
 									<div class="text-center">
 										<button id="column_select_button" class="btn btn-primary" type="button" data-toggle="modal" data-target="#select_columns">Select Columns</button>
 									</div>
+									{% endif %}
 									<div class="text-center">
 										<button id="token_copy_button" class="btn btn-secondary" onclick="copyTokenToClipboard()">Copy Token</button>
 									</div>
