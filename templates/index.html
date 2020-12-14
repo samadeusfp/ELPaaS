@@ -134,7 +134,7 @@
 										{{token}}
 										</b>
 									</div>
-									{% if document.0.algorithm == "Quantifying Re-identification Risk" %}
+									{% if document.0.algorithm == "Quantifying Re-identification Risk" and document.0.status != "PROCESSING" %}
 									<div class="text-center">
 										<button id="column_select_button" class="btn btn-primary" type="button" data-toggle="modal" data-target="#select_columns">Select Columns</button>
 									</div>
