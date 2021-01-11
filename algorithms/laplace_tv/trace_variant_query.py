@@ -3,7 +3,8 @@ try:
     
     import numpy as np
     from pm4py.objects.log import log as event_log
-    from pm4py.objects import log as import_log
+    from pm4py.objects.log.exporter.xes import factory as xes_exporter
+    from pm4py.objects.log.importer.xes import factory as xes_import_factory
     import datetime
     from dateutil.tz import tzutc
     import sys
@@ -157,14 +158,15 @@ try:
     dbName = sys.argv[5]
     secure_token = sys.argv[6]
     
-    
-    log = import_log.importer.xes.factory.apply(filePath)
+    print("\n starting tv Query \n")
+    log = xes_import_factory.apply(filePath)
     private_log = privatize_tracevariants(log, float(epsilon),int(p),int(n))
     #preprocess file
     os.mkdir(secure_token)
     
     outPath = filePath.replace(".xes","_%s_%s_%s.xes" % (epsilon, n, p))
-    import_log.exporter.xes.factory.export_log(private_log,outPath)
+    print("\n exporting log \n")
+    xes_exporter.export_log(private_log,outPath)
   
     #write to db
     print("Writing to DB")

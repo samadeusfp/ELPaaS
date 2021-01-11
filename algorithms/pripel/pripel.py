@@ -30,9 +30,9 @@ try:
     secure_token = sys.argv[6]###
     ################################## pripel code
 
-    new_ending = "_epsilon_" + str(epsilon) + "_k" + str(k) + "_anonymizied.xes"
+    new_ending = "_epsilon_" + "_k" + str(k) + "_anonymizied.xes"
     result_log_path = log_path.replace(".xes",new_ending)
-
+    print("\n output_path pripel: ",result_log_path,"\n")
     starttime = datetime.datetime.now()
     log = xes_import_factory.apply(log_path)
 
@@ -41,8 +41,11 @@ try:
     print(len(tv_query_log))
     endtime_tv_query = datetime.datetime.now()
     print("Time of TV Query: " + str((endtime_tv_query - starttime_tv_query)))
+    print("print0")
     starttime_trace_matcher = datetime.datetime.now()
+    print("print1")
     traceMatcher = TraceMatcher(tv_query_log,log)
+    print("print2")
     matchedLog = traceMatcher.matchQueryToLog()
     print(len(matchedLog))
     endtime_trace_matcher = datetime.datetime.now()

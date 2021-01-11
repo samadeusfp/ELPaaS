@@ -14,7 +14,7 @@
 * subprocess-*
 * requests
 * time-*
-* pm4py
+* pm4py 1.3
 * django
 * django-crispy-forms
 * django-env-overrides

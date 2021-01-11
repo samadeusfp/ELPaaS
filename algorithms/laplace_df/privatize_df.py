@@ -9,7 +9,7 @@ try:
     import shutil
     from opyenxes.classification.XEventNameClassifier import XEventNameClassifier
     import numpy as np
-    from pm4py.objects import log as import_log
+    from pm4py.objects.log.importer.xes import factory as xes_import_factory
 
     TRACE_START = "TRACE_START"
     TRACE_END = "TRACE_END"
@@ -46,22 +46,29 @@ try:
         return event_int_mapping
 
     def get_df_frequencies(log, event_int_mapping):
+        print("print1")
         classifier = XEventNameClassifier()
+        print("print2")
         df_relations = np.zeros((len(event_int_mapping),len(event_int_mapping)), dtype=int)
+        print("print3")
         for trace in log[0]:
             current_event = TRACE_START
+            print("print4")
             for event in trace:
+                print("print4.5")
                 next_event = classifier.get_class_identity(event)
-                
+                print("print5")
                 current_event_int = event_int_mapping[current_event]
                 next_event_int = event_int_mapping[next_event]
                 df_relations[current_event_int, next_event_int] += 1
-
+                print("print5")
                 current_event = next_event
 
             current_event_int = event_int_mapping[current_event]
+            print("print6")
             next_event = TRACE_END
             next_event_int = event_int_mapping[next_event]
+            print("print7")
             df_relations[current_event_int, next_event_int] += 1
         return df_relations
 
@@ -78,6 +85,7 @@ try:
 
     def write_to_dfg(df_relations, event_int_mapping, output):
         out=output+".dfg"
+        print("\n output_path: ",out,"\n")
         f = open(out,"w+")
         f.write(str(len(df_relations)-2)+"\n")
         for key in event_int_mapping:
@@ -120,11 +128,12 @@ try:
     epsilon = sys.argv[2]
     dbName = sys.argv[3]
     secure_token = sys.argv[4]
+    
     #preprocess file
-    os.mkdir(secure_token)
-    print("print1")
+    #os.mkdir(secure_token)
+    print("\n Starting privatize_df.py \n")
     outPath = filePath.replace(".xes","_%s" % (epsilon))
-    log = import_log.importer.xes.factory.apply(filePath)
+    log = xes_import_factory.apply(filePath)
     event_mapping = create_event_int_mapping(log)
     privatize_df(log, event_mapping, epsilon, outPath)
     print("print2")
@@ -141,7 +150,7 @@ try:
     #cleanup
     shutil.rmtree(os.getcwd()+os.path.sep+secure_token)
 except Exception as e:
-    print("print_error")
+    print("\n Error in privatize_df.py \n")
     f=open("debug","w+")
     f.write(str(e))
     if hasattr(e, 'message'):

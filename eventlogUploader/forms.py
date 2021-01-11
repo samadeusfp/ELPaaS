@@ -146,6 +146,8 @@ class ColumnSelectForm(forms.Form):
                  ("4","activities and case attributes"),
                  ("5","activities")
                 ),
+            help_text='Use shift+click to select multiple attributes',
+
         )
         self.fields['case_attr'] = forms.MultipleChoiceField(
             label='Specify case attributes',

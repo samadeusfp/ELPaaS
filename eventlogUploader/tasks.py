@@ -14,28 +14,37 @@ import shutil
 def handle_pretsa_upload(kValue, tValue, anonValue, path, pathDB, secure_token, metadataValue):
     command = Popen(["python", os.getcwd()+"/algorithms/PRETSA/runPretsa.py", str(path), str(kValue), str(tValue), str(anonValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/PRETSA")
     if metadataValue:
-        command_two = Popen(["python", os.getcwd()+"/algorithms/metadata/privacy_metadata.py", str(path), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/metadata")
+        output_path = path.replace(".xes","_k%s_pretsa.csv" % (kValue))
+        print("\n output_path: ",output_path,"\n")
+        command_two = Popen(["python", os.getcwd()+"/algorithms/metadata/privacy_metadata.py", str(output_path), 'pretsa', str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/metadata")
     return
 
 @shared_task
 def handle_laplace_df_upload(epsilonValue, path, pathDB, secure_token, metadataValue):
     command = Popen(["python", os.getcwd()+"/algorithms/laplace_df/privatize_df.py", str(path), str(epsilonValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/laplace_df")
     if metadataValue:
-        command_two = Popen(["python", os.getcwd()+"/algorithms/metadata/privacy_metadata.py", str(path), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/metadata")
+        output_path = path.replace(".xes","_%s.dfg" % (epsilonValue))
+        print("\n output_path: ",output_path,"\n")
+        command_two = Popen(["python", os.getcwd()+"/algorithms/metadata/privacy_metadata.py", str(output_path),'laplace_df', str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/metadata")
     return
 
 @shared_task
 def handle_laplace_tv_upload(epsilonValue, nValue, pValue, path, pathDB, secure_token, metadataValue):
     command = Popen(["python", os.getcwd()+"/algorithms/laplace_tv/trace_variant_query.py", str(path), str(epsilonValue), str(nValue), str(pValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/laplace_tv")
     if metadataValue:
-        command_two = Popen(["python", os.getcwd()+"/algorithms/metadata/privacy_metadata.py", str(path), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/metadata")
+        output_path = path.replace(".xes","_%s_%s_%s.xes" % (epsilonValue, nValue, pValue))
+        print("\n output_path: ",output_path,"\n")
+        command_two = Popen(["python", os.getcwd()+"/algorithms/metadata/privacy_metadata.py", str(output_path),'laplace_tv', str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/metadata")
     return
 
 @shared_task    
 def handle_pripel_upload(epsilonValue, nValue, kValue, path, pathDB, secure_token, metadataValue):
     command = Popen(["python", os.getcwd()+"/algorithms/pripel/pripel.py", str(path), str(epsilonValue), str(nValue), str(kValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/pripel")
     if metadataValue:
-        command_two = Popen(["python", os.getcwd()+"/algorithms/metadata/privacy_metadata.py", str(path), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/metadata")
+        new_ending = "_epsilon_" + "_k" + str(kValue) + "_anonymizied.xes"
+        output_path = path.replace(".xes",new_ending)
+        print("\n output_path: ",output_path,"\n")
+        command_two = Popen(["python", os.getcwd()+"/algorithms/metadata/privacy_metadata.py", str(output_path),'pripel', str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/metadata")
         
     return
       
