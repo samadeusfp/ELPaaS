@@ -2,7 +2,7 @@ try:
     from pm4py.objects.log.importer.xes import factory as xes_import_factory
     from pm4py.objects.log.exporter.xes import factory as xes_exporter
     from pm4py.objects.log.util import sampling
-    from tracematcher import TraceMatcher as TraceMatcher
+    import tracematcher
     from attributeAnonymizier import AttributeAnonymizier as AttributeAnonymizier
     from trace_variant_query import privatize_tracevariants
     import datetime
@@ -44,7 +44,7 @@ try:
     print("print0")
     starttime_trace_matcher = datetime.datetime.now()
     print("print1")
-    traceMatcher = TraceMatcher(tv_query_log,log)
+    traceMatcher = tracematcher.TraceMatcher(tv_query_log,log)
     print("print2")
     matchedLog = traceMatcher.matchQueryToLog()
     print(len(matchedLog))

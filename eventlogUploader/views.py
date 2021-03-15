@@ -30,10 +30,11 @@ def handle_view_file(request):
             #print(document[0]['algorithm'])
         upload_form = DocumentForm(initial = {'algorithm':'1'})
         download_form = DownloadForm()
-        columns = tuple()
+        columns_cases = tuple()
+        columns_events = tuple()
         if document[0]['algorithm']=='Quantifying Re-identification Risk':
-            columns = tuple(token_to_column_list(token))
-        column_form = ColumnSelectForm(case_attr_var= columns,event_attr_var= columns,token_var=token)
+            columns_cases,columns_events = tuple(token_to_column_list(token))
+        column_form = ColumnSelectForm(case_attr_var= columns_cases,event_attr_var= columns_events,token_var=token)
 
         #Load documents for the list page
         if not document:
@@ -202,19 +203,30 @@ def generate_token(docfile, algorithm):
     
 def token_to_column_list(secure_token):
     if secure_token == None:
-        columns = []
+        case_attributes = []
+        event_attributes = []
     else:
-        columns = []
-        column_path = os.path.join(os.getcwd(), "media",secure_token,"columns.txt")
-        while not os.path.exists(column_path):
+        case_attributes = []
+        event_attributes = []
+        case_path = os.path.join(os.getcwd(), "media",secure_token,"case_attributes.txt")
+        event_path = os.path.join(os.getcwd(), "media",secure_token,"event_attributes.txt")
+        while not os.path.exists(event_path):
             time.sleep(1)
         
-        with open(column_path, 'r') as filehandle:
-            columns = [current_column.rstrip() for current_column in filehandle.readlines()]
+        with open(case_path, 'r') as filehandle:
+            case_attributes = [current_column.rstrip() for current_column in filehandle.readlines()]
+        with open(event_path, 'r') as filehandle:
+            event_attributes = [current_column.rstrip() for current_column in filehandle.readlines()]
+        case_attributes.sort()
+        event_attributes.sort()
+        
     lista = []  
-    for i in columns:
+    for i in case_attributes:
         lista.append((i,i))
-    return lista
+    listb = []  
+    for i in event_attributes:
+        listb.append((i,i))
+    return lista, listb
     
 
 def delete_file(request, token =None):

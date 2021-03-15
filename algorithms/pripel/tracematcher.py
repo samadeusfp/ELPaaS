@@ -8,6 +8,7 @@ import numpy as np
 
 class TraceMatcher:
     def __init__(self,tv_query_log,log):
+        print("trace_matcher kreiiert")
         self.__timestamp = "time:timestamp"
         self.__allTimestamps = list()
         self.__allTimeStampDifferences = list()
@@ -238,11 +239,15 @@ class TraceMatcher:
         return distributionOfAttributes, eventStructure
 
     def matchQueryToLog(self,fillUp=True,greedy=False):
+        print("tm1")
         if greedy:
             traceMatching = self.__getTraceMatching()
+            print("tm2")
         else:
             traceMatching = self.__findOptimalMatches()
+            print("tm3")
         matched_log = self.__resolveTraceMatching(traceMatching,self.__distributionOfAttributes,fillUp)
+        print("tm4")
         return matched_log
 
     def getAttributeDistribution(self):

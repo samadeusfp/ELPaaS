@@ -56,6 +56,7 @@ try:
             print("print4")
             for event in trace:
                 print("print4.5")
+                print("event type:",type(event))
                 next_event = classifier.get_class_identity(event)
                 print("print5")
                 current_event_int = event_int_mapping[current_event]
@@ -148,7 +149,7 @@ try:
     conn.close()
 
     #cleanup
-    shutil.rmtree(os.getcwd()+os.path.sep+secure_token)
+    #shutil.rmtree(os.getcwd()+os.path.sep+secure_token)
 except Exception as e:
     print("\n Error in privatize_df.py \n")
     f=open("debug","w+")
@@ -165,7 +166,7 @@ except Exception as e:
     f.write(secure_token)
     f.close()
     #cleanup
-    shutil.rmtree(os.getcwd()+os.path.sep+secure_token)
+    #shutil.rmtree(os.getcwd()+os.path.sep+secure_token)
     conn = sqlite3.connect(dbName)
     c = conn.cursor()
     c.execute("UPDATE eventlogUploader_document SET status = ? WHERE token = ?", ("ERROR", secure_token))
