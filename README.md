@@ -2,8 +2,10 @@
 ELPaaS(Event Log Privacy as a Service) is a web based tool, that allow users to apply state of the art privacy algorithms from the process mining domain to their event logs. 
 The algorithms provided include:
 
-* PRETSA (https://github.com/samadeusfp/PRETSA) 
+* PRETSA (https://github.com/samadeusfp/PRETSA)
+* PRIPEL (https://github.com/samadeusfp/PRIPEL) 
 * Process Discovery with Differential Privacy (https://github.com/fmannhardt/pddp)
+* Quantifying the Re-identification Risk of Event Logs for Process Mining (https://arxiv.org/abs/2003.10707)
 
 We welcome other researchers to integrate their privacy algorithms for process mining in our tool. If you are interested in doing so please contact us under: Stephan.Fahrenkrog-Petersen || hu-berlin.de
 
@@ -40,7 +42,32 @@ https://youtu.be/XLq124VpZ6Q
 We have set-up a test deployment at:
 https://elpaas.fmannhardt.de
 
-Note that we may disable the test deployment at any time or limit the rate of requests to prevent server resources from being overloaded. 
+Note that we may disable the test deployment at any time or limit the rate of requests to prevent server resources from being overloaded.
+
+## Functionality Overview
+
+### PRETSA
+
+PRETSA is an algorithm which ensures t-closeness and k- anonymity.
+* PRETSA on GitHub (https://github.com/samadeusfp/PRETSA)
+
+### Laplacian df-based
+
+Query - based algorithm that adds Laplacian noise to event frequencies in the generated directly-follows-grap of the log.
+
+### Laplacian tv-based
+
+Query - based algorithm that adds Laplacian noise to trace-variant frequencies.
+
+### PRIPEL
+
+
+* PRIPEL on GitHub (https://github.com/samadeusfp/PRIPEL)
+
+### Quantifying Re-identification Risk
+
+* Quantifying the Re-identification Risk of Event Logs for Process Mining (https://arxiv.org/abs/2003.10707)
+
 
 ## Installation & Deployment
 You can install ELPaaS in your own environment to avoid sharing your data with a untrusted third party.
