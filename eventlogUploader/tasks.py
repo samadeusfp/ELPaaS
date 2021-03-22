@@ -23,7 +23,7 @@ def handle_pretsa_upload(kValue, tValue, anonValue, path, pathDB, secure_token, 
 def handle_laplace_df_upload(epsilonValue, path, pathDB, secure_token, metadataValue):
     command = Popen(["python", os.getcwd()+"/algorithms/laplace_df/privatize_df.py", str(path), str(epsilonValue), str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/laplace_df")
     if metadataValue:
-        output_path = path.replace(".xes","_%s.dfg" % (epsilonValue))
+        output_path = path.replace(".xes","_%s.xes" % (epsilonValue))
         print("\n output_path: ",output_path,"\n")
         command_two = Popen(["python", os.getcwd()+"/algorithms/metadata/privacy_metadata.py", str(output_path),'laplace_df', str(pathDB), str(secure_token)], cwd=os.getcwd()+"/algorithms/metadata")
     return

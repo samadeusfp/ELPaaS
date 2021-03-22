@@ -1,1 +1,1 @@
-'str' object has no attribute 'get_attributes'C:\Users\felix\GitHub\ELPaaS\media\0e09d7f887e42c81b65937171a9ce7e011d1f46051820736b2ddfac9014c6d8e\Sepsis_Cases_-_Event_Log.xes0.1C:\Users\felix\GitHub\ELPaaS\db.sqlite30e09d7f887e42c81b65937171a9ce7e011d1f46051820736b2ddfac9014c6d8e
+unsupported operand type(s) for /: 'int' and 'str'C:\Users\felix\GitHub\ELPaaS\media\ba09442b387b28b20dfc9f9583e33c3d5d10454b51e147f3cc94dd112b701568\Sepsis_Cases_-_Event_Log.xes0.1C:\Users\felix\GitHub\ELPaaS\db.sqlite3ba09442b387b28b20dfc9f9583e33c3d5d10454b51e147f3cc94dd112b701568
