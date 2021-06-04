@@ -71,7 +71,7 @@ class DocumentForm(forms.Form):
         label='Select maximum Sequence Length',
         help_text='Maximum length of a subsequence in a trace which will be internally queried. Higher value will take longer to compute and the likelihood grows that new traces not found in the original event log will appear.',
         required = True,
-        initial = "6",
+        initial = "4",
         )
 
     #laplacian - tv
@@ -107,7 +107,7 @@ class DocumentForm(forms.Form):
         label='Select k',
         help_text='Prunning parameter of the trace-variant-query. At least k traces must appear in a noisy variant count to be part of the result of the query. ',
         required = True,
-        initial = "4",
+        initial = "10",
     )
     #metadata
     metadata = forms.BooleanField(
