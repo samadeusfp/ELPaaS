@@ -10,7 +10,7 @@ try:
     from pm4py.objects.log.importer.xes import factory as xes_import_factory
     from pm4py.objects.log.exporter.csv import factory as csv_exporter
     from scipy.stats import itemfreq
-    
+
     def generate_projection_view(projections_local, case_attribute_local, activity_local, event_attribute_local,
                              timestamp_local):
         """ Depending on the projection, the corresponding columns are selected."""
@@ -175,9 +175,13 @@ try:
             return 1
         return 0
 
+    def command_print(list):
 
+        with open("cmd.txt", 'w') as filehandle:
+            filehandle.writelines("%s " % column for column in list)
+            
     #set parameters
-    
+
     filePath = sys.argv[1]
     projection = sys.argv[2]
     case_attribute_string = sys.argv[3]
@@ -185,7 +189,9 @@ try:
     dbName = sys.argv[5]
     secure_token = sys.argv[6]
     sys.setrecursionlimit(3000)
-    
+
+    #command_print(sys.argv)
+
     case_attribute = list(case_attribute_string.split(","))
     event_attribute = list(event_attribute_string.split(","))
     if case_attribute[0] == '$empty_string$':
@@ -194,39 +200,51 @@ try:
     if event_attribute[0] == '$empty_string$':
         print("empty case attributes")
         event_attribute = list()
-    
-    
+
+
     attributes_non_unique = case_attribute + event_attribute
-    attributes_non_unique.append('Activity')
-    attributes_non_unique.append('time:timestamp')
-    
+    #attributes_non_unique.append('Activity')
+    #attributes_non_unique.append('time:timestamp')
+
     attributes = list(set(attributes_non_unique)) 
     unique_identifier = ['Case ID']
+    #unique_identifier = ['case:concept:name']
     activity = ['Activity']
+    #activity = ['concept:name']
     timestamp = ['time:timestamp']
 
-    
+    attributes = attributes + timestamp + activity
+    print(attributes)
+
+
     current_file_name= ""
     #########################################
     for filename in os.listdir(filePath):
-        if filename.endswith(".xes.csv"): 
+        if filename.endswith("_renamed.csv"): 
             current_file_name= filename
+            #print(current_file_name)
             
-    
-    
+
+
     #df_data = pd.read_csv(filePath, delimiter=";",skipinitialspace=True, encoding="utf-8-sig")
-    
-    
-    
+
+
+
     buffer_path = os.path.join(filePath, "buffer.csv")
     filePath = os.path.join(filePath, current_file_name)
-    df_data = pd.read_csv(filePath, delimiter=";",skipinitialspace=True, encoding="utf-8-sig")
+    df_data = pd.read_csv(filePath, delimiter=",",skipinitialspace=True, encoding="utf-8-sig", keep_default_na=False, na_values=['-1.#IND', '1.#QNAN', '1.#IND', '-1.#QNAN', '#N/A N/A', '#N/A', 'N/A', 'n/a', '', '#NA', 'NULL', 'null', 'NaN', '-NaN', 'nan', '-nan', ''])
+        
+
+    #if not 'Activity' in df_data.columns:
+    #print("Changing concept:name to Activity,case:concept:name to Case ID")
+    #df_data.rename(columns={'concept:name': 'Activity', 'case:concept:name': 'Case ID'}, inplace=True)
+
     #xes_csv_file.rename(columns={'concept:name': 'Activity', 'case:concept:name': 'Case ID'}, inplace=True)
     #if not 'Duration' in xes_csv_file.columns:
     #    xes_csv_file.loc[:,"Duration"] = 0.0
     ##########################################
     filePath = filePath.replace(" ","_")
-    
+
     #if filePath.endswith(".xes"):
     #    log = xes_import_factory.apply(filePath)
     #    filePath = filePath + ".csv"
@@ -239,13 +257,15 @@ try:
     #    if not 'Duration' in xes_csv_file.columns:
     #        xes_csv_file.loc[:,"Duration"] = 0.0
     #    #xes_csv_file.to_csv(filePath,sep=";",encoding="utf-8-sig",index=False)
-    
+
     #eventLog = pd.read_csv(filePath, delimiter=";",skipinitialspace=True, encoding="utf-8-sig")
-    
+
     #######################
     ####csv2simple_auto####
     #######################
-    
+    df_data_column_list = list(df_data.columns.values.tolist())
+    #print("\n",df_data_column_list,"\n")
+
     # drop all unnecessary columns
     df_important_columns = df_data[unique_identifier + attributes]
 
@@ -266,7 +286,7 @@ try:
 
     # use attributes in file name
     list_file_name = []
-    
+
 
     # loop through all variable attributes
     for attribute in attributes:
@@ -304,42 +324,47 @@ try:
             list_file_name.append(attribute.replace(" ", ""))
 
 
-    # concatenate separate data frames to one data frame
-    df_for_export = pd.concat(list_of_data_frames, axis=1)
 
-    # rename columns
-    df_for_export.columns = list_column_names
 
-    # get index (unique identifier) from enumerated data
-    df_for_export.index = df_enumerated_data.index
-    df_for_export.to_csv(buffer_path,sep=";")
-    ###########################################################################################################################################################
-    ###########################################################################################################################################################
-    ###########################################################################################################################################################
-    ###########################################################################################################################################################
-    ###########################################################################################################################################################    
-    pd.options.mode.chained_assignment = None   
-    df_two = pd.read_csv(buffer_path, delimiter=";",low_memory=False, nrows=1000)   
+    if len(list_of_data_frames) > 0:
+        # concatenate separate data frames to one data frame
+        df_for_export = pd.concat(list_of_data_frames, axis=1)
+        # rename columns
+        df_for_export.columns = list_column_names
+        # get index (unique identifier) from enumerated data
+        df_for_export.index = df_enumerated_data.index
+        df_for_export.to_csv(buffer_path,sep=";")
+        ###########################################################################################################################################################
+        ###########################################################################################################################################################
+        ###########################################################################################################################################################
+        ###########################################################################################################################################################
+        ###########################################################################################################################################################    
+        pd.options.mode.chained_assignment = None   
+        df_two = pd.read_csv(buffer_path, delimiter=";",low_memory=False, nrows=1000,skipinitialspace=True, encoding="utf-8-sig", keep_default_na=False, na_values=['-1.#IND', '1.#QNAN', '1.#IND', '-1.#QNAN', '#N/A N/A', '#N/A', 'N/A', 'n/a', '', '#NA', 'NULL', 'null', 'NaN', '-NaN', 'nan', '-nan', ''])
+    else:
+        df_two = []
+       
     # Specify number or relative frequency of points
     number_points = 1    
-    
+
     quasi_identifier, events_to_concat = generate_projection_view(projection, case_attribute, activity,
                                                                   event_attribute, timestamp)
     attributes_quasi = unique_identifier + quasi_identifier 
-    
+
+    #print("unique_identifier + quasi_identifier",unique_identifier,"\n",quasi_identifier)
     df_aggregated_data = prepare_data(events_to_concat, df_two, attributes_quasi)
     print("Data preparation finished")
-    
+
     unicity = calculate_unicity(df_aggregated_data, quasi_identifier, events_to_concat, number_points)
     print("unicity = ", unicity)
-    
-    
+
+
     ###########################################################################################################################################################
     result_filename = current_file_name.replace(".csv","_results.txt")
     puffer,targetFile = filePath.split("media"+os.path.sep)
     result_path = puffer +"media" +os.path.sep + secure_token +os.path.sep + result_filename
     targetFile = secure_token + os.path.sep + result_filename
-    
+
     with open(result_path, 'w') as filehandle:
         filehandle.write("Unicity = %s \n" % unicity )
         filehandle.write("Based on activities \n")
@@ -354,14 +379,15 @@ try:
             filehandle.writelines("%s\n" % event_attr for event_attr in event_attribute)
         
     ###########################################################################################################################################################
-    
-    
+
+
     conn = sqlite3.connect(dbName)
     c = conn.cursor()
     c.execute("UPDATE eventlogUploader_document SET status = ?, docfile = ? WHERE token = ?", ("FINISHED", targetFile, secure_token))
     conn.commit()
     conn.close()
     print("DB submit done")
+
 
 except:
     filePath = sys.argv[1]

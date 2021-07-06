@@ -19,7 +19,7 @@ try:
     filePath = filePath.replace(" ","_")
     
     log = xes_import_factory.apply(filePath)
-    targetFilePath = filePath.replace(".xes","_incl_metadata.xes")
+    targetFilePath = filePath.replace(".xes","_renamed.csv")
     file_path_buffer = filePath.replace(".xes","_buffer.csv")
     csv_exporter.export(log, file_path_buffer)
     xes_csv_file = pd.read_csv(file_path_buffer, delimiter=",",skipinitialspace=True, encoding="utf-8-sig", keep_default_na=False, na_values=['-1.#IND', '1.#QNAN', '1.#IND', '-1.#QNAN', '#N/A N/A', '#N/A', 'N/A', 'n/a', '', '#NA', 'NULL', 'null', 'NaN', '-NaN', 'nan', '-nan', ''])
@@ -68,7 +68,7 @@ try:
     #column_list.remove('Activity')
     #column_list.remove('Case ID')
     #column_list.remove('time:timestamp')
-
+    
     puffer,targetFile = targetFilePath.split("media"+os.path.sep)
     case_attributes_path = puffer +"media" +os.path.sep + secure_token +os.path.sep + "case_attributes.txt"
     event_attributes_path = puffer +"media" +os.path.sep + secure_token +os.path.sep + "event_attributes.txt"
@@ -82,7 +82,7 @@ try:
         
     print("\n case and event attributes saved.\n")
     #write to db
-    
+    xes_csv_file.to_csv(targetFilePath, sep = ",")
     
     conn = sqlite3.connect(dbName)
     c = conn.cursor()
